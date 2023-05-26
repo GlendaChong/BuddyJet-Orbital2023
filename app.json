@@ -1,6 +1,15 @@
 {
   "expo": {
-    "name": "orbital-app",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "The app accesses your photos to let you attach them with your todos."
+        }
+      ]
+    ],
+    "name": "BuddyJet-Orbital2023",
+    "scheme:": "BuddyJet-Orbital2023",
     "slug": "orbital-app",
     "version": "1.0.0",
     "orientation": "portrait",
