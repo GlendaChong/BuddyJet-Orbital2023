@@ -5,8 +5,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextFieldInput from "./TextFieldInput";
-import { useNavigation } from "expo-router";
-
 
 export default function CreateAccount() {
     const [name, setName] = useState(''); 
@@ -17,7 +15,6 @@ export default function CreateAccount() {
     const [confirmPassword, setConfirmPassword] = useState(''); 
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
-    const navigation = useNavigation(); 
 
     const handleSubmit = async () => {
         if (name == '') {
@@ -114,5 +111,6 @@ const styles = StyleSheet.create({
         fontWeight: 600, 
         fontSize: 18, 
         lineHeight: 35,  
+        textAlign: 'center', 
     }, 
  }); 

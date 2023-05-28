@@ -24,14 +24,19 @@ function useProtectedRoute(user) {
             console.log(`inAuthGroup: ${inAuthGroup}`);
             router.replace("/");
         } else if (user && inAuthGroup) {
-            // Go to main home page
-            router.replace("/(tabs)/Home");
+            if (segments[1] === "CreateAccount") {
+                router.replace("/(authentication)/AccountCreated");
+            } else if (segments[1] === "Login") {
+                router.replace("/(tabs)/Home")
+            }
         }
     }, [user, segments, router]);
 }
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    const router = useRouter(); 
+    const segments = useSegments(); 
     useProtectedRoute(user);
 
     useEffect(() => {
@@ -44,8 +49,10 @@ export function AuthProvider({ children }) {
                 setUser(null);
             }
         })
+
+
         return () => data.subscription.unsubscribe();
-    }, []);
+    }, [segments, router]);
 
     return <AuthContext.Provider value={{ user }}>{children}</ AuthContext.Provider>
 }
