@@ -126,6 +126,10 @@ For example, if the user is spending a lot on transport, the app will suggest so
 * Git and Github: Source control and collaboration
 * Visual Studio Code: IDE
 
+# Milestone 1 Submissions
+* Project Video: 
+* Project Poster: https://drive.google.com/file/d/1hvuCJ22INAzVEMl7UphCFnMPSvPOndhb/view?usp=sharing
+
 **Note:**
 * Other features/pages of our main app will be fully and beautifully designed by Milestone 2. They are currently a work in progress. 
 * Deployment of our app for user testing and user guides will also be done by Milestone 2 too. 
