@@ -4,7 +4,7 @@ import { useNavigation } from 'expo-router';
 
 export default function OnboardingScreen() {
 
-  const CreateAccount = () => {
+  const CreateAccountButton = () => {
     const navigation = useNavigation(); 
     return (
       <Button
@@ -18,7 +18,7 @@ export default function OnboardingScreen() {
     ); 
   };
    
-  const Login = () => {
+  const LoginButton = () => {
     const navigation = useNavigation(); 
     return (
       <Button 
@@ -45,12 +45,11 @@ export default function OnboardingScreen() {
   return (
     <View styles={styles.container}>
       <Design />
-      <CreateAccount /> 
-      <Login />
+      <CreateAccountButton /> 
+      <LoginButton />
     </View>
   ); 
 }
-
 
 const styles = StyleSheet.create({
   container: {
