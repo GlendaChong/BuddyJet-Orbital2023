@@ -53,8 +53,6 @@ export default function CreateAccount() {
             setErrMsg(error.message);
             return;
         }
-        navigation.navigate('Login'); 
-        
     }
 
     return (
@@ -77,8 +75,6 @@ export default function CreateAccount() {
                 </Button>
                 {errMsg !== "" && <Text>{errMsg}</Text>}
                 {loading && <ActivityIndicator />}
-                
-                
             </ScrollView>
         </SafeAreaView>
     );
