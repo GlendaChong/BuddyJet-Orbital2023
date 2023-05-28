@@ -11,6 +11,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
     
+    
     const handleSubmit = async () => {
         setErrMsg('');
         if (email == '') {
@@ -43,6 +44,7 @@ export default function Login() {
             >
                 Login
             </Button>
+            
             {errMsg !== "" && <Text>{errMsg}</Text>}
             {loading && <ActivityIndicator />}
         </SafeAreaView> 
