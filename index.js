@@ -7,6 +7,7 @@ import Login from "./app/(authentication)/Login";
 import CreateAccount from "./app/(authentication)/CreateAccount";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeLayout from "./app/(tabs)/_layout";
+import AccountCreated from "./app/(authentication)/AccountCreated";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -15,10 +16,11 @@ export default function App() {
     <SafeAreaView>
       <NavigationContainer>
           <Stack.Navigator>
-              <Stack.Screen name="Onboarding Screen" component={OnboardingScreen} />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Create Account" component={CreateAccount} />
-              <Stack.Screen name="Home" component={HomeLayout} />
+            <Stack.Screen name="Onboarding Screen" component={OnboardingScreen} />
+            <Stack.Screen name="Create Account" component={CreateAccount} />
+            <Stack.Screen name="Account Created" component={AccountCreated} />
+            <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Home" component={HomeLayout} />
             </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
