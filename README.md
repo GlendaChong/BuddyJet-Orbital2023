@@ -37,38 +37,44 @@ We aim to ease the process of personal financing (i.e. expenses tracking and bud
 
 The mobile application provides users with a platform to track their expenses, create and manage budgets, and monitor their financial health.
 
-**Features completed as of 28 May (Milestone 1):** 
-1. User authentication and registration
+## Features completed as of 28 May (Milestone 1): 
+**1. User authentication and registration**
 * The design and operations of the Onboarding page, Create Account page, and Login page. 
 * When either the account is created, or the user is logged in, users will be  directed to the home page.
-2. Bottom tab bar
+
+**2. Bottom tab bar**
 * The bottom tab bar navigation between the Home (for expenses tracking), Budget (for budgeting), Dashboard (for visualisation of spending and reports) and Profile (for other admin features) pages. 
-3. Logout 
+
+**3. Logout**
 * The logout feature at the Profile page, which will direct users back to the onboarding screen. 
 
-**Features to be completed by 11 June:** 
-4. Advanced user authentication and registration
+## Features to be completed by 11 June: 
+**4. Advanced user authentication and registration**
 * Users can use their Google account or even face identification to sign up or log into the app. 
-5. Forget password 
+
+**5. Forget password**
 * Users can choose to reset their password if they forgot it. 
-6. Expenses tracking and categorization (Home page)
+
+**6. Expenses tracking and categorization (Home page)**
 * Users can add their individual expenses via the Home page. 
 * Users can either create their own categories, or select from relevant categories suggested for them in the app to better organise their spending. 
 * The Home page will show their income, spending and balance for the month. They can view their expenses either as a list of all the individual expenses, or as categories. They can view all their recorded expenses for the past month via the Home page as well. 
-7. Budget creating and management (Budget page)
+
+**7. Budget creating and management (Budget page)**
 * Users can choose between the option of doing up weekly or monthly budgets. They will choose the main categories in their budget (e.g Spending, Investments, Savings) and decide on the percentage of their income they would like to spend on each category. There will be a fixed template provided for them. 
 * For users who are new to budgeting or find it tedious to customise their own budgets, they can choose from various pre-set budgets according to what they prioritise. 
 * Offer examples of budget rules according to various goals (e.g. to save more/to invest more) to provide a starting point for those who are unsure of how to start budgeting.  
 * Offer financial tips to users.
 * When users create their new budget, the app will indicate if it’s a surplus or deficit from the budget they set (if any)
 
-**Features to be completed by 26 June (Milestone 2):**  
-8. Data visualisation and reports (Dashboard Page)
+## Features to be completed by 26 June (Milestone 2):
+**8. Data visualisation and reports (Dashboard Page)**
 * Pie charts for a breakdown of spending for categories. 
 * Line graphs to show the trend/change in income and spending across months. 
 * Bar graphs to show comparison between money in and money out, and across months. 
 * Detailed report consisting of the plot visualisations above, and the individual expenses recorded in the app, to be downloaded by users when they want to view it. 
-9. Profile Page
+
+**9. Profile Page**
 * Users may set to receive alerts when they are close to exceeding their budget (can be toggled off in settings) or when they have exceeded their budget. 
 * Users can change their personal particulars. 
 * Provide a list of frequently asked questions (FAQs) for the users. FAQs could be about the app functions or features. 
@@ -78,16 +84,38 @@ The mobile application provides users with a platform to track their expenses, c
   * Erase all added data (expenses and budget): Remove all expenses and budget added. 
   * Full reset: Delete the user profile from the app and all its associated data. 
 
-**Features to be completed by 24 July (Milestone 3):** 
-10. Providing support for multiple currencies (aside from just SGD): 
+## Features to be completed by 24 July (Milestone 3):
+**10. Providing support for multiple currencies (aside from just SGD):**
 * Users spending with overseas currencies, such as purchasing online goods, spending overseas, or investing, may want to record down their spending using the overseas currencies instead of SGD. The app should be able to convert the expenses into SGD based on the exchange rate at that point in time (i.e. based on the date the expenses are made, indicated by user). 
 * Inclusion of location with maps to be added together with each expenses included, for users who wish to record where they spend their money on (e.g. eating at Restaurant A, watching a movie at Shopping Mall B)
 * Create customised recommendations to address users specific financial needs/goals, by suggesting ways on how they can reduce their expenditure on categories which exceed their budget. 
 For example, if the user is spending a lot on transport, the app will suggest some tips/reminders like take the public transport instead. 
 
-**Note:**
-* Other features/pages of our main app will be fully and beautifully designed by Milestone 2. They are currently a work in progress. 
-* Deployment of our app for user testing and user guides will also be done by Milestone 2 too. 
+# Current Design of App
+**Onboarding Page:**
+
+<img width="401" alt="Screenshot 2023-05-29 at 2 57 26 AM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/ad5b8070-7056-4362-9e76-c0730097a5a2">
+
+**Create Account Pages:**
+
+<img width="369" alt="Screenshot 2023-05-28 at 10 27 10 PM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/3635f3db-3acc-467c-9123-15098e0ba754">
+<img width="372" alt="Screenshot 2023-05-28 at 10 27 17 PM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/85f653a7-f177-4cb1-b5f6-dc5b5fdcb7d4">
+<img width="378" alt="Screenshot 2023-05-28 at 10 27 24 PM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/440c1255-171b-422b-9313-d35e2ece5d1c">
+
+**Login Page:**
+
+<img width="376" alt="Screenshot 2023-05-28 at 10 27 29 PM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/1619590b-be34-4e61-a1aa-5f82f6d35c4b">
+
+**Home Page:**
+
+<img width="473" alt="Screenshot 2023-05-29 at 2 58 12 AM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/7c067be7-4659-4b80-b172-7b49c55c9dc4">
+
+**Forget Password Pages:** 
+
+<img width="386" alt="Screenshot 2023-05-28 at 10 27 34 PM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/e8635c48-ad94-4387-87be-d89eddbb7836">
+<img width="465" alt="Screenshot 2023-05-29 at 3 07 53 AM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/dbc53cab-9c32-4c7c-9e5e-356f8f4192b0">
+<img width="373" alt="Screenshot 2023-05-28 at 10 27 56 PM" src="https://github.com/GlendaChong/BuddyJet-Orbital2023/assets/47603827/bb81f81a-f2d8-481d-9787-a9d8abc5176e">
+
 
 # Tech Stack
 * React Native: Main app 
@@ -97,3 +125,7 @@ For example, if the user is spending a lot on transport, the app will suggest so
 * Google Sign-In, Maps API for features in the app
 * Git and Github: Source control and collaboration
 * Visual Studio Code: IDE
+
+**Note:**
+* Other features/pages of our main app will be fully and beautifully designed by Milestone 2. They are currently a work in progress. 
+* Deployment of our app for user testing and user guides will also be done by Milestone 2 too. 
