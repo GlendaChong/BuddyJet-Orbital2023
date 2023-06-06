@@ -16,19 +16,30 @@ export default function CreateAccount() {
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
 
+    const dateFormat = /^(\d{2}-)(\d{2}-)(\d{4})$/;
+
     const handleSubmit = async () => {
         if (name == '') {
             setErrMsg("Name cannot be empty")
             return;
         }
+
         if (dateOfBirth == '') {
             setErrMsg("Date of Birth cannot be empty")
             return;
+        } else if (!dateOfBirth.match(dateFormat)) {
+            setErrMsg("Date of Birth must be in DD-MM-YYYY format")
+            return; 
         }
+
         if (phoneNumber == '') {
             setErrMsg("Phone number cannot be empty")
             return;
+        } else if (isNaN(parseInt(phoneNumber))) {
+            setErrMsg("Phone number contains illegal characters")
+            return; 
         }
+
         if (email == '') {
             setErrMsg("Email cannot be empty")
             return;
@@ -58,7 +69,7 @@ export default function CreateAccount() {
                 <Text style={styles.helloText}>Hello!</Text>
                 <Text style={styles.descriptionText}>Create a new account</Text>
                 <TextFieldInput label='Name' value={name} onChangeText={setName} />
-                <TextFieldInput label='Date of Birth (DD/MM/YYYY)' value={dateOfBirth} onChangeText={setDateOfBirth} />
+                <TextFieldInput label='Date of Birth (DD-MM-YYYY)' value={dateOfBirth} placeholder='DD/MM/YYYYY' onChangeText={setDateOfBirth} />
                 <TextFieldInput label='Phone Number' value={phoneNumber} onChangeText={setPhoneNumber} />
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                 <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
