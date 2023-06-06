@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "overrides": {
@@ -24,7 +24,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@supabase/supabase-js": "^2.22.0",
-    "expo": "~48.0.15",
+    "expo": "~48.0.18",
     "expo-constants": "~14.2.1",
     "expo-font": "~11.1.1",
     "expo-image-picker": "~14.1.1",
@@ -42,7 +42,8 @@
     "react-native-screens": "~3.20.0",
     "react-native-url-polyfill": "^1.3.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "expo-splash-screen": "~0.18.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

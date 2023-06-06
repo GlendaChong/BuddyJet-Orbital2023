@@ -1,17 +1,17 @@
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import { useNavigation } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 export default function OnboardingScreen() {
+  const router = useRouter();
 
   const CreateAccountButton = () => {
-    const navigation = useNavigation(); 
     return (
       <Button
       mode="contained" 
       style={styles.createAccountButton}
       labelStyle={styles.createAccountText}
-      onPress={() => navigation.navigate('CreateAccount')}
+      onPress={() => router.push('./CreateAccount')}
       >
         Create Acount
       </Button>
@@ -19,13 +19,12 @@ export default function OnboardingScreen() {
   };
    
   const LoginButton = () => {
-    const navigation = useNavigation(); 
     return (
       <Button 
       mode="outlined" 
       style={styles.loginButton}
       labelStyle={styles.loginText}
-      onPress={() => navigation.navigate("Login")}
+      onPress={() => router.push("./Login")}
       > 
         Login Now
       </Button>       
@@ -60,8 +59,8 @@ const styles = StyleSheet.create({
   image: {
     position: 'absolute', 
     width: 325,
-    height: 237, 
-    left: 33, 
+    height: 237,
+    alignSelf: 'center',  
     top: 168, 
   }, 
   
@@ -69,10 +68,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-SemiBold', 
     fontSize: 35, 
     lineHeight: 52, 
-    position: 'absolute', 
-    width: 170,
-    height: 53,
-    left: 110,
     top: 454,
     color: '#100D40',
     textAlign: 'center', 
@@ -83,11 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     opacity: 0.65, 
     lineHeight: 24, 
-    position: 'absolute', 
-    width: 347, 
-    height: 24, 
-    left: 23, 
-    top: 525, 
+    top: 470, 
     color: '#100D40',
     textAlign: 'center', 
   }, 
@@ -115,6 +106,7 @@ const styles = StyleSheet.create({
     fontWeight: 600, 
     fontSize: 18, 
     lineHeight: 40, 
+    textAlign: 'center'
   },
 
   loginText: {
@@ -123,6 +115,7 @@ const styles = StyleSheet.create({
     fontSize: 18, 
     lineHeight: 40, 
     color: '#100D40',
+    textAlign: 'center',
   }
 });  
 
