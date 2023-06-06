@@ -11,7 +11,6 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
     
-    
     const handleSubmit = async () => {
         setErrMsg('');
         if (email == '') {
