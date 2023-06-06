@@ -1,17 +1,10 @@
 import { StyleSheet, Text } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "expo-router"; 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 export default function AccountCreated() {
-    const navigation = useNavigation(); 
-
-    const handleLogin = async () => {
-        navigation.navigate("Login");
-    };
-
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <Text style={styles.header}>Account Created!</Text>
@@ -20,7 +13,6 @@ export default function AccountCreated() {
             <Button 
                 style={styles.loginButton} 
                 labelStyle={styles.loginText}
-                onPress={handleLogin}
             >
                 Login Now
             </Button>
