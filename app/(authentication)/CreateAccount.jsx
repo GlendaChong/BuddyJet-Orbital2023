@@ -6,7 +6,7 @@ import { Text, ActivityIndicator, Button } from 'react-native-paper';
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextFieldInput from "./TextFieldInput";
 
-export default function CreateAccount() {
+function CreateAccount() {
     const [name, setName] = useState(''); 
     const [dateOfBirth, setDateOfBirth] = useState(''); 
     const [phoneNumber, setPhoneNumber] = useState(''); 
@@ -125,3 +125,5 @@ const styles = StyleSheet.create({
         textAlign: 'center', 
     }, 
  }); 
+
+ export default CreateAccount; 

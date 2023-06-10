@@ -2,7 +2,7 @@ import { Text, TextInput } from "react-native-paper";
 import { StyleSheet } from "react-native";
 
 // Method to display the input fields
-export default function TextFieldInput({ label, value, onChangeText}) {
+function TextFieldInput({ label, value, onChangeText}) {
     return (
         <>
             <Text style={styles.textfieldName}>{label}</Text>
@@ -41,3 +41,4 @@ const styles = StyleSheet.create({
     },  
 }); 
 
+export default TextFieldInput; 
