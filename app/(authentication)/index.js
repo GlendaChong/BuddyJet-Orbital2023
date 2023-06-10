@@ -2,7 +2,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
-export default function OnboardingScreen() {
+function OnboardingScreen() {
   const router = useRouter();
 
   const CreateAccountButton = () => {
@@ -119,5 +119,4 @@ const styles = StyleSheet.create({
   }
 });  
 
-
-
+export default OnboardingScreen; 
