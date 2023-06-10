@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeLayout from "./app/(tabs)/_layout";
 import AuthLayout from "./app/(authentication)/_layout";
+import BudgetLayout from "./app/(tabs)/(budgetTabs)/_layout";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -15,6 +16,7 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen name="Onboarding Screen" component={AuthLayout} />
             <Stack.Screen name="Home" component={HomeLayout} />
+            <Stack.Screen name="Budget" component={BudgetLayout} />
           </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
