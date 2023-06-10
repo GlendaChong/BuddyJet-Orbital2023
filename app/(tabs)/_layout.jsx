@@ -4,12 +4,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { StyleSheet, View } from "react-native";
 import { Tabs } from "expo-router";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./Home";
-import Budget from "./Budget";
-import Dashboard from "./Dashboard";
-import Profile from "./Profile";
-
 const CustomTabBarButton = ({ children, onPress }) => {
     return (
         <TouchableOpacity 
@@ -27,16 +21,79 @@ const CustomTabBarButton = ({ children, onPress }) => {
     )
 }; 
 
-export default function HomeLayout() {
-    const Tab = createBottomTabNavigator(); 
+function HomeLayout() {
 
     return (
-        <Tab.Navigator>
-            <Tab.Screen name="Home" component={Home}/>
-            <Tab.Screen name="Budget" component={Budget}/>
-            <Tab.Screen name="Dashboard" component={Dashboard} />
-            <Tab.Screen name="Profile" component={Profile}/>
-        </Tab.Navigator>
+        <Tabs>
+            <Tabs.Screen name="Expenses" 
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesomeIcon icon={faHouse} color={color} />                
+                    ), 
+                    tabBarLabelStyle: {
+                        display: "flex"
+                    } 
+                }} 
+            />
 
+            <Tabs.Screen name="Budget" 
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesomeIcon icon={faCalculator} color={color} />   
+                    ), 
+                    tabBarLabelStyle: {
+                        display: "flex"
+                    }
+                }} 
+            />
+
+            <Tabs.Screen name="AddExpenses"
+                options={{
+                    tabBarIcon: () => (
+                        <FontAwesomeIcon icon={faPlus} color={"white"} size={30} />
+                    ), 
+                    tabBarButton: (props) => (
+                        <CustomTabBarButton {...props} />
+                    ), 
+                    tabBarLabelStyle: {
+                        display: "none"
+                    } 
+                }}
+            
+            />
+            <Tabs.Screen name="Dashboard" 
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesomeIcon icon={faChartColumn} color={color} />
+                    ), 
+                    tabBarLabelStyle: {
+                        display: "flex"
+                    }
+                }}
+            />
+
+            <Tabs.Screen name="Profile" 
+              options={{
+                tabBarIcon: ({ color }) => (
+                    <FontAwesomeIcon icon={faUser} color={color} />
+                ), 
+                tabBarLabelStyle: {
+                    display: "flex"
+                }
+            }}
+            />
+        </Tabs>
     );
 }
+
+const styles = StyleSheet.create({
+    addExpensesButton: {
+        width: 65,
+        height: 65, 
+        backgroundColor: "#3D70FF", 
+        borderRadius: 100, 
+    }, 
+
+}); 
+
+export default HomeLayout; 
