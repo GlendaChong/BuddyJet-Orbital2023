@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
-export default function AccountCreated() {
+function AccountCreated() {
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <Text style={styles.header}>Account Created!</Text>
@@ -57,3 +57,5 @@ const styles = StyleSheet.create({
         textAlign: 'center', 
     },
 }); 
+
+export default AccountCreated; 
