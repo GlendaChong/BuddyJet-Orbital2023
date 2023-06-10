@@ -1,24 +1,32 @@
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import { Button} from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 
 
 
 export default function Budget() {
     const router = useRouter();
-    // const router = useNavigation();
 
     const CreateBudgetButton = () => {
         return (
+          // <TouchableOpacity 
+          //       onPress={()=>router.push('./CreateBudget')} 
+          //       style={styles.createBudgetButton}
+          //   >
+          //       <Text style={styles.createBudgetText}>Create a budget</Text>
+          //   </TouchableOpacity>
+
           <Button
           mode="contained" 
           style={styles.createBudgetButton}
           labelStyle={styles.createBudgetText}
-          onPress={() => router.push('./CreateBudget')}
-          // onPress={() => router.navigate('CreateBudget')}
+          // onPress={() => router.push('./CreateBudget')}
+          onPress={() => router.navigate('CreateBudget')}
           >
             Create a budget
           </Button>
@@ -82,7 +90,7 @@ const styles = StyleSheet.create({
         left: '15%', 
         right: '15%', 
         top: "80.72%", 
-        // bottom: "22.85%",
+        bottom: "27.85%",
         backgroundColor: '#3D70FF',
         borderRadius: 40, 
       }, 
@@ -92,6 +100,8 @@ const styles = StyleSheet.create({
         fontWeight: 600, 
         fontSize: 18, 
         lineHeight: 30, 
-        textAlign: 'center'
+        textAlign: 'center',
+        top: 6,
+        color: '#fff'
       },
     });  
