@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import HomeLayout from "./app/(tabs)/_layout";
 import AuthLayout from "./app/(authentication)/_layout";
 
-export default function App() {
+function App() {
   const Stack = createNativeStackNavigator();
 
   return (
@@ -21,5 +21,7 @@ export default function App() {
    
   ); 
 }
+
+export default App; 
 
 // ios: 269503627700-78cs6nkpjjbfvckl3s46m4smlvf6tkcl.apps.googleusercontent.com
