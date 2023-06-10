@@ -3,7 +3,7 @@ import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../../lib/supabase";
 
-export default function Profile() {
+function Profile() {
     const handleLogOut = async () => {
         await supabase.auth.signOut(); 
     }
@@ -15,3 +15,5 @@ export default function Profile() {
         </SafeAreaView>
     ); 
 }
+
+export default Profile; 

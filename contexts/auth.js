@@ -27,7 +27,7 @@ function useProtectedRoute(user) {
             if (segments[1] === "CreateAccount") {
                 router.replace("/(authentication)/AccountCreated");
             } else if (segments[1] === "Login") {
-                router.replace("/(tabs)/Home")
+                router.replace("/(tabs)/Expenses")
             }
         }
     }, [user, segments, router]);

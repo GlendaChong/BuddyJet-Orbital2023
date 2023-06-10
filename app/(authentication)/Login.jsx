@@ -5,7 +5,7 @@ import { supabase } from "../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextFieldInput from "./TextFieldInput";
 
-export default function Login() {
+function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -92,3 +92,5 @@ const styles = StyleSheet.create({
         lineHeight: 35,  
     }, 
 })
+
+export default Login; 
