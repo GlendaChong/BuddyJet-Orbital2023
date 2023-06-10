@@ -1,5 +1,5 @@
 import React from "react";
-import Budget from "./(budgetTabs)/Budget";
+import Budget from "./Budget";
 import CreateBudget from "./(budgetTabs)/CreateBudget";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
