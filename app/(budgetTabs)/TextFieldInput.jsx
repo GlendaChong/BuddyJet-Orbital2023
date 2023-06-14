@@ -9,6 +9,7 @@ function TextFieldInput({ label, value, onChangeText}) {
             <TextInput style={styles.textfieldInput}
                 autoCapitalize='none'
                 textContentType="none"
+                keyboardType="decimal-pad"
                 secureTextEntry={label == ('Password') || (label =='Confirm Password')}
                 value={value}
                 onChangeText={onChangeText}
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
         lineHeight: 26, 
         color: '#100D40', 
         opacity: 0.65,    
-        marginTop: 150,      
+        marginTop: 140,      
     },
     textfieldInput: {
         width: 327, 
