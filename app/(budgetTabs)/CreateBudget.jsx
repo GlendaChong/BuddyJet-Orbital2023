@@ -40,17 +40,13 @@ function CreateBudget() {
       <ScrollView>
       <FontAwesomeIcon
         icon={faChevronLeft}
-        onPress={() => {
-          router.back();
-        }}
+        
         style={styles.BackButton}
         size={20}
       />
       <Text
+        onPress={() => {router.back()}}
         style={styles.BudgetText}
-        onPress={() => {
-          router.back();
-        }}
       >
         Budget
       </Text>
@@ -112,6 +108,7 @@ const styles = StyleSheet.create({
         left: 34,
         alignContent: 'center',
         color: '#100D40', 
+        
     }, 
 
       MakeBudgetButton: {
