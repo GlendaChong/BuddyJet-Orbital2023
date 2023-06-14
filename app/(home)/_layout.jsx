@@ -33,7 +33,8 @@ function HomeLayout() {
                     ), 
                     tabBarLabelStyle: {
                         display: "flex"
-                    } 
+                    }, 
+                    headerShown: false,  
                 }} 
             />
 
@@ -44,7 +45,8 @@ function HomeLayout() {
                     ), 
                     tabBarLabelStyle: {
                         display: "flex"
-                    }
+                    }, 
+                    headerShown: false,  
                 }} 
             />
 
@@ -58,7 +60,8 @@ function HomeLayout() {
                     ), 
                     tabBarLabelStyle: {
                         display: "none"
-                    } 
+                    }, 
+                    headerShown: false,   
                 }}
             
             />
@@ -69,7 +72,8 @@ function HomeLayout() {
                     ), 
                     tabBarLabelStyle: {
                         display: "flex"
-                    }
+                    }, 
+                    headerShown: false, 
                 }}
             />
 
@@ -80,9 +84,11 @@ function HomeLayout() {
                 ), 
                 tabBarLabelStyle: {
                     display: "flex"
-                }
+                }, 
+                headerShown: false,  
             }}
             />
+            
         </Tabs>
     );
 }
