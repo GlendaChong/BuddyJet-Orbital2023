@@ -5,8 +5,12 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextFieldInput from "./TextFieldInput";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from 'expo-router';
 
 function CreateAccount() {
+    const router = useRouter();
     const [name, setName] = useState(''); 
     const [dateOfBirth, setDateOfBirth] = useState(''); 
     const [phoneNumber, setPhoneNumber] = useState(''); 
@@ -68,6 +72,14 @@ function CreateAccount() {
             <ScrollView>
                 <Text style={styles.helloText}>Hello!</Text>
                 <Text style={styles.descriptionText}>Create a new account</Text>
+                <FontAwesomeIcon
+                    icon={faChevronLeft}
+                    style={styles.BackButton}
+                    size={20}
+                 />
+                <Text onPress={()=> {router.back();}} style={styles.BackText} >
+                    back
+                </Text>
                 <TextFieldInput label='Name' value={name} onChangeText={setName} />
                 <TextFieldInput label='Date of Birth (DD-MM-YYYY)' value={dateOfBirth} placeholder='DD/MM/YYYYY' onChangeText={setDateOfBirth} />
                 <TextFieldInput label='Phone Number' value={phoneNumber} onChangeText={setPhoneNumber} />
@@ -89,6 +101,23 @@ function CreateAccount() {
 }
 
 const styles = StyleSheet.create({
+    BackButton: {
+        position: 'absolute', 
+        marginTop: 7,
+        left: 30
+      }, 
+
+      BackText: {
+        fontFamily: 'Poppins-Regular', 
+        fontWeight: 600, 
+        fontSize: 15, 
+        position: 'absolute', 
+        marginTop: 7, 
+        left: 20,
+        color: '#fff', 
+        opacity: 0.1, 
+      }, 
+
     helloText: {
         left: 30,
         fontFamily: 'Poppins-SemiBold', 
