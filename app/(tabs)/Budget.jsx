@@ -3,10 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import { Button} from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { useNavigation } from 'expo-router';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-
 
 
 export default function Budget() {
@@ -14,19 +10,11 @@ export default function Budget() {
 
     const CreateBudgetButton = () => {
         return (
-          // <TouchableOpacity 
-          //       onPress={()=>router.push('./CreateBudget')} 
-          //       style={styles.createBudgetButton}
-          //   >
-          //       <Text style={styles.createBudgetText}>Create a budget</Text>
-          //   </TouchableOpacity>
-
           <Button
           mode="contained" 
           style={styles.createBudgetButton}
           labelStyle={styles.createBudgetText}
-          // onPress={() => router.push('./CreateBudget')}
-          onPress={() => router.navigate('CreateBudget')}
+          onPress={() => router.push('../(budgetTabs)/CreateBudget')}
           >
             Create a budget
           </Button>
@@ -36,7 +24,7 @@ export default function Budget() {
       const Design = () => {
         return (
           <View>
-            {/* <Image style={styles.image} source={require('../../../assets/budget.jpeg')}/> */}
+            <Image style={styles.image} source={require('../../assets/budget.jpeg')} />
             <Text style={styles.mainText}>No Budget</Text>
             <Text style={styles.descriptionText}>You have not created a budget</Text>
           </View>
@@ -90,7 +78,6 @@ const styles = StyleSheet.create({
         left: '15%', 
         right: '15%', 
         top: "80.72%", 
-        bottom: "27.85%",
         backgroundColor: '#3D70FF',
         borderRadius: 40, 
       }, 
@@ -101,7 +88,6 @@ const styles = StyleSheet.create({
         fontSize: 18, 
         lineHeight: 30, 
         textAlign: 'center',
-        top: 6,
         color: '#fff'
       },
     });  
