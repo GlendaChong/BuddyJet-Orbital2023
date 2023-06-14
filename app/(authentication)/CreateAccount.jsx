@@ -105,9 +105,8 @@ const styles = StyleSheet.create({
         position: 'absolute', 
         marginTop: 7,
         left: 30
-      }, 
-
-      BackText: {
+    }, 
+    BackText: {
         fontFamily: 'Poppins-Regular', 
         fontWeight: 600, 
         fontSize: 15, 
@@ -116,8 +115,7 @@ const styles = StyleSheet.create({
         left: 20,
         color: '#fff', 
         opacity: 0.1, 
-      }, 
-
+    }, 
     helloText: {
         left: 30,
         fontFamily: 'Poppins-SemiBold', 

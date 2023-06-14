@@ -1,6 +1,6 @@
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Button} from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
