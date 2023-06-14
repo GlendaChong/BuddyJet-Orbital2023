@@ -3,8 +3,9 @@ import { faHouse, faChartColumn, faCalculator, faUser, faPlus } from "@fortaweso
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { StyleSheet, View } from "react-native";
 import { Tabs } from "expo-router";
+import { ScrollView } from "react-native-gesture-handler";
 
-const CustomTabBarButton = ({ children, onPress }) => {
+const CustomTabBarButton = ({children, onPress }) => {
     return (
         <TouchableOpacity 
             style={{

@@ -1,6 +1,7 @@
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function OnboardingScreen() {
   const router = useRouter();
@@ -42,7 +43,7 @@ function OnboardingScreen() {
   }
 
   return (
-    <View styles={styles.container}>
+    <View style={{ flex:1, backgroundColor: '#fff' }}>
       <Design />
       <CreateAccountButton /> 
       <LoginButton />
