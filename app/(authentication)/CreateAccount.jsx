@@ -57,14 +57,11 @@ function CreateAccount() {
         }
       
         setLoading(true);
-        const { error } = await supabase.auth.signUp({ 
-           email, password, options: { name, dateOfBirth, phoneNumber, confirmPassword }
-        });
-        setLoading(false);
-        if (error) {
-            setErrMsg(error.message);
-            return;
-        }
+
+        const { error, user } =  await supabase.auth.signUp({ 
+            email, password, options: { data :{full_name: name, phone_number: phoneNumber, date_of_birth: dateOfBirth}},
+         });
+
     }
 
     return (
@@ -89,7 +86,9 @@ function CreateAccount() {
                 <Button 
                     style={styles.signUpButton} 
                     labelStyle={styles.signUpText} 
-                    onPress={handleSubmit}
+                    onPress={ () => {
+                         handleSubmit();
+                    }}
                 >
                     Sign Up
                 </Button>

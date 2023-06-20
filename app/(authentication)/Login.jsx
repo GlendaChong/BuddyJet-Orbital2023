@@ -4,6 +4,9 @@ import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextFieldInput from "./TextFieldInput";
+import { ScrollView } from "react-native-gesture-handler";
+import BackButton from "../components/BackButton";
+
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -31,6 +34,8 @@ function Login() {
     }
     return (
         <SafeAreaView style={{ flex: 1}}>
+            <ScrollView>
+            <BackButton />
             <Text style={styles.welcomeText}>Welcome!</Text>
             <Text style={styles.descriptionText}>Please sign in to continue</Text>
             <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
@@ -46,6 +51,7 @@ function Login() {
             
             {errMsg !== "" && <Text>{errMsg}</Text>}
             {loading && <ActivityIndicator />}
+            </ScrollView>
         </SafeAreaView> 
     );
 }
@@ -59,7 +65,7 @@ const styles = StyleSheet.create({
         lineHeight: 68, 
         color: '#100D40', 
         alignContent: 'center',
-        marginTop: 40, 
+        marginTop: 80, 
     }, 
     descriptionText: {
         left: 30,
