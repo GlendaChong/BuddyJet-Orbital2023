@@ -4,6 +4,7 @@ import { useState } from "react";
 import TextFieldInput from "../components/TextFieldInput";
 import BackButton from "../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
+import { supabase } from "../../lib/supabase";
 
 
 function AddExpenses() {

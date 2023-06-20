@@ -3,8 +3,10 @@ import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from 'expo-router';
 
 function AccountCreated() {
+    const router = useRouter();
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <Text style={styles.header}>Account Created!</Text>
@@ -13,6 +15,7 @@ function AccountCreated() {
             <Button 
                 style={styles.loginButton} 
                 labelStyle={styles.loginText}
+                onPress={() => router.push('./Login')}
             >
                 Login Now
             </Button>

@@ -3,10 +3,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View, Image } from 'react-native';
 import { Button} from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { useState, useEffect } from "react";
+import { ScrollView } from "react-native-gesture-handler";
+import { supabase } from "../../lib/supabase";
+import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 
 export default function Budget() {
     const router = useRouter();
+    let [boolean, setBoolean] = useState(true);
+
+
+    //component for no budget
 
     const CreateBudgetButton = () => {
         return (
@@ -14,7 +23,10 @@ export default function Budget() {
           mode="contained" 
           style={styles.createBudgetButton}
           labelStyle={styles.createBudgetText}
-          onPress={() => router.push('../(budgetTabs)/CreateBudget')}
+          onPress={() => {
+            router.push('../(budgetTabs)/CreateBudget')
+            // setBoolean(true)
+          }}
           >
             Create a budget
           </Button>
@@ -23,7 +35,7 @@ export default function Budget() {
 
       const Design = () => {
         return (
-          <View>
+          <View style={{marginTop: 80}}>
             <Image style={styles.image} source={require('../../assets/budget.jpeg')} />
             <Text style={styles.mainText}>No Budget</Text>
             <Text style={styles.descriptionText}>You have not created a budget</Text>
@@ -31,13 +43,157 @@ export default function Budget() {
         ); 
       }
 
+      //component for when there is budget 
+      let [category, setCategory] = useState([]);
+      let [monthlyBudget, setMonthlyBudget] = useState(0);
+      let [budgetId, setbudgetId] = useState(0)
+
+      //obtain the budget_id that is currently in use 
+      const checkBudget = async () => {
+
+        let { data: budget, error } = await supabase
+            .from('budget')
+            .select('budget_id')
+            .eq('in_use', true);
+
+        const budget_id = budget[0]?.budget_id
+        // console.log(budget_id)
+        setbudgetId(budget_id);
+        // console.log(budgetId)
+
+          if (budget_id == undefined) {
+            setBoolean(false);
+          }
+          if (error) {
+            console.error('Error fetching budget', error);
+          }
+
+          // console.log(boolean)
+      }
+
+      useEffect(() => {
+        checkBudget();
+      },[])
+
+    
+
+    const fetchBudgetDetail = async () => {
+
+      let {data: budget } = await supabase.from('budget').select('income, spending').eq('in_use', true).eq('budget_id', budgetId)
+
+      const income = parseInt(budget[0]?.income);
+      const spend = budget[0]?.spending;
+      const budgetAmount = income * spend;
+
+      // console.log("fetched budget detail")
+
+      // console.log(income)
+      // console.log(spend)
+      // console.log(budgetAmount)
+
+      setMonthlyBudget(budgetAmount);
+      
+    }
+
+    //  useEffect(() => {
+    //   if (budgetId != undefined) {
+    //     fetchBudgetDetail();
+    //   }
+    //   }, []);
+    
+    const fetchCategoryDetail = async () => {
+
+      let {data: categoryData} = await supabase.from('categories').select('category, spending, color').eq('in_use', true).eq('budget_id', budgetId)
+      // console.log(category)
+      // console.log("fetched category")
+      setCategory(categoryData);
+
+    }
+
+    useEffect(() => {
+      if (budgetId != null) {
+        // console.log("fetched")
+        fetchBudgetDetail();
+        fetchCategoryDetail();
+        
+      }
+      
+    }, [budgetId]);
+
+
+    const BudgetBox = () => {
+      return (
+        <View style={{ marginTop: -15, flex: 1}}>
+          <Text onPress={()=> {router.push('../(budgetTabs)/EditBudget');}} style={{fontFamily: 'Poppins-Regular' , left: 280, marginBottom:10}} > Edit</Text> 
+      <View  style={{backgroundColor: '#000E90', borderRadius: 18, paddingHorizontal: 30, paddingTop: 15, paddingBottom:8}}>
+        {category.map((item, index) => (
+          <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }} >
+              <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: item.color, marginRight: 20 }} />
+              <Text style={{ fontFamily: 'Poppins-Medium', width: 120, color:'#fff'}}>{item.category}</Text>
+              <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize:18, width: 85, color:'#fff'}}>${(monthlyBudget * item.spending).toFixed(0)}</Text>
+              <Text style={{ fontFamily: 'Poppins-Medium', width: 30, color:'#fff'}}>{`${(item.spending * 100).toFixed(0)}%`}</Text>
+          </View>
+        ))}
+   
+        {/* <Text onPress={()=> {router.push("../(budgetTabs)/BudgetBoard")}} >
+                test
+            </Text> */}
+     </View>
+     </View>
+      );
+    }
+
+
+    const FinancialTip = () => {
+      return (
+        <View style={{ paddingHorizontal: 10, paddingTop: 35 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginRight: 10 }}>
+              <FontAwesomeIcon icon={faLightbulb} size={30} style={{ color: "#FF9F1A" }} />
+            </View>
+            <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 20, marginBottom: 4 }}>Financial Tip</Text>
+          </View>
+          <View style={{ marginLeft: 40 }}>
+            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginBottom: 4, width: 285, marginTop: 20, marginLeft: -30, lineHeight: 28 }}>
+              Save regularly: Make saving a priority by setting aside a portion of your income each month. Start with a small amount and gradually increase it over time.
+            </Text>
+          </View>
+        </View>
+      );
+    }
+
+    
+    
+    
+
+    //checking if there is budget
+   if (boolean) {
+    //The page for when there is a budget 
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" , backgroundColor: "#fff"}}>
+        <ScrollView>
+          <View style={{ alignItems: 'center' }}>
+        <Text style={{fontFamily:'Poppins-Regular', color:'#2C2646', marginTop: 20}}>Monthly Budget</Text>
+        <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize:48, marginTop: 0}}>${monthlyBudget}</Text>
+        <BudgetBox />
+        </View>
+        <FinancialTip />
+        </ScrollView>
+      </SafeAreaView>
+    );
+    } else {
+    //The page for when there is  no budget
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" , backgroundColor: "#fff"}}>
             <Design />
             <CreateBudgetButton /> 
+
         </SafeAreaView>
     ); 
+      }
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
