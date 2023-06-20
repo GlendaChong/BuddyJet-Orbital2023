@@ -8,6 +8,8 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import TextFieldInput from "./TextFieldInput";
 import { useState } from "react";
 import Slider from '@react-native-community/slider';
+import BackButton from "../components/BackButton";
+import { supabase } from "../../lib/supabase";
 
 
 
@@ -32,6 +34,7 @@ function MakeBudget() {
 
     const SaveSpendSlider = () => {
         return (
+            
             <View style={{ flex: 1, padding:55, bottom: 100}}>
                 <Slider
                 maximumValue={100}
@@ -45,18 +48,25 @@ function MakeBudget() {
                 <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular', left: -25, top: 0}}> Save </Text>
                 <Text style={{color: '#2C2646', fontFamily:'Poppins-Medium', fontSize: 18, bottom: 19, left: 125 }}> {sliderValue}% </Text>
                 <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular',left: 250, bottom: 40}}> Spend </Text>
-            
             </View>
+            
+            
         ); 
+      };
+
+      const buttonPress = () => {
+        // setCreated(true); 
+        router.push('../(home)/Budget');
       };
 
       const CreateBudgetButton = () => {
         return (
+
           <Button
           mode="contained" 
           style={styles.CreateBudgetButton}
           labelStyle={styles.CreateText}
-          onPress={() => router.push('../(home)/Budget')}
+          onPress={buttonPress}
           >
             Create
           </Button>
@@ -67,14 +77,7 @@ function MakeBudget() {
     return (
         <SafeAreaView style={{ flex:1, backgroundColor: "#fff"}}>
             <ScrollView>
-                <FontAwesomeIcon
-                    icon={faChevronLeft}
-                    style={styles.BackButton}
-                    size={20}
-                 />
-                <Text onPress={()=> {router.back();}} style={styles.CreateText} >
-                    Create
-                </Text>
+                <BackButton />
                 <Text style={styles.MakeText}>Make</Text>
                 <Text style={styles.DescriptionText}>Your own budget</Text>
                 <TextFieldInput label='Income' value={income} onChangeText={setIncome} />
@@ -82,7 +85,6 @@ function MakeBudget() {
                 <SaveSpendSlider />
                 <Text style={{color: '#2C2646', fontFamily:'Poppins-SemiBold', fontSize: 18, bottom:160, paddingLeft: 30}}> Categories </Text>
                 <CreateBudgetButton />
-            
             </ScrollView>
         </SafeAreaView>
     ); 
@@ -94,22 +96,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
       },
 
-      BackButton: {
-        position: 'absolute', 
-        marginTop: 7,
-        left: 30
-      }, 
-
-      CreateText: {
-        fontFamily: 'Poppins-Regular', 
-        fontWeight: 600, 
-        fontSize: 15, 
-        position: 'absolute', 
-        marginTop: 7, 
-        left: 20,
-        color: '#fff', 
-        opacity: 0.1, 
-      }, 
       MakeText: {
         position: 'absolute', 
         fontFamily: 'Poppins-SemiBold', 
@@ -123,7 +109,7 @@ const styles = StyleSheet.create({
         color: '#100D40', 
     }, 
     DescriptionText: {
-        position: 'absolute', 
+        position: 'absolute',
         fontFamily: 'Poppins-Regular', 
         fontWeight: 600, 
         fontSize: 16, 

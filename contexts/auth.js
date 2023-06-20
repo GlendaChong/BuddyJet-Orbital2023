@@ -11,7 +11,7 @@ export function useAuth() {
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute(user) {
+export function useProtectedRoute(user) {
     const segments = useSegments();
     const router = useRouter();
 
@@ -34,25 +34,28 @@ function useProtectedRoute(user) {
 }
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const router = useRouter(); 
-    const segments = useSegments(); 
-    useProtectedRoute(user);
+  const [user, setUser] = useState(null);
+  const router = useRouter(); 
+  const segments = useSegments(); 
+  useProtectedRoute(user);
 
-    useEffect(() => {
-        console.log(`AuthProvider useEffect called`);
-        const { data } = supabase.auth.onAuthStateChange((event, session) => {
-            console.log(`onAuthStateChange event: ${event}`);
-            if (event === "SIGNED_IN") {
-                setUser(session.user);
-            } else if (event === "SIGNED_OUT") {
-                setUser(null);
-            }
-        })
+  useEffect(() => {
+      console.log(`AuthProvider useEffect called`);
+      const { data } = supabase.auth.onAuthStateChange((event, session) => {
+          console.log(`onAuthStateChange event: ${event}`);
+          if (event === "SIGNED_IN") {
+              setUser(session.user);
+          } else if (event === "SIGNED_OUT") {
+              setUser(null);
+          }
+      })
 
 
-        return () => data.subscription.unsubscribe();
-    }, [segments, router]);
+      return () => data.subscription.unsubscribe();
+  }, [segments, router]);
 
-    return <AuthContext.Provider value={{ user }}>{children}</ AuthContext.Provider>
+  return <AuthContext.Provider value={{ user }}>{children}</ AuthContext.Provider>
 }
+
+
+
