@@ -6,7 +6,9 @@ import { useRouter } from 'expo-router';
 import { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from "../../lib/supabase";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+
 
 export default function Budget() {
     const router = useRouter();
@@ -42,14 +44,14 @@ export default function Budget() {
       }
 
       //component for when there is budget 
-      const [category, setCategory] = useState([]);
-      const [monthlyBudget, setMonthlyBudget] = useState(0);
-      const [budgetId, setbudgetId] = useState(0)
+      let [category, setCategory] = useState([]);
+      let [monthlyBudget, setMonthlyBudget] = useState(0);
+      let [budgetId, setbudgetId] = useState(0)
 
       //obtain the budget_id that is currently in use 
       const checkBudget = async () => {
 
-        let { data: budget } = await supabase
+        let { data: budget, error } = await supabase
             .from('budget')
             .select('budget_id')
             .eq('in_use', true);
@@ -57,56 +59,72 @@ export default function Budget() {
         const budget_id = budget[0]?.budget_id
         // console.log(budget_id)
         setbudgetId(budget_id);
+        // console.log(budgetId)
 
           if (budget_id == undefined) {
             setBoolean(false);
           }
-          console.log(boolean)
+          if (error) {
+            console.error('Error fetching budget', error);
+          }
+
+          // console.log(boolean)
       }
 
       useEffect(() => {
         checkBudget();
-      }, [])
+      },[])
 
     
 
     const fetchBudgetDetail = async () => {
 
-      let {data: budget} = await supabase.from('budget').select('income, spending').eq('in_use', true).eq('budget_id', budgetId)
+      let {data: budget } = await supabase.from('budget').select('income, spending').eq('in_use', true).eq('budget_id', budgetId)
 
       const income = parseInt(budget[0]?.income);
       const spend = budget[0]?.spending;
       const budgetAmount = income * spend;
 
-      console.log(income)
-      console.log(spend)
-      console.log(budgetAmount)
+      // console.log("fetched budget detail")
+
+      // console.log(income)
+      // console.log(spend)
+      // console.log(budgetAmount)
 
       setMonthlyBudget(budgetAmount);
       
     }
 
-     useEffect(() => {
-        fetchBudgetDetail();
-      }, []);
+    //  useEffect(() => {
+    //   if (budgetId != undefined) {
+    //     fetchBudgetDetail();
+    //   }
+    //   }, []);
     
     const fetchCategoryDetail = async () => {
 
-      let {data: categoryData} = await supabase.from('categories').select('category, spending, color').eq('in_use', true)
-      console.log(category)
+      let {data: categoryData} = await supabase.from('categories').select('category, spending, color').eq('in_use', true).eq('budget_id', budgetId)
+      // console.log(category)
+      // console.log("fetched category")
       setCategory(categoryData);
 
     }
 
     useEffect(() => {
-      fetchCategoryDetail();
-    }, []);
+      if (budgetId != null) {
+        // console.log("fetched")
+        fetchBudgetDetail();
+        fetchCategoryDetail();
+        
+      }
+      
+    }, [budgetId]);
 
 
     const BudgetBox = () => {
       return (
         <View style={{ marginTop: -15, flex: 1}}>
-          <Text style={{fontFamily: 'Poppins-Regular' , left: 280, marginBottom:10}}> Edit</Text> 
+          <Text onPress={()=> {router.push('../(budgetTabs)/EditBudget');}} style={{fontFamily: 'Poppins-Regular' , left: 280, marginBottom:10}} > Edit</Text> 
       <View  style={{backgroundColor: '#000E90', borderRadius: 18, paddingHorizontal: 30, paddingTop: 15, paddingBottom:8}}>
         {category.map((item, index) => (
           <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }} >
@@ -125,6 +143,29 @@ export default function Budget() {
       );
     }
 
+
+    const FinancialTip = () => {
+      return (
+        <View style={{ paddingHorizontal: 10, paddingTop: 35 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginRight: 10 }}>
+              <FontAwesomeIcon icon={faLightbulb} size={30} style={{ color: "#FF9F1A" }} />
+            </View>
+            <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 20, marginBottom: 4 }}>Financial Tip</Text>
+          </View>
+          <View style={{ marginLeft: 40 }}>
+            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginBottom: 4, width: 285, marginTop: 20, marginLeft: -30, lineHeight: 28 }}>
+              Save regularly: Make saving a priority by setting aside a portion of your income each month. Start with a small amount and gradually increase it over time.
+            </Text>
+          </View>
+        </View>
+      );
+    }
+
+    
+    
+    
+
     //checking if there is budget
    if (boolean) {
     //The page for when there is a budget 
@@ -136,6 +177,7 @@ export default function Budget() {
         <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize:48, marginTop: 0}}>${monthlyBudget}</Text>
         <BudgetBox />
         </View>
+        <FinancialTip />
         </ScrollView>
       </SafeAreaView>
     );
