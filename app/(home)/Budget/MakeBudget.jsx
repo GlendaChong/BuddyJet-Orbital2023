@@ -8,8 +8,8 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import TextFieldInput from "./TextFieldInput";
 import { useState } from "react";
 import Slider from '@react-native-community/slider';
-import BackButton from "../components/BackButton";
-import { supabase } from "../../lib/supabase";
+import BackButton from "../../components/BackButton";
+import { supabase } from "../../../lib/supabase";
 
 
 
@@ -20,39 +20,39 @@ function MakeBudget() {
     var save = income * (sliderValue/100);
     var spend = income * (1 - (sliderValue/100));
 
-    const SaveSpendBox = () => {
-        return (
-            <View style={{flex: 1}}>
-                <View style={styles.roundedRect} />
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular', bottom: 45, left: 100}}> Save: </Text>
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular', bottom: 30, left: 98}}> Spend: </Text>
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-SemiBold', fontSize: 20,  bottom: 88, left: 180}}> ${save.toFixed(2)} </Text>
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-SemiBold', fontSize: 20,  bottom: 81, left: 180}}> ${spend.toFixed(2)} </Text>
-            </View>
-        ); 
-      };
+    // const SaveSpendBox = () => {
+    //     return (
+    //         <View style={{flex: 1}}>
+    //             <View style={styles.roundedRect} />
+    //             <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular', bottom: 45, left: 100}}> Save: </Text>
+    //             <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular', bottom: 30, left: 98}}> Spend: </Text>
+    //             <Text style={{color: '#2C2646', fontFamily:'Poppins-SemiBold', fontSize: 20,  bottom: 88, left: 180}}> ${save.toFixed(2)} </Text>
+    //             <Text style={{color: '#2C2646', fontFamily:'Poppins-SemiBold', fontSize: 20,  bottom: 81, left: 180}}> ${spend.toFixed(2)} </Text>
+    //         </View>
+    //     ); 
+    //   };
 
-    const SaveSpendSlider = () => {
-        return (
+    // const SaveSpendSlider = () => {
+    //     return (
             
-            <View style={{ flex: 1, padding:55, bottom: 100}}>
-                <Slider
-                maximumValue={100}
-                minimumValue={0}
-                minimumTrackTintColor="#007AFF"
-                maximumTrackTintColor="#E4E4E6"
-                step={1}
-                value={sliderValue}
-                onValueChange={(sliderValue) => setSliderValue(sliderValue)}
-                />
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular', left: -25, top: 0}}> Save </Text>
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-Medium', fontSize: 18, bottom: 19, left: 125 }}> {sliderValue}% </Text>
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular',left: 250, bottom: 40}}> Spend </Text>
-            </View>
+    //         <View style={{ flex: 1, padding:55, bottom: 100}}>
+    //             <Slider
+    //             maximumValue={100}
+    //             minimumValue={0}
+    //             minimumTrackTintColor="#007AFF"
+    //             maximumTrackTintColor="#E4E4E6"
+    //             step={1}
+    //             value={sliderValue}
+    //             onValueChange={(sliderValue) => setSliderValue(sliderValue)}
+    //             />
+    //             <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular', left: -25, top: 0}}> Save </Text>
+    //             <Text style={{color: '#2C2646', fontFamily:'Poppins-Medium', fontSize: 18, bottom: 19, left: 125 }}> {sliderValue}% </Text>
+    //             <Text style={{color: '#2C2646', fontFamily:'Poppins-Regular',left: 250, bottom: 40}}> Spend </Text>
+    //         </View>
             
             
-        ); 
-      };
+    //     ); 
+    //   };
 
       const buttonPress = () => {
         // setCreated(true); 
@@ -81,9 +81,7 @@ function MakeBudget() {
                 <Text style={styles.MakeText}>Make</Text>
                 <Text style={styles.DescriptionText}>Your own budget</Text>
                 <TextFieldInput label='Income' value={income} onChangeText={setIncome} />
-                <SaveSpendBox />
-                <SaveSpendSlider />
-                <Text style={{color: '#2C2646', fontFamily:'Poppins-SemiBold', fontSize: 18, bottom:160, paddingLeft: 30}}> Categories </Text>
+                <Text style={{color: '#2C2646', fontFamily:'Poppins-SemiBold', fontSize: 18, marginTop: 35, paddingLeft: 30}}> Categories </Text>
                 <CreateBudgetButton />
             </ScrollView>
         </SafeAreaView>
