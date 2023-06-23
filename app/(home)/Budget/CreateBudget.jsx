@@ -2,15 +2,15 @@ import { Text, StyleSheet, View } from "react-native";
 import { Button } from 'react-native-paper';
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 // import TextFieldInput from "../(authentication)/TextFieldInput";
 import TextFieldInput from "./TextFieldInput";
-import BackButton from "../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
-import { supabase } from "../../lib/supabase";
+import BackButton from "../../components/BackButton";
+import { supabase } from "../../../lib/supabase";
 
 
 function CreateBudget() {
@@ -39,8 +39,6 @@ function CreateBudget() {
         const updates = {
           income,
           user_id: selectedID,
-          save: 0.2,
-          spending: 0.8, 
         }
 
         // insert the data into the budget table 
@@ -62,6 +60,7 @@ function CreateBudget() {
             , {user_id: selectedID, budget_id: budgetID, category:'Transport', spending:0.15, color:'#0A84FF'}
             , {user_id: selectedID, budget_id: budgetID, category:'Recreation', spending:0.3,color:'#F46040' }
             , {user_id: selectedID, budget_id: budgetID, category:'Bills', spending:0.10, color:'#32D74B'}
+            , {user_id: selectedID, budget_id: budgetID, category:'Saving', spending:0.20, color:'#64D2FF'}
           ]);
         
         if (error) {
@@ -106,20 +105,23 @@ function CreateBudget() {
       const Budget1Desc = () => {
         return (
           <View>
-            <Text style={{color: '#fff', opacity:0.1, marginTop: -60}}> anchor </Text>
-            <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 260, left: 20}}>Save: </Text>
-            <Text style={{fontFamily:'Poppins-Medium', color:'#2C2646', fontSize: 15, bottom: 280, left: 92}}>20% </Text>
-            <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 270, left: 20}}>Spend: </Text>
-            <Text style={{fontFamily:'Poppins-Medium', color:'#2C2646', fontSize: 15, bottom: 290, left: 92}}>80% </Text>
-            <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 270, left: 20}}>Spending: </Text>
+            <Text style={{color: '#fff', opacity:0.1, marginTop: 15}}> anchor </Text>
             <FontAwesomeIcon
               icon={faChevronRight}
-                style={{bottom: 355, left:250}}
+                style={{bottom: 240, left:250}}
                 size={25}
             />
-            <Text onPress={()=> {router.push('../(home)/Budget'), handleSubmit1()}} style={{bottom: 375, left:250, opacity:0.1, color:'#F3F6FA'}} >
+            <Text onPress={()=> {router.back(), handleSubmit1()}} style={{bottom: 275, fontSize: 30,left:230, opacity:100, color:'#F3F6FA'}} >
                 back
             </Text>
+
+
+            <FontAwesomeIcon
+              icon={faCircle}
+                style={{color:'#64D2FF',bottom: 305, left: 28}}
+                size={15}
+            />
+            
             <FontAwesomeIcon
               icon={faCircle}
                 style={{color:'#BF5AF2',bottom: 280, left: 28}}
@@ -140,10 +142,11 @@ function CreateBudget() {
                 style={{color:'#32D74B',bottom: 188, left: 29}}
                 size={15}
             />
-             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 344, left: 70}}>Food: 25% </Text>
-             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 320, left: 70}}>Transport: 15% </Text>
-             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 298, left: 70}}>Recreation: 30% </Text>
-             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 268, left: 70}}>Bills: 10% </Text>
+             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 384, left: 70}}>Saving: 20% </Text>
+             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 364, left: 70}}>Food: 25% </Text>
+             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 340, left: 70}}>Transport: 15% </Text>
+             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 315, left: 70}}>Recreation: 30% </Text>
+             <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 15, bottom: 288, left: 70}}>Bills: 10% </Text>
           </View>
         ); 
       };
@@ -172,6 +175,7 @@ function CreateBudget() {
         <SampleBudget1 />
         <View style ={{marginTop:-45, marginBottom: -90}}>
         <MakeBudgetButton />
+   
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -215,7 +219,7 @@ const styles = StyleSheet.create({
 
     roundedRect: {
       width: 311,
-      height: 350,
+      height: 260,
       backgroundColor: '#F3F6FA',
       borderRadius: 18,
       top: 20,

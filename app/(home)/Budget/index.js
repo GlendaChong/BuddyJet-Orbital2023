@@ -5,15 +5,15 @@ import { Button} from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../../lib/supabase";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 
 export default function Budget() {
     const router = useRouter();
-    let [boolean, setBoolean] = useState(true);
-
+    const [boolean, setBoolean] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     //component for no budget
 
@@ -24,7 +24,7 @@ export default function Budget() {
           style={styles.createBudgetButton}
           labelStyle={styles.createBudgetText}
           onPress={() => {
-            router.push('../(budgetTabs)/CreateBudget')
+            router.push('./Budget/CreateBudget')
             // setBoolean(true)
           }}
           >
@@ -36,7 +36,7 @@ export default function Budget() {
       const Design = () => {
         return (
           <View style={{marginTop: 80}}>
-            <Image style={styles.image} source={require('../../assets/budget.jpeg')} />
+            <Image style={styles.image} source={require('../../../assets/budget.jpeg')} />
             <Text style={styles.mainText}>No Budget</Text>
             <Text style={styles.descriptionText}>You have not created a budget</Text>
           </View>
@@ -50,16 +50,16 @@ export default function Budget() {
 
       //obtain the budget_id that is currently in use 
       const checkBudget = async () => {
-
+        setRefreshing(true)
         let { data: budget, error } = await supabase
             .from('budget')
             .select('budget_id')
             .eq('in_use', true);
 
         const budget_id = budget[0]?.budget_id
-        // console.log(budget_id)
+      
         setbudgetId(budget_id);
-        // console.log(budgetId)
+        setRefreshing(false);
 
           if (budget_id == undefined) {
             setBoolean(false);
@@ -68,63 +68,41 @@ export default function Budget() {
             console.error('Error fetching budget', error);
           }
 
-          // console.log(boolean)
+          console.log(boolean)
       }
 
-      useEffect(() => {
+    useEffect(() => {
         checkBudget();
-      },[])
+    },[])
 
     
 
     const fetchBudgetDetail = async () => {
-
-      let {data: budget } = await supabase.from('budget').select('income, spending').eq('in_use', true).eq('budget_id', budgetId)
+      let {data: budget } = await supabase.from('budget').select('income').eq('in_use', true).eq('budget_id', budgetId)
 
       const income = parseInt(budget[0]?.income);
-      const spend = budget[0]?.spending;
-      const budgetAmount = income * spend;
-
-      // console.log("fetched budget detail")
-
-      // console.log(income)
-      // console.log(spend)
-      // console.log(budgetAmount)
-
-      setMonthlyBudget(budgetAmount);
-      
+      setMonthlyBudget(income);
     }
 
-    //  useEffect(() => {
-    //   if (budgetId != undefined) {
-    //     fetchBudgetDetail();
-    //   }
-    //   }, []);
     
     const fetchCategoryDetail = async () => {
-
       let {data: categoryData} = await supabase.from('categories').select('category, spending, color').eq('in_use', true).eq('budget_id', budgetId)
-      // console.log(category)
-      // console.log("fetched category")
       setCategory(categoryData);
-
     }
 
     useEffect(() => {
-      if (budgetId != null) {
-        // console.log("fetched")
-        fetchBudgetDetail();
-        fetchCategoryDetail();
+        if (budgetId != null) {
+          fetchBudgetDetail();
+          fetchCategoryDetail();
+        }
         
-      }
-      
-    }, [budgetId]);
+      }, [budgetId]);
 
 
     const BudgetBox = () => {
       return (
         <View style={{ marginTop: -15, flex: 1}}>
-          <Text onPress={()=> {router.push('../(budgetTabs)/EditBudget');}} style={{fontFamily: 'Poppins-Regular' , left: 280, marginBottom:10}} > Edit</Text> 
+          <Text onPress={()=> {router.push('../Budget/EditBudget');}} style={{fontFamily: 'Poppins-Regular' , left: 280, marginBottom:10}} > Edit</Text> 
       <View  style={{backgroundColor: '#000E90', borderRadius: 18, paddingHorizontal: 30, paddingTop: 15, paddingBottom:8}}>
         {category.map((item, index) => (
           <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }} >
@@ -134,10 +112,6 @@ export default function Budget() {
               <Text style={{ fontFamily: 'Poppins-Medium', width: 30, color:'#fff'}}>{`${(item.spending * 100).toFixed(0)}%`}</Text>
           </View>
         ))}
-   
-        {/* <Text onPress={()=> {router.push("../(budgetTabs)/BudgetBoard")}} >
-                test
-            </Text> */}
      </View>
      </View>
       );
