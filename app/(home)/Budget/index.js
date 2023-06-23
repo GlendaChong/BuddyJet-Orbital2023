@@ -4,7 +4,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Button} from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from "react";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, RefreshControl } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -15,10 +15,17 @@ export default function Budget() {
     const [boolean, setBoolean] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
+    const refresh = () => {
+        checkBudget();
+        fetchBudgetDetail();
+        fetchCategoryDetail();
+    }
+
     //component for no budget
 
     const CreateBudgetButton = () => {
         return (
+            <View style={{marginTop:80}}>
           <Button
           mode="contained" 
           style={styles.createBudgetButton}
@@ -30,12 +37,13 @@ export default function Budget() {
           >
             Create a budget
           </Button>
+          </View>
         ); 
       };
 
       const Design = () => {
         return (
-          <View style={{marginTop: 80}}>
+          <View style={{marginTop: 360}}>
             <Image style={styles.image} source={require('../../../assets/budget.jpeg')} />
             <Text style={styles.mainText}>No Budget</Text>
             <Text style={styles.descriptionText}>You have not created a budget</Text>
@@ -46,7 +54,7 @@ export default function Budget() {
       //component for when there is budget 
       let [category, setCategory] = useState([]);
       let [monthlyBudget, setMonthlyBudget] = useState(0);
-      let [budgetId, setbudgetId] = useState(0)
+      const [budgetId, setbudgetId] = useState(0)
 
       //obtain the budget_id that is currently in use 
       const checkBudget = async () => {
@@ -59,11 +67,17 @@ export default function Budget() {
         const budget_id = budget[0]?.budget_id
       
         setbudgetId(budget_id);
+        console.log(budget_id)
         setRefreshing(false);
 
           if (budget_id == undefined) {
             setBoolean(false);
           }
+
+          if(budget_id !== undefined) {
+            setBoolean(true);
+          } 
+
           if (error) {
             console.error('Error fetching budget', error);
           }
@@ -75,19 +89,32 @@ export default function Budget() {
         checkBudget();
     },[])
 
+    useEffect(() => {
+        if (refreshing) {
+            checkBudget();
+            setRefreshing(false);
+        }
+        
+    },[refreshing])
+
     
 
     const fetchBudgetDetail = async () => {
+        setRefreshing(true)
       let {data: budget } = await supabase.from('budget').select('income').eq('in_use', true).eq('budget_id', budgetId)
 
       const income = parseInt(budget[0]?.income);
       setMonthlyBudget(income);
+      setRefreshing(false)
     }
 
     
     const fetchCategoryDetail = async () => {
+        setRefreshing(true);
       let {data: categoryData} = await supabase.from('categories').select('category, spending, color').eq('in_use', true).eq('budget_id', budgetId)
       setCategory(categoryData);
+      console.log(categoryData)
+      setRefreshing(false);
     }
 
     useEffect(() => {
@@ -97,6 +124,15 @@ export default function Budget() {
         }
         
       }, [budgetId]);
+
+      useEffect(() => {
+        if (refreshing) {
+          fetchBudgetDetail();
+          fetchCategoryDetail();
+          setRefreshing(false);
+        }
+        
+      }, [refreshing]);
 
 
     const BudgetBox = () => {
@@ -145,7 +181,12 @@ export default function Budget() {
     //The page for when there is a budget 
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" , backgroundColor: "#fff"}}>
-        <ScrollView>
+        <ScrollView
+         refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+          }
+          >
+
           <View style={{ alignItems: 'center' }}>
         <Text style={{fontFamily:'Poppins-Regular', color:'#2C2646', marginTop: 20}}>Monthly Budget</Text>
         <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize:48, marginTop: 0}}>${monthlyBudget}</Text>
@@ -159,9 +200,13 @@ export default function Budget() {
     //The page for when there is  no budget
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" , backgroundColor: "#fff"}}>
+            <ScrollView
+             refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={checkBudget} />
+              }>
             <Design />
             <CreateBudgetButton /> 
-
+            </ScrollView>
         </SafeAreaView>
     ); 
       }
@@ -205,9 +250,9 @@ const styles = StyleSheet.create({
 
       createBudgetButton: {
         position: 'absolute', 
-        left: '15%', 
-        right: '15%', 
+        left:20 ,
         top: "80.72%", 
+        width: 250,
         backgroundColor: '#3D70FF',
         borderRadius: 40, 
       }, 
