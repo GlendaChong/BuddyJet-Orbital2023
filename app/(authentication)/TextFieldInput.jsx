@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3,
         marginTop: 10, 
+        backgroundColor: "rgb(237, 221, 246)"
     },  
 }); 
 
