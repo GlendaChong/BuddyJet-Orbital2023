@@ -9,12 +9,10 @@ function EditBudget() {
 
     let [budgetId, setbudgetId] = useState(0)
     let [userId, setUserId] = useState('')
-    // const [category, setCategory] = useState([]);
-    // const [percentages, setPercentages] = useState([]);
+    const [category, setCategory] = useState([]);
     const [editing, setEditing] = useState(false);
     const [oldIncome, setOldIncome] = useState(0);
     const [newIncome, setNewIncome] = useState(0);
-    
 
     const fetchUserId = async () => {
         try {
@@ -63,7 +61,7 @@ function EditBudget() {
           const fetchCategoryDetail = async () => {
             let { data: categoryData } = await supabase
               .from('categories')
-              .select('category, spending, color')
+              .select('category, spending, color, category_id')
               .eq('in_use', true)
               .eq('budget_id', budgetId);
             setCategory(categoryData);
@@ -140,22 +138,25 @@ function EditBudget() {
         };
 
         
-        const [category, setCategory] = useState([]);
-
-        const updateCategory = async (category) => {
+        const updateCategory = async (updatedCategories) => {
             try {
-              await supabase
-                .from('categories')
-                .update({ category: category.category })
-                .eq('budget_id', budgetId)
-                .eq('user_id', userId)
-                .eq('category_id', category.category_id);
-              console.log('Category updated successfully');
+              await Promise.all(
+                updatedCategories.map((category) =>
+                  supabase
+                    .from('categories')
+                    .update({ category: category.category, spending: category.percentage / 100 })
+                    .eq('budget_id', budgetId)
+                    .eq('user_id', userId)
+                    .eq('category_id', category.category_id)
+                    .eq('in_use', true)
+                )
+              );
+              console.log('Categories updated successfully');
+              fetchCategoryDetail();
             } catch (error) {
-              console.error('Error updating category:', error.message);
+              console.error('Error updating categories:', error.message);
             }
           };
-
     
         const SpendingBox = () => {
             const [percentages, setPercentages] = useState([]);
@@ -187,22 +188,18 @@ function EditBudget() {
                 setErrorMessage('Percentage sum is not equal to 100.');
                 return;
               }
-               // Update the category in the database
-               await Promise.all(
-                category.map((item) => updateCategory(item))
-              );
-            
-              // Update the category state with the new category names
-              const updatedCategories = category.map((item) => ({
+
+              const updatedCategories = category.map((item, index) => ({
                 ...item,
-                category: percentages.find((p) => p.category === item.category)?.category || item.category,
+                category: percentages[index]?.category || item.category,
+                percentage: percentages[index]?.percentage || item.spending * 100,
               }));
-              setCategory(updatedCategories);
 
               // Perform any necessary API calls or save the data
-              await updateCategory();
+              await updateCategory(updatedCategories);
               console.log('Updated Percentages:', percentages);
               setErrorMessage('');
+              setCategory(updatedCategories);
             };
           
             return (
