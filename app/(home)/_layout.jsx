@@ -11,52 +11,52 @@ function HomeLayout() {
 
     return (
         <Tabs>
-            <Tabs.Screen name="Expenses" 
+            <Tabs.Screen name="Expenses"
                 options={{
                     tabBarIcon: ({ color }) => (
-                        <FontAwesomeIcon icon={faHouse} color={color} />                
-                    ), 
+                        <FontAwesomeIcon icon={faHouse} color={color} />
+                    ),
                     tabBarLabelStyle: {
                         display: "flex"
-                    }, 
-                    headerShown: false,  
+                    },
+                    headerShown: false,
                 }}
             />
-    
-            <Tabs.Screen name="Budget" 
+
+            <Tabs.Screen name="Budget"
                 options={{
                     tabBarIcon: ({ color }) => (
-                        <FontAwesomeIcon icon={faCalculator} color={color} />   
-                    ), 
+                        <FontAwesomeIcon icon={faCalculator} color={color} />
+                    ),
                     tabBarLabelStyle: {
                         display: "flex"
-                    }, 
-                    headerShown: false,  
-                }} 
+                    },
+                    headerShown: false,
+                }}
             />
 
-            <Tabs.Screen name="Dashboard" 
+            <Tabs.Screen name="Dashboard"
                 options={{
                     tabBarIcon: ({ color }) => (
                         <FontAwesomeIcon icon={faChartColumn} color={color} />
-                    ), 
+                    ),
                     tabBarLabelStyle: {
                         display: "flex"
-                    }, 
-                    headerShown: false, 
+                    },
+                    headerShown: false,
                 }}
             />
 
-            <Tabs.Screen name="Profile" 
-              options={{
-                tabBarIcon: ({ color }) => (
-                    <FontAwesomeIcon icon={faUser} color={color} />
-                ), 
-                tabBarLabelStyle: {
-                    display: "flex"
-                }, 
-                headerShown: false,  
-            }}
+            <Tabs.Screen name="Profile"
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesomeIcon icon={faUser} color={color} />
+                    ),
+                    tabBarLabelStyle: {
+                        display: "flex"
+                    },
+                    headerShown: false,
+                }}
             />
 
         </Tabs>
