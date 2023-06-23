@@ -8,13 +8,16 @@ import { useRouter } from "expo-router";
 function Profile() {
     const handleLogOut = async () => {
         await supabase.auth.signOut(); 
+    }
 
+    const fetchProfile = async () => {
+        await supabase.from('profiles').select('full_name, phone_number, email, date_of_birth' )
     }
     
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA"}}>
             <ScrollView>
-                <Text>This is the profile page. Work in progress!</Text>
+                <Text style={{fontFamily:'Poppins-SemiBold', fontSize:35, marginLeft: 40, marginTop:20}}>Profile</Text>
                 <Button style={styles.LogoutButton} onPress={handleLogOut}>Logout</Button>
             </ScrollView>
         </SafeAreaView>

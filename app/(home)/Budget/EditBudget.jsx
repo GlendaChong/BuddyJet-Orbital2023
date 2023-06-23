@@ -87,6 +87,7 @@ function EditBudget() {
                 .eq('budget_id', budgetId)
                 .eq('user_id', userId);
               console.log('Income updated successfully');
+              fetchOldIncome();
             } catch (error) {
               console.error('Error updating income:', error.message);
             }
@@ -105,7 +106,6 @@ function EditBudget() {
             setOldIncome(newIncome)
             setEditing(false);
             updateIncome();
-
           };
         
           if (editing) {
@@ -286,8 +286,8 @@ function EditBudget() {
                 <View style={{ backgroundColor: '#F3F6FA', borderRadius: 18, paddingHorizontal: 30, paddingTop:20, marginTop: 10 }}>
                   {sideHustles.map((sideHustle) => (
                     <View key={sideHustle.name} style={{ flexDirection: 'row', marginBottom: 20 }}>
-                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{sideHustle.name}:</Text>
-                      <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 18, marginLeft: 80 }}>${sideHustle.amount}</Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, width:100 }}>{sideHustle.name}:</Text>
+                      <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 18, marginLeft: 80}}>${sideHustle.amount}</Text>
                     </View>
                   ))}
                   <View style ={{flexDirection:'row'}}>
