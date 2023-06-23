@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 18,
     marginBottom: 10,
-    color: '100D40', 
+    color: '#100D40', 
     fontFamily: 'Poppins-SemiBold',
   },
   expenseText: {
