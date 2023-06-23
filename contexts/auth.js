@@ -27,7 +27,7 @@ export function useProtectedRoute(user) {
             if (segments[1] === "CreateAccount") {
                 router.replace("/(authentication)/AccountCreated");
             } else if (segments[1] === "Login") {
-                router.replace("/(home)/Expenses")
+                router.replace("/(home)/Expenses/")
             }
         }
     }, [user, segments, router]);
@@ -35,8 +35,6 @@ export function useProtectedRoute(user) {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const router = useRouter(); 
-  const segments = useSegments(); 
   useProtectedRoute(user);
 
   useEffect(() => {
@@ -50,9 +48,8 @@ export function AuthProvider({ children }) {
           }
       })
 
-
       return () => data.subscription.unsubscribe();
-  }, [segments, router]);
+  }, []);
 
   return <AuthContext.Provider value={{ user }}>{children}</ AuthContext.Provider>
 }
