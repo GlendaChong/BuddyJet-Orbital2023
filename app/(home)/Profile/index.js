@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSyncAlt, faTrashAlt, faBan, faChevronRight, faLock } from "@fortawesome/free-solid-svg-icons";
 
 function Profile() {
+    const router = useRouter();
     const [userData, setUserData] = useState(null);
     const [userId, setUserId] = useState('')
     const [updatedUserData, setUpdatedUserData] = useState(null);
@@ -97,7 +98,7 @@ function Profile() {
             <View style={{ marginTop: 30 }}>
                 <Text style={{ fontFamily: "Poppins-Medium", fontSize: 17, marginBottom: 10, left: 40 }}>Account</Text>
                 <View style={{ backgroundColor: "#fff", borderRadius: 18, marginHorizontal: 30, paddingHorizontal: 25, paddingTop: 20 }}>
-                    <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData("Expenses")}>
+                    <TouchableOpacity style={styles.resetOption} onPress={()=> {router.push('../Profile/ChangePassword');}}>
                         <View style={{ backgroundColor: "#0A84FF", borderRadius: 10, padding: 10, marginRight: 25 }}>
                             <FontAwesomeIcon icon={faLock} color="white" size={18} />
                         </View>
@@ -111,35 +112,35 @@ function Profile() {
 
     const ResetBox = () => {
         return (
-            <View style={{ marginTop: 30 }}>
-                <Text style={{ fontFamily: "Poppins-Medium", fontSize: 17, marginBottom: 10, left: 40 }}>Reset</Text>
-                <View style={{ backgroundColor: "#fff", borderRadius: 18, marginHorizontal: 30, paddingHorizontal: 25, paddingTop: 20 }}>
-                    <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData("Expenses")}>
-                        <View style={styles.resetOptionIconContainer}>
-                            <FontAwesomeIcon icon={faTrashAlt} color="white" size={18} />
-                        </View>
-                        <Text style={styles.resetOptionText}>Reset Expenses</Text>
-                        <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 50 }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData("Budget")}>
-                        <View style={styles.resetOptionIconContainer}>
-                            <FontAwesomeIcon icon={faBan} color="white" size={18} />
-                        </View>
-                        <Text style={styles.resetOptionText}>Reset Budget</Text>
-                        <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 70 }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData("All")}>
-                        <View style={styles.resetOptionIconContainer}>
-                            <FontAwesomeIcon icon={faSyncAlt} color="white" size={18} />
-                        </View>
-                        <Text style={styles.resetOptionText}>Reset All Data</Text>
-                        <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 65 }} />
-                    </TouchableOpacity>
+          <View style={{ marginTop: 30 }}>
+            <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 17, marginBottom: 10, left: 40 }}>Reset</Text>
+            <View style={{ backgroundColor: '#fff', borderRadius: 18, marginHorizontal: 30, paddingHorizontal: 25, paddingTop: 20 }}>
+              <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData('Expenses')}>
+                <View style={styles.resetOptionIconContainer}>
+                  <FontAwesomeIcon icon={faTrashAlt} color="white" size={18} />
                 </View>
+                <Text style={styles.resetOptionText}>Reset Expenses</Text>
+                <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 50 }} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData('Budget')}>
+                <View style={styles.resetOptionIconContainer}>
+                  <FontAwesomeIcon icon={faBan} color="white" size={18} />
+                </View>
+                <Text style={styles.resetOptionText}>Reset Budget</Text>
+                <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 70 }} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData('All')}>
+                <View style={styles.resetOptionIconContainer}>
+                  <FontAwesomeIcon icon={faSyncAlt} color="white" size={18} />
+                </View>
+                <Text style={styles.resetOptionText}>Reset All Data</Text>
+                <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 65 }} />
+              </TouchableOpacity>
             </View>
-        )
-
-    }
+          </View>
+        );
+      };
+      
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA" }}>
