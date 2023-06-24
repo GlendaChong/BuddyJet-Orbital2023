@@ -13,6 +13,13 @@ function Dashboard() {
     const [Income, setIncome] = useState(0)
     const [moneyIn, setMoneyin] = useState(0)
 
+    const refreshes = () => {
+        fetchUserId();
+        fetchExpenses();
+        fetchIncome();
+        fetchMoneyIn();
+    }
+
     const fetchUserId = async () => {
         try {
             let { data: profiles } = await supabase
@@ -193,7 +200,10 @@ function Dashboard() {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA" }}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl onRefresh={refreshes} />
+                }>
                 <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 35, marginLeft: 40, marginTop: 20, }}>Dashboard</Text>
                 <ExpensesChart />
                 <BarCharts />
