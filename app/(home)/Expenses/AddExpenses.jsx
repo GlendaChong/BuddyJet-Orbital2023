@@ -1,6 +1,6 @@
 import { Text, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState, useEffect,} from "react";
+import { useState } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
 import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
@@ -42,12 +42,10 @@ function AddExpenses() {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           data={categories}
-          search
           maxHeight={300}
           labelField="label"
           valueField="value"
           placeholder={!isFocus ? 'Select item' : '...'}
-          searchPlaceholder="Search..."
           value={selectedCategory}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
@@ -59,7 +57,6 @@ function AddExpenses() {
       </View>
     );
   };
-
 
   // Dropdown selection for payment mode field
   const PaymentModeField = () => {
@@ -80,12 +77,9 @@ function AddExpenses() {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           data={paymentModes}
-          search
           maxHeight={300}
           labelField="label"
           valueField="value"
-          // placeholder={!isFocus ? 'Select item' : {selectedCategory}}
-          searchPlaceholder="Search..."
           value={selectedPaymentMode}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}

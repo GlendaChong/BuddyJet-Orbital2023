@@ -4,11 +4,10 @@ import { StyleSheet, View } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
-import TextFieldInput from "../../components/TextFieldInput"
+import TextFieldInput from "../../components/TextFieldInput";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from '../../components/BackButton'
 import { useRouter } from "expo-router";
-
 
 function ChangePassword() {
     const router = useRouter();
@@ -120,7 +119,9 @@ const styles = {
         fontWeight: 600,
         fontSize: 18,
         lineHeight: 35,
-    },
+    }, 
+
 }
+
 
 export default ChangePassword; 
