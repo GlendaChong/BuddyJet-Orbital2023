@@ -79,7 +79,7 @@ function ChangePassword() {
     );
 }
 
-const styles = {
+const styles = StyleSheet.create({
     welcomeText: {
         left: 30,
         fontFamily: 'Poppins-SemiBold',
@@ -119,9 +119,7 @@ const styles = {
         fontWeight: 600,
         fontSize: 18,
         lineHeight: 35,
-    }, 
-
-}
-
+    },
+}); 
 
 export default ChangePassword; 
