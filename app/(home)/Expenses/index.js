@@ -69,11 +69,11 @@ function Expenses() {
         <View>
           <BudgetProgressBar 
             selectedMonth={selectedMonth} 
-            selectedYear={selectedYear} />
+            selectedYear={selectedYear}
+            />
         </View>
         <SelectSortingOrder onToggle={handleSortingOrderToggle}/>
       </View>
-    
       {sortingOrder === "Date" ? (
         <SortExpensesByDate selectedMonth={selectedMonth} selectedYear={selectedYear} />
       ) : (
