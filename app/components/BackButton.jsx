@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 
 function BackButton() {
-    const router = useRouter(); 
+    const router = useRouter();
     return (
         <>
             <FontAwesomeIcon
@@ -13,29 +13,29 @@ function BackButton() {
                 style={styles.BackButton}
                 size={20}
             />
-            <Text onPress={()=> {router.back();}} style={styles.BackText} >
+            <Text onPress={() => { router.back(); }} style={styles.BackText} >
                 back
             </Text>
         </>
-    ); 
+    );
 }
 
 const styles = StyleSheet.create({
     BackButton: {
-        position: 'absolute', 
+        position: 'absolute',
         marginTop: 7,
         left: 30
-    }, 
+    },
     BackText: {
-        fontFamily: 'Poppins-Regular', 
-        fontWeight: 600, 
-        fontSize: 15, 
-        position: 'absolute', 
-        marginTop: 7, 
+        fontFamily: 'Poppins-Regular',
+        fontWeight: 600,
+        fontSize: 15,
+        position: 'absolute',
+        marginTop: 7,
         left: 20,
-        color: '#fff', 
-        opacity: 0.1, 
-    }, 
-}); 
+        color: '#fff',
+        opacity: 0.1,
+    },
+});
 
 export default BackButton; 

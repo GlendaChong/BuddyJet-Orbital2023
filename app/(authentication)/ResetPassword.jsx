@@ -1,33 +1,38 @@
 import { useState } from "react";
 import React from 'react';
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../lib/supabase";
+// import { supabase } from "../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
-import TextFieldInput from "../../components/TextFieldInput";
+import TextFieldInput from "../components/TextFieldInput"
 import { ScrollView } from "react-native-gesture-handler";
-import BackButton from '../../components/BackButton'
+import BackButton from '../components/BackButton'
 import { useRouter } from "expo-router";
+import * as Linking from 'expo-linking'
 
-function ChangePassword() {
+
+function ResetPassword() {
+    console.log(window.location.pathname);
+    Linking.createURL();
     const router = useRouter();
     const [email, setEmail] = useState('');
-    const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
 
+
+
     const handleSubmit = async () => {
+
+
         setErrMsg('');
         if (email === '') {
             setErrMsg("Email cannot be empty");
             return;
         }
-        if (oldPassword === '') {
-            setErrMsg("Old Password cannot be empty");
-            return;
-        }
+
         if (newPassword === '') {
             setErrMsg("New Password cannot be empty");
             return;
@@ -55,12 +60,15 @@ function ChangePassword() {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             <ScrollView>
                 <BackButton />
-                <Text style={styles.welcomeText}>Change Password</Text>
+                <View style={{ alignItems: 'center' }}>
+                    <Text style={styles.welcomeText}>Reset Password</Text>
+                    <Image style={{ marginTop: 60 }} source={require('../../assets/Forgot_password.jpg')} />
+                    {/* <Image style={{ marginTop: 60 }} source={require('../assets/Forgot_password.jpg')} /> */}
+                </View>
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
-                <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} />
                 <TextFieldInput label='New Password' value={newPassword} onChangeText={setNewPassword} />
                 <TextFieldInput label='Confirm New Password' value={confirmPassword} onChangeText={setConfirmPassword} />
                 <Button
@@ -68,7 +76,7 @@ function ChangePassword() {
                     labelStyle={styles.loginText}
                     onPress={handleSubmit}
                 >
-                    Change
+                    Reset
                 </Button>
                 <View style={{ alignItems: 'center', marginTop: 10 }}>
                     {errMsg !== "" && <Text>{errMsg}</Text>}
@@ -81,10 +89,9 @@ function ChangePassword() {
 
 const styles = {
     welcomeText: {
-        left: 30,
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 600,
-        fontSize: 45,
+        fontSize: 35,
         lineHeight: 60,
         color: '#100D40',
         alignContent: 'center',
@@ -119,9 +126,7 @@ const styles = {
         fontWeight: 600,
         fontSize: 18,
         lineHeight: 35,
-    }, 
-
+    },
 }
 
-
-export default ChangePassword; 
+export default ResetPassword; 
