@@ -72,7 +72,6 @@ function Expenses() {
         </View>
         <SelectSortingOrder onToggle={handleSortingOrderToggle} />
       </View>
-
       {sortingOrder === "Date" ? (
         <SortExpensesByDate
           selectedMonth={selectedMonth}
