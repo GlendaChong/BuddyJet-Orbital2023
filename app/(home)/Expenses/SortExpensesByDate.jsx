@@ -28,9 +28,9 @@ function SortExpensesByDate({ selectedMonth, selectedYear }) {
         setExpenses(data);
       }, [selectedYear, monthIndex]); 
       
-      useEffect(() => {
-        fetchExpenses();
-      }, [fetchExpenses]);
+    useEffect(() => {
+      fetchExpenses();
+    }, [fetchExpenses]);
 
     const groupExpensesByDate = (expenses) => {
         const groupedExpenses = {};
@@ -95,7 +95,6 @@ function SortExpensesByDate({ selectedMonth, selectedYear }) {
       />
     ); 
 }
-
 
 const styles = StyleSheet.create({
     sectionContainer: {
