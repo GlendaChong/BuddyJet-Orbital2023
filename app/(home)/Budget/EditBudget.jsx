@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 function EditBudget() {
 
@@ -322,7 +322,7 @@ function EditBudget() {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     marginTop: 30,
@@ -362,7 +362,7 @@ const styles = {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 18,
   }
-};
+});
 
 
 export default EditBudget; 

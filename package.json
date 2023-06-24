@@ -59,9 +59,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@react-native-community/datetimepicker": "^7.2.0",
-    "@react-native-picker/picker": "^2.4.10",
-    "@typescript-eslint/eslint-plugin": "^5.60.0",
-    "@typescript-eslint/parser": "^5.60.0",
+    "@react-native-picker/picker": "^2.4.8",
     "eslint": "^8.41.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
