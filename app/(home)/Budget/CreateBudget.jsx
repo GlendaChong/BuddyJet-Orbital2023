@@ -111,7 +111,11 @@ function CreateBudget() {
           style={{ bottom: 240, left: 250 }}
           size={25}
         />
-        <Text onPress={() => { router.back(), handleSubmit1() }} style={{ bottom: 275, fontSize: 30, left: 230, opacity: 0.1, color: '#F3F6FA' }} >
+        {/* <Text onPress={() => { router.back(), handleSubmit1() }} style={{ bottom: 275, fontSize: 30, left: 230, opacity: 0.1, color: '#F3F6FA' }} >
+          back
+        </Text> */}
+
+        <Text onPress={() => { router.push('/'), handleSubmit1() }} style={{ bottom: 275, fontSize: 30, left: 230, opacity: 0.1, color: '#F3F6FA' }} >
           back
         </Text>
 
