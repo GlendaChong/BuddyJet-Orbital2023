@@ -3,10 +3,9 @@ import { StyleSheet } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextFieldInput } from "../../components/TextFieldInput"
+import TextFieldInput from "../../components/TextFieldInput";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/BackButton";
-
 
 function ChangePassword() {
     const [email, setEmail] = useState('');
@@ -98,6 +97,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 35,
     },
-})
+}); 
 
 export default ChangePassword; 
