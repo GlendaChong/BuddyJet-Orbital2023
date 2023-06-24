@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "io.supabase.BuddyJet-Orbital2023",
     "plugins": [
       [
         "expo-image-picker",
