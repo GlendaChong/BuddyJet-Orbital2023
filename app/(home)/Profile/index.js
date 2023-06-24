@@ -93,11 +93,13 @@ function Profile() {
     };
 
     const AccountBox = () => {
+        const router = useRouter(); 
+
         return (
             <View style={{ marginTop: 30 }}>
                 <Text style={{ fontFamily: "Poppins-Medium", fontSize: 17, marginBottom: 10, left: 40 }}>Account</Text>
                 <View style={{ backgroundColor: "#fff", borderRadius: 18, marginHorizontal: 30, paddingHorizontal: 25, paddingTop: 20 }}>
-                    <TouchableOpacity style={styles.resetOption} onPress={() => handleResetData("Expenses")}>
+                    <TouchableOpacity style={styles.resetOption} onPress={() => router.push("./Profile/ChangePassword")}>
                         <View style={{ backgroundColor: "#0A84FF", borderRadius: 10, padding: 10, marginRight: 25 }}>
                             <FontAwesomeIcon icon={faLock} color="white" size={18} />
                         </View>
