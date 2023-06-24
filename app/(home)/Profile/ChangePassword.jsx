@@ -1,69 +1,92 @@
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import React from 'react';
+import { StyleSheet, View } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextFieldInput } from "../../components/TextFieldInput"
+import TextFieldInput from "../../components/TextFieldInput"
 import { ScrollView } from "react-native-gesture-handler";
-import BackButton from "../../components/BackButton";
+import BackButton from '../../components/BackButton'
+import { useRouter } from "expo-router";
 
 
 function ChangePassword() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
 
     const handleSubmit = async () => {
         setErrMsg('');
-        if (email == '') {
-            setErrMsg("Email cannot be empty")
+        if (email === '') {
+            setErrMsg("Email cannot be empty");
             return;
         }
-        if (password == '') {
-            setErrMsg("Password cannot be empty")
+        if (oldPassword === '') {
+            setErrMsg("Old Password cannot be empty");
+            return;
+        }
+        if (newPassword === '') {
+            setErrMsg("New Password cannot be empty");
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            setErrMsg("Passwords do not match");
             return;
         }
         setLoading(true);
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        setLoading(false);
-        if (error) {
-            setErrMsg(error.message);
+        const { errors } = await supabase.auth.signInWithPassword({ email, password: oldPassword });
+
+        if (errors) {
+            setLoading(false);
+            setErrMsg("Incorrect details");
             return;
         }
-    }
+
+        const { error } = await supabase.auth.updateUser({ email, password: newPassword });
+        setLoading(false);
+        if (error) {
+            setErrMsg("Incorrect details");
+            return;
+        }
+        await supabase.auth.signOut();
+    };
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <BackButton />
                 <Text style={styles.welcomeText}>Change Password</Text>
-                <Text style={styles.descriptionText}>Please sign in to continue</Text>
-                <TextFieldInput label='Old password' value={email} onChangeText={setEmail} />
-                <TextFieldInput label='New Password' value={password} onChangeText={setPassword} />
-                <TextFieldInput label='Confirm new Password' value={password} onChangeText={setPassword} />
-                <Text style={styles.passwordText}>Forgot Password?</Text>
+                <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
+                <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} />
+                <TextFieldInput label='New Password' value={newPassword} onChangeText={setNewPassword} />
+                <TextFieldInput label='Confirm New Password' value={confirmPassword} onChangeText={setConfirmPassword} />
                 <Button
                     style={styles.loginButton}
                     labelStyle={styles.loginText}
                     onPress={handleSubmit}
                 >
-                    Login
+                    Change
                 </Button>
-
-                {errMsg !== "" && <Text>{errMsg}</Text>}
-                {loading && <ActivityIndicator />}
+                <View style={{ alignItems: 'center', marginTop: 10 }}>
+                    {errMsg !== "" && <Text>{errMsg}</Text>}
+                    {loading && <ActivityIndicator />}
+                </View>
             </ScrollView>
         </SafeAreaView>
     );
 }
 
-const styles = StyleSheet.create({
+const styles = {
     welcomeText: {
         left: 30,
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 600,
         fontSize: 45,
-        lineHeight: 68,
+        lineHeight: 60,
         color: '#100D40',
         alignContent: 'center',
         marginTop: 80,
@@ -98,6 +121,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 35,
     },
-})
+}
 
 export default ChangePassword; 
