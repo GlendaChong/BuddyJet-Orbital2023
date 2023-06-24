@@ -6,9 +6,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import TextFieldInput from "./TextFieldInput";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../components/BackButton";
+import { useRouter } from 'expo-router';
 
 
 function Login() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -40,7 +42,7 @@ function Login() {
                 <Text style={styles.descriptionText}>Please sign in to continue</Text>
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                 <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
-                <Text style={styles.passwordText}>Forgot Password?</Text>
+                <Text onPress={() => { router.push('./ForgotPassword') }} style={styles.passwordText}>Forgot Password?</Text>
                 <Button
                     style={styles.loginButton}
                     labelStyle={styles.loginText}
