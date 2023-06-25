@@ -8,11 +8,13 @@ const BudgetProgressBar = ({ selectedMonth, selectedYear } ) => {
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [budget, setBudget] = useState(0);
     const [progressValue, setProgressValue] = useState(0);
+    const [balance, setBalance] = useState(0); 
     const [refreshing, setRefreshing] = useState(false); 
-  
+    
+
     const fetchData = useCallback(async () => {
       // Get existing income from backend
-      let { data: budgetIncome, error: budgetError } = await supabase
+      let { data: budgetsArray, error: budgetError } = await supabase
         .from('budget')
         .select('income')
         .eq('in_use', true);
@@ -22,9 +24,15 @@ const BudgetProgressBar = ({ selectedMonth, selectedYear } ) => {
         return;
       }
 
-      const currentIncome = parseInt(budgetIncome[0]?.income);
-      setBudget(currentIncome);
+      const currentIncome = parseInt(budgetsArray[0]?.income);
 
+      if (budgetsArray.length == 0) {
+        setBudget(0); 
+        setBalance(0); 
+      } else {
+        setBudget(currentIncome);
+      }
+  
       // Get total monthly expenses from backend
       const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -46,6 +54,7 @@ const BudgetProgressBar = ({ selectedMonth, selectedYear } ) => {
 
       const totalMonthlyExpenses = amount.reduce((sum, expense) => sum + expense.amount, 0);
       setTotalExpenses(totalMonthlyExpenses);
+
     }, [selectedMonth, selectedYear, totalExpenses]);
 
     useEffect(() => {
@@ -53,13 +62,16 @@ const BudgetProgressBar = ({ selectedMonth, selectedYear } ) => {
     }, [fetchData]); 
   
     useEffect(() => {
-      if (refreshing || budget === 0) {
+      if (refreshing || budget == 0 || budget == NaN) {
         setProgressValue(0);
       } else {
         setProgressValue(totalExpenses / budget);
+        setBalance(budget - totalExpenses); 
       }
     }, [refreshing, budget, totalExpenses]);
   
+    
+    // Determine the colours of progress bar
     let color = '#32D74B'; 
     
     if (progressValue >= 0.75) {
@@ -76,6 +88,7 @@ const BudgetProgressBar = ({ selectedMonth, selectedYear } ) => {
       setRefreshing(false);
     }, [totalExpenses]);
 
+
     return (
       <ScrollView
         refreshControl={
@@ -87,7 +100,7 @@ const BudgetProgressBar = ({ selectedMonth, selectedYear } ) => {
           <View style={styles.wordsContainer}>
             <View>
               <Text style={styles.wordText}>Balance</Text>
-              <Text style={styles.moneyText}>S$ {budget - totalExpenses}</Text>
+              <Text style={styles.moneyText}>S$ {balance}</Text>
             </View>
             <View>
               <Text style={styles.wordText}>Monthly Budget</Text>
@@ -109,11 +122,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     marginTop: 10, 
     shadowOffset: {
-      width: 1,
-      height: 5,
+      width: 0,
+      height: 1,
     },
-    shadowOpacity: 0.5,
-    shadowRadius: 5, 
+    shadowOpacity: 0.25,
+    shadowRadius: 3, 
   },
   wordsContainer: {
     justifyContent: 'space-between', 
