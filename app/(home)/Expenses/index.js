@@ -52,6 +52,8 @@ function Expenses() {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
+  const [refreshed, setRefreshed] = useState(false); 
+
 
   const handleSortingOrderToggle = (selectedOrder) => {
     setSortingOrder(selectedOrder);
