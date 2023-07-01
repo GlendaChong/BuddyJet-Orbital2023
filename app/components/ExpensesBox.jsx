@@ -1,6 +1,41 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { supabase } from "../../lib/supabase";
 
 const IndividualExpenseBox = ({ expense }) => {
+
+  const handleDeleteExpense = async () => {
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete this expense?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const { data, error } = await supabase
+                .from("expenses")
+                .delete()
+                .eq("id", expense.id);
+              if (error) {
+                throw error;
+              }
+          
+            } catch (error) {
+              console.error("Error deleting expense:", error.message);
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <View style={styles.expenseBox}>
       <View style={styles.rowDirectionBox}>
@@ -11,8 +46,16 @@ const IndividualExpenseBox = ({ expense }) => {
           <Text style={styles.expenseCategory}>{expense.category}</Text>
         </View>
         <View style={styles.rightColumnBox}>
-          <Text style={styles.expenseAmount}>SGD {expense.amount}</Text>
+          <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteExpense}>
+            <FontAwesomeIcon
+                icon={faTrash}
+                size={15}
+                color="red"
+            />
+        </TouchableOpacity>
+        <Text style={styles.expenseAmount}>SGD {expense.amount}</Text>
         </View>
+        
       </View>
     </View>
   );
@@ -33,7 +76,7 @@ const styles = StyleSheet.create({
   },
   rowDirectionBox: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between", 
     padding: 16,
   },
   leftColumnBox: {
@@ -42,8 +85,8 @@ const styles = StyleSheet.create({
   },
   rightColumnBox: {
     flexDirection: "column",
-    alignItems: "flex-end",
-    justifyContent: 'center'
+    alignItems: "flex-end", 
+    justifyContent: "space-between"
   },
   expenseDescription: {
     fontSize: 16,
@@ -57,7 +100,11 @@ const styles = StyleSheet.create({
   expenseAmount: {
     fontSize: 16,
     fontFamily: "Poppins-SemiBold",
+    // marginRight: 20,
   },
+  deleteButton: {
+    justifyContent: "flex-end"
+  }
 });
 
 export default IndividualExpenseBox;
