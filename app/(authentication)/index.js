@@ -13,7 +13,7 @@ function OnboardingScreen() {
       labelStyle={styles.createAccountText}
       onPress={() => router.push('./CreateAccount')}
       >
-        Create Acount
+        Create Account
       </Button>
     ); 
   };
