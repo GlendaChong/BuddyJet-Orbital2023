@@ -8,7 +8,7 @@ import AuthLayout from "./app/(authentication)/_layout";
 
 function App() {
   const Stack = createNativeStackNavigator();
-
+  
   return (
     <SafeAreaView>
       <NavigationContainer>
