@@ -75,6 +75,7 @@
     "supabase": "^1.75.2"
   },
   "jest": {
+    "verbose": true,
     "preset": "jest-expo",
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
@@ -87,6 +88,14 @@
     ],
     "moduleDirectories": [
       "node_modules"
+    ],
+    "collectCoverage": false,
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/babel.config.js",
+      "!**/jest.setup.js"
     ]
   },
   "private": true

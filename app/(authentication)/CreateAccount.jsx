@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet } from "react-native"; 
+import { StyleSheet } from "react-native";
 import { supabase } from "../../lib/supabase";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
@@ -11,12 +11,12 @@ import { useRouter } from 'expo-router';
 
 function CreateAccount() {
     const router = useRouter();
-    const [name, setName] = useState(''); 
-    const [dateOfBirth, setDateOfBirth] = useState(''); 
-    const [phoneNumber, setPhoneNumber] = useState(''); 
+    const [name, setName] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState(''); 
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
 
@@ -33,7 +33,7 @@ function CreateAccount() {
             return;
         } else if (!dateOfBirth.match(dateFormat)) {
             setErrMsg("Date of Birth must be in DD-MM-YYYY format")
-            return; 
+            return;
         }
 
         if (phoneNumber == '') {
@@ -41,7 +41,7 @@ function CreateAccount() {
             return;
         } else if (isNaN(parseInt(phoneNumber))) {
             setErrMsg("Phone number contains illegal characters")
-            return; 
+            return;
         }
 
         if (email == '') {
@@ -55,17 +55,17 @@ function CreateAccount() {
         if (confirmPassword != password) {
             setErrMsg('Password and confirmed password does not match')
         }
-      
+
         setLoading(true);
 
-        const { error, user } =  await supabase.auth.signUp({ 
-            email, password, options: { data :{full_name: name, phone_number: phoneNumber, date_of_birth: dateOfBirth}},
-         });
+        const { error, user } = await supabase.auth.signUp({
+            email, password, options: { data: { full_name: name, phone_number: phoneNumber, date_of_birth: dateOfBirth } },
+        });
 
     }
 
     return (
-        <SafeAreaView style={{ flex:1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <Text style={styles.helloText}>Hello!</Text>
                 <Text style={styles.descriptionText}>Create a new account</Text>
@@ -73,21 +73,21 @@ function CreateAccount() {
                     icon={faChevronLeft}
                     style={styles.BackButton}
                     size={20}
-                 />
-                <Text onPress={()=> {router.back();}} style={styles.BackText} >
+                />
+                <Text onPress={() => { router.back(); }} style={styles.BackText} >
                     back
                 </Text>
                 <TextFieldInput label='Name' value={name} onChangeText={setName} />
-                <TextFieldInput label='Date of Birth (DD-MM-YYYY)' value={dateOfBirth} placeholder='DD/MM/YYYYY' onChangeText={setDateOfBirth} />
+                <TextFieldInput label='Date of Birth (DD-MM-YYYY)' value={dateOfBirth} placeholder='DD/MM/YYYY' onChangeText={setDateOfBirth} />
                 <TextFieldInput label='Phone Number' value={phoneNumber} onChangeText={setPhoneNumber} />
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                 <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
                 <TextFieldInput label='Confirm Password' value={confirmPassword} onChangeText={setConfirmPassword} />
-                <Button 
-                    style={styles.signUpButton} 
-                    labelStyle={styles.signUpText} 
-                    onPress={ () => {
-                         handleSubmit();
+                <Button
+                    style={styles.signUpButton}
+                    labelStyle={styles.signUpText}
+                    onPress={() => {
+                        handleSubmit();
                     }}
                 >
                     Sign Up
@@ -101,55 +101,55 @@ function CreateAccount() {
 
 const styles = StyleSheet.create({
     BackButton: {
-        position: 'absolute', 
+        position: 'absolute',
         marginTop: 7,
         left: 30
-    }, 
+    },
     BackText: {
-        fontFamily: 'Poppins-Regular', 
-        fontWeight: 600, 
-        fontSize: 15, 
-        position: 'absolute', 
-        marginTop: 7, 
+        fontFamily: 'Poppins-Regular',
+        fontWeight: 600,
+        fontSize: 15,
+        position: 'absolute',
+        marginTop: 7,
         left: 20,
-        color: '#fff', 
-        opacity: 0.1, 
-    }, 
+        color: '#fff',
+        opacity: 0.1,
+    },
     helloText: {
         left: 30,
-        fontFamily: 'Poppins-SemiBold', 
-        fontWeight: 600, 
-        fontSize: 45, 
-        lineHeight: 68, 
-        color: '#100D40', 
+        fontFamily: 'Poppins-SemiBold',
+        fontWeight: 600,
+        fontSize: 45,
+        lineHeight: 68,
+        color: '#100D40',
         alignContent: 'center',
-        marginTop: 40, 
-    }, 
+        marginTop: 40,
+    },
     descriptionText: {
         left: 30,
-        fontFamily: 'Poppins-Regular', 
-        fontWeight: 400, 
-        fontSize: 19, 
-        lineHeight: 24, 
-        color: '#100D40', 
-        opacity: 0.65, 
-    }, 
+        fontFamily: 'Poppins-Regular',
+        fontWeight: 400,
+        fontSize: 19,
+        lineHeight: 24,
+        color: '#100D40',
+        opacity: 0.65,
+    },
     signUpButton: {
         backgroundColor: '#3D70FF',
-        borderRadius: 40, 
-        width: 327, 
-        height: 56, 
+        borderRadius: 40,
+        width: 327,
+        height: 56,
         left: 30,
-        marginTop: 50, 
+        marginTop: 50,
     },
     signUpText: {
-        color: 'white', 
-        fontFamily: 'Poppins-SemiBold', 
-        fontWeight: 600, 
-        fontSize: 18, 
-        lineHeight: 35,  
-        textAlign: 'center', 
-    }, 
- }); 
+        color: 'white',
+        fontFamily: 'Poppins-SemiBold',
+        fontWeight: 600,
+        fontSize: 18,
+        lineHeight: 35,
+        textAlign: 'center',
+    },
+});
 
- export default CreateAccount; 
+export default CreateAccount; 

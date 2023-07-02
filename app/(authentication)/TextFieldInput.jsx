@@ -12,6 +12,7 @@ function TextFieldInput({ label, value, onChangeText }) {
                 secureTextEntry={label == ('Password') || (label == 'Confirm Password')}
                 value={value}
                 onChangeText={onChangeText}
+                accessibilityLabel={label} // Add the accessibilityLabel prop
             />
         </>
     );
