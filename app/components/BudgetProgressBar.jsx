@@ -1,5 +1,5 @@
 import {  ProgressBar } from "react-native-paper";
-import { useEffect, useState, React } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 
 const BudgetProgressBar = ({ expenses, income } ) => {
@@ -53,48 +53,48 @@ const BudgetProgressBar = ({ expenses, income } ) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column', 
-    backgroundColor: '#000E90', 
-    borderRadius: 20, 
-    height: 100, 
-    justifyContent: 'center', 
-    marginTop: 10, 
+    flexDirection: 'column',
+    backgroundColor: '#000E90',
+    borderRadius: 20,
+    height: 100,
+    justifyContent: 'center',
+    marginTop: 10,
     shadowOffset: {
       width: 0,
       height: 1,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3, 
+    shadowRadius: 3,
   },
   wordsContainer: {
-    justifyContent: 'space-between', 
-    flexDirection: 'row', 
-  }, 
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
   expensesText: {
-    color: '#100D40', 
-    fontFamily: 'Poppins-SemiBold', 
-    fontSize: 48, 
-    textAlign: 'center',  
-  }, 
+    color: '#100D40',
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 48,
+    textAlign: 'center',
+  },
   wordText: {
-    color: "#FFFFFF", 
-    fontFamily: 'Poppins-SemiBold', 
-    fontSize: 14, 
-    paddingHorizontal: 25, 
-  }, 
+    color: "#FFFFFF",
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+    paddingHorizontal: 25,
+  },
   moneyText: {
-    color: "#FFFFFF", 
-    fontFamily: 'Poppins-SemiBold', 
-    fontSize: 16, 
-    paddingHorizontal: 25,   
-  }, 
+    color: "#FFFFFF",
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 16,
+    paddingHorizontal: 25,
+  },
   progressBar: {
-    marginTop: 15, 
-    marginBottom: 10, 
-    marginLeft: 25,  
+    marginTop: 15,
+    marginBottom: 10,
+    marginLeft: 25,
     height: 10,
     borderRadius: 10,
-    width: 300, 
-  }, 
+    width: 300,
+  },
 })
 export default BudgetProgressBar; 

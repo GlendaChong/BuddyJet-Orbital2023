@@ -1,4 +1,4 @@
-import { React, useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -15,7 +15,7 @@ import {
 
 
 const AddExpensesButton = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   return (
     <FAB
       icon="plus"
@@ -23,11 +23,11 @@ const AddExpensesButton = () => {
       onPress={() => router.push("./Expenses/AddExpenses")}
       color="white"
     />
-  ); 
-}; 
+  );
+};
 
 const SelectSortingOrder = ({ onToggle }) => {
-  const [value, setValue] = useState('Date');
+  const [value, setValue] = useState("Date");
 
   const handleToggle = (selectedValue) => {
     setValue(selectedValue);
@@ -37,16 +37,15 @@ const SelectSortingOrder = ({ onToggle }) => {
   return (
     <SegmentedButtons
       style={styles.segmentedButtonContainer}
-    
       value={value}
       onValueChange={handleToggle}
       buttons={[
-        { value: 'Date', label: 'Date' },
-        { value: 'Categories', label: 'Categories' },
+        { value: "Date", label: "Date" },
+        { value: "Categories", label: "Categories" },
       ]}
     />
-  ); 
-}
+  );
+};
 
 function Expenses() {
   const [sortingOrder, setSortingOrder] = useState("Date");
@@ -57,7 +56,6 @@ function Expenses() {
 
   const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
 
   const handleSortingOrderToggle = (selectedOrder) => {
     setSortingOrder(selectedOrder);
@@ -106,9 +104,9 @@ function Expenses() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    backgroundColor: 'white', 
-  }, 
+    flex: 1,
+    backgroundColor: "white",
+  },
   topContainer: {
     paddingHorizontal: 20,
     paddingTop: 20,
@@ -135,10 +133,10 @@ const styles = StyleSheet.create({
   },
   segmentedButtonContainer: {
     marginTop: 20,
-  }, 
+  },
   SegmentedButtons: {
-    fontSize: 15, 
-  }
-}); 
+    fontSize: 15,
+  },
+});
 
-export default Expenses; 
+export default Expenses;

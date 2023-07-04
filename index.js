@@ -11,7 +11,7 @@ import queryClient from "./queryClient";
 
 function App() {
   const Stack = createNativeStackNavigator();
-
+  
   return (
     <QueryClientProvider client={queryClient}>
         <NavigationContainer>
