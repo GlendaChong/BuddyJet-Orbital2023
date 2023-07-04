@@ -1,39 +1,10 @@
 import { Text, StyleSheet,  View } from "react-native";
-import { RefreshControl, FlatList } from "react-native-gesture-handler";
-import { useEffect, useState, useCallback } from "react";
-import { supabase } from "../../../lib/supabase";
+import { FlatList } from "react-native-gesture-handler";
+import { React } from "react";
 import IndividualExpenseBox from "../../components/ExpensesBox";
 
-function SortExpensesByCategories({ selectedMonth, selectedYear }) {
-    const [expenses, setExpenses] = useState([]); 
-    const [refreshing, setRefreshing] = useState(false);
-  
-    const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    const monthIndex = monthNames.indexOf(selectedMonth) + 1;
+function SortExpensesByCategories({ expenses }) {
 
-    // Fetch monthly expenses from backend
-    const fetchExpenses = useCallback(async () => {
-        setRefreshing(true);
-        let { data } = await supabase
-          .from('expenses')
-          .select('*')
-          .order("category")
-          .order("date", { ascending: false })
-          .gte('date', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
-          .lt('date', `${selectedYear}-${(monthIndex + 1).toString().padStart(2, '0')}-01`);
-              
-        setRefreshing(false);
-        setExpenses(data);
-      }, [selectedYear, monthIndex]); 
-      
-      useEffect(() => {
-        fetchExpenses();
-      }, [fetchExpenses]);
-
-  
     const groupExpensesByCategories = (expenses) => {
         const groupedCategories = {};
 
@@ -51,7 +22,6 @@ function SortExpensesByCategories({ selectedMonth, selectedYear }) {
         }
         return groupedCategories;
     };
-
 
     const renderExpenseSection = ({ item }) => {
         const { sectionCategory, sectionExpenses } = item;
@@ -74,20 +44,11 @@ function SortExpensesByCategories({ selectedMonth, selectedYear }) {
     sectionExpenses: groupedCategories[category],
     }));
 
-    const handleRefresh = useCallback(async () => {
-        setRefreshing(true);
-        await fetchExpenses();
-        setRefreshing(false);
-      }, [fetchExpenses]);
-
     return (
         <FlatList
             data={expenseSections}
             renderItem={renderExpenseSection}
             keyExtractor={(item) => item.sectionCategory}
-            refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-            }
         />
     ); 
 }
