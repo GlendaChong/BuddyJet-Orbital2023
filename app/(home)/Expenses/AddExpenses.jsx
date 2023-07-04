@@ -1,6 +1,6 @@
 import { Text, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useState, React } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
 import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
@@ -118,7 +118,7 @@ function AddExpenses() {
 
     setLoading(true); 
 
-    // Reformat the date from DD/MM/YYYY to YYYY/MM/DD
+    // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
     const [day, month, year] = date.split('/');
     const reformattedDate = `${year}/${month}/${day}`;
 

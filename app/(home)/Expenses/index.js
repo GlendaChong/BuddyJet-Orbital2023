@@ -1,12 +1,18 @@
-import { StyleSheet, View } from "react-native";
+import { useState, useCallback, useEffect } from "react";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { FAB, SegmentedButtons } from "react-native-paper";
-import { useState } from "react";
 import SortExpensesByDate from "./SortExpensesByDate";
 import SortExpensesByCategories from "./SortExpensesByCategories";
 import MonthYearPicker from "../../components/MonthYearPicker";
 import BudgetProgressBar from "../../components/BudgetProgressBar";
+import { 
+  GetMonthlyExpensesSortedByCat, 
+  GetMonthlyExpensesSortedByDate, 
+  GetCurrentIncome 
+} from "../GetBackendData";
+
 
 const AddExpensesButton = () => {
   const router = useRouter();
@@ -43,15 +49,13 @@ const SelectSortingOrder = ({ onToggle }) => {
 
 function Expenses() {
   const [sortingOrder, setSortingOrder] = useState("Date");
+  const [refreshing, setRefreshing] = useState(false);
+  const [expensesSortedByCat, setExpensesSortedByCat] = useState([]); 
+  const [expensesSortedByDate, setExpensesSortedByDate] = useState([]); 
+  const [currentIncome, setCurrentIncome] = useState(0);   
 
-  const currentDate = new Date();
-  const currentMonth = currentDate.toLocaleString("default", { month: "long" });
-  const currentYear = currentDate.getFullYear();
-
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-
-  const [refreshed, setRefreshed] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const handleSortingOrderToggle = (selectedOrder) => {
     setSortingOrder(selectedOrder);
@@ -62,30 +66,37 @@ function Expenses() {
     setSelectedYear(year);
   };
 
+  // Fetch monthly expenses from backend
+  const fetchExpenses = useCallback(async () => {
+    setRefreshing(true);
+    const expensesSortedByCat = await GetMonthlyExpensesSortedByCat(selectedMonth, selectedYear); 
+    const expensesSortedByDate = await GetMonthlyExpensesSortedByDate(selectedMonth, selectedYear); 
+    const currentIncome = await GetCurrentIncome(selectedMonth, selectedYear);
+    setExpensesSortedByCat(expensesSortedByCat);
+    setExpensesSortedByDate(expensesSortedByDate);
+    setCurrentIncome(currentIncome); 
+    setRefreshing(false);
+  }, [selectedYear, selectedMonth, expensesSortedByDate, currentIncome]); 
+  
+  useEffect(() => {
+    fetchExpenses();
+  }, [fetchExpenses]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
-        <MonthYearPicker onSelect={handleDateSelect} />
-        <View>
-          <BudgetProgressBar
-            selectedMonth={selectedMonth}
-            selectedYear={selectedYear}
-          />
-        </View>
-        <SelectSortingOrder onToggle={handleSortingOrderToggle} />
+        <MonthYearPicker onSelect={handleDateSelect}/>
+      <View>
+      <BudgetProgressBar expenses={expensesSortedByDate} income={currentIncome} />
       </View>
+        <SelectSortingOrder onToggle={handleSortingOrderToggle}/>
+      </View>
+      {refreshing && <ActivityIndicator />}
       {sortingOrder === "Date" ? (
-        <SortExpensesByDate
-          selectedMonth={selectedMonth}
-          selectedYear={selectedYear}
-        />
+        <SortExpensesByDate expenses={expensesSortedByDate}selectedMonth={selectedMonth} selectedYear={selectedYear} />
       ) : (
-        <SortExpensesByCategories
-          selectedMonth={selectedMonth}
-          selectedYear={selectedYear}
-        />
+        <SortExpensesByCategories expenses={expensesSortedByCat} selectedMonth={selectedMonth} selectedYear={selectedYear} />
       )}
-
       <AddExpensesButton />
     </SafeAreaView>
   );
@@ -103,21 +114,22 @@ const styles = StyleSheet.create({
   },
   addExpensesButton: {
     width: 65,
-    height: 65,
-    backgroundColor: "#3D70FF",
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    right: 20,
-    bottom: 10,
-    color: "#FFFFFF",
+    height: 65, 
+    backgroundColor: "#3D70FF", 
+    borderRadius: 100, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 20, 
+    bottom: 7,
+    color: "#FFFFFF", 
     shadowOffset: {
       width: 1,
       height: 3,
     },
     shadowOpacity: 0.5,
     shadowRadius: 5,
+    
   },
   segmentedButtonContainer: {
     marginTop: 20,
