@@ -5,16 +5,12 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextFieldInput from "./TextFieldInput";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from 'expo-router';
 import BackButton from "../components/BackButton";
 
 function CreateAccount() {
-    const router = useRouter();
-    const [name, setName] = useState('');
-    const [dateOfBirth, setDateOfBirth] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [name, setName] = useState(''); 
+    const [dateOfBirth, setDateOfBirth] = useState(''); 
+    const [phoneNumber, setPhoneNumber] = useState(''); 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
