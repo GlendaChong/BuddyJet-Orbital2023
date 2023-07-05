@@ -10,7 +10,7 @@ import BudgetProgressBar from "../../components/BudgetProgressBar";
 import { 
   GetMonthlyExpensesSortedByCat, 
   GetMonthlyExpensesSortedByDate, 
-  GetCurrentIncome 
+  GetCurrentFixedIncome
 } from "../GetBackendData";
 
 
