@@ -33,7 +33,7 @@ export const GetMonthlyExpensesSortedByCat = async (selectedMonth, selectedYear)
   return data;
 };
 
-export const GetCurrentIncome = async () => {
+export const GetCurrentFixedIncome = async () => {
   // Get existing income from backend
   let { data: budgetsArray, error: budgetError } = await supabase
     .from('budget')
@@ -53,3 +53,32 @@ export const GetCurrentIncome = async () => {
     return currentIncome; 
   }
 }; 
+
+export const GetUserId = async () => {
+  try {
+    let { data: profiles } = await supabase
+        .from('profiles')
+        .select('id');
+
+    const UserID = profiles[0]?.id;
+    return UserID;
+  } catch (error) {
+    console.error('Error fetching user id', error);
+    return; 
+  }
+};
+
+export const GetMoneyIn = async (fixedIncome) => {
+  try {
+    let { data: moneyIn } = await supabase
+        .from('moneyIn')
+        .select('name, amount');
+
+    const sideHustlesIncome = parseInt(moneyIn.reduce((sum, item) => sum + item.amount, 0));
+    const total = sideHustlesIncome + parseInt(fixedIncome); 
+    return total; 
+  } catch (error) {
+    console.error('Error fetching money in data', error);
+    return; 
+  }
+};
