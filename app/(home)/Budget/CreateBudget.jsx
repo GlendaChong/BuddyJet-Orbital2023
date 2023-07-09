@@ -34,12 +34,15 @@ function CreateBudget() {
       return;
     }
 
-    setLoading(true)
+    setLoading(true); 
+
+    const todayDate = new Date(); 
 
     const updates = {
       income,
       user_id: selectedID,
-    }
+      created_at: todayDate
+    }; 
 
     // insert the data into the budget table 
     await supabase.from('budget').insert([updates]);
@@ -48,10 +51,10 @@ function CreateBudget() {
     let { data: budget } = await supabase
       .from('budget')
       .select('budget_id')
-      .eq('in_use', true)
+      .eq('in_use', true); 
 
-    const budgetID = budget[0]?.budget_id
-    console.log(budget)
+    const budgetID = budget[0]?.budget_id; 
+    console.log(budget);
 
     // insert data into category table
     const { data, error } =
@@ -64,10 +67,10 @@ function CreateBudget() {
       ]);
 
     if (error) {
-      alert(error.message)
+      alert(error.message); 
 
     }
-    setLoading(false)
+    setLoading(false); 
 
   }
 
