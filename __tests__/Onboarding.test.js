@@ -8,33 +8,32 @@ jest.mock('../__mocks__/expo-router', () => ({
 }));
 
 
-test('app boot', async () => {
+describe('Onboarding', () => {
 
-  //Mocking
   useRouter.mockReturnValue({
     push: jest.fn(), // Mock the push method
   });
 
-
-  const { getByText } = render(<OnboardingScreen />);
+  it('should navigate to create account page when Create Account button is pressed', async () => {
+    
+    const { getByText } = render(<OnboardingScreen />);
+    const loginButton = getByText('Create Account');
+    fireEvent.press(loginButton);
   
-  // Test that fonts are loaded
-  await waitFor(() => {
-    const mainText = getByText('BuddyJet');
-    expect(mainText).toBeTruthy();
+    // Assert that router.push is called with the expected route
+    expect(useRouter().push).toHaveBeenCalledWith('./CreateAccount');
   });
 
-  // Test that splash screen is dismissed
-  const createAccountButton = getByText('Create Account');
-  expect(createAccountButton).toBeTruthy();
+  it('should navigate to login page when Login button is pressed', async () => {
+    
+    const { getByText } = render(<OnboardingScreen />);
+    const loginButton = getByText('Login Now');
+    fireEvent.press(loginButton);
+  
+    // Assert that router.push is called with the expected route
+    expect(useRouter().push).toHaveBeenCalledWith('./Login');
+  });
 
-
-  // Test navigation
-  const loginButton = getByText('Login Now');
-  fireEvent.press(loginButton);
-
-  // Assert that router.push is called with the expected route
-  expect(useRouter().push).toHaveBeenCalledWith('./Login');
 });
 
 

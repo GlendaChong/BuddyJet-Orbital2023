@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View, Image } from 'react-native';
 import { Button} from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { useState, useEffect } from "react";
+import { useState, useEffect, React } from "react";
 import { ScrollView, RefreshControl } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
