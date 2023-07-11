@@ -2,8 +2,6 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { supabase } from '../lib/supabase';
 import Login from '../app/(authentication)/Login';
 
-// jest.useFakeTimers(); // Add this line to mock timers
-
 jest.mock('../lib/supabase', () => ({
   supabase: {
     auth: {
