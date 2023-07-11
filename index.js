@@ -8,21 +8,17 @@ import AuthLayout from "./app/(authentication)/_layout";
 
 function App() {
   const Stack = createNativeStackNavigator();
-  
+
   return (
-    <SafeAreaView>
       <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Onboarding Screen" component={AuthLayout} />
             <Stack.Screen name="Home" component={HomeLayout} />
           </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
    
   ); 
 }
 
 export default App; 
 
-
-// ios: 269503627700-78cs6nkpjjbfvckl3s46m4smlvf6tkcl.apps.googleusercontent.com

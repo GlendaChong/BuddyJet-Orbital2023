@@ -14,6 +14,7 @@ function TextFieldInput({ label, value, onChangeText }) {
                     (label == 'Confirm New Password') || (label == 'New Password') || (label == 'Old Password')}
                 value={value}
                 onChangeText={onChangeText}
+                accessibilityLabel={label} // Add the accessibilityLabel prop
             />
         </>
     );
