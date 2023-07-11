@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from 'react';
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -55,10 +55,11 @@ function ChangePassword() {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <ScrollView>
                 <BackButton />
                 <Text style={styles.welcomeText}>Change Password</Text>
+                <Image style={{ marginTop: 40, left: 90 }} source={require('../../../assets/Forgot_password.jpg')} />
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                 <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} />
                 <TextFieldInput label='New Password' value={newPassword} onChangeText={setNewPassword} />
@@ -81,14 +82,14 @@ function ChangePassword() {
 
 const styles = StyleSheet.create({
     welcomeText: {
-        left: 30,
+        left: 55,
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 600,
-        fontSize: 45,
+        fontSize: 30,
         lineHeight: 60,
         color: '#100D40',
         alignContent: 'center',
-        marginTop: 80,
+        marginTop: 60,
     },
     descriptionText: {
         left: 30,
@@ -120,6 +121,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 35,
     },
-}); 
+});
 
 export default ChangePassword; 
