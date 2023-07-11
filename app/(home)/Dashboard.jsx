@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, Text } from 'react-native';
 import { useState, useEffect, useCallback } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { PieChart, BarChart } from 'react-native-chart-kit';
+import { GetCurrentFixedIncome, GetMoneyIn, GetMonthlyExpensesSortedByDate } from "./GetBackendData";
 import MonthYearPicker from "../components/MonthYearPicker";
 // import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
 import { 
@@ -51,11 +52,11 @@ function Dashboard() {
   
     }, [selectedYear, selectedMonth, monthlyExpensesList, moneyInSum, fixedIncome, pastYearExpensesSum]); 
 
-    useEffect(() => {
-        fetchData();
-      }, [fetchData]);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-
+  // Fetch monthly expenses from backend
+  const fetchData = useCallback(async () => {
     // Assign each expenses category to a color
     const getLegendColor = (index) => {
       const colors = ['#0A84FF', '#32D74B', '#FF453A', '#FF9F0A', '#FFD60A', '#64D2FF', '#BF5AF2'];
@@ -197,9 +198,57 @@ function Dashboard() {
         );
     };
 
-    const handleDateSelect = (month, year) => {
-        setSelectedMonth(month);
-        setSelectedYear(year);
+      fetchData();
+    }, [selectedMonth, selectedYear]);
+
+    return (
+      <View style={styles.pieChartContainer}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', marginTop: 20, marginBottom: 20 }}>
+            Total Expenses: ${monthlyExpensesSum}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : monthlyExpensesSum === 0 ? (
+            <Text style={{ right: 90, bottom: 10, color: "red" }}>No expenses for this month!</Text>
+          ) : (
+            <PieChart
+              data={mergedChartData}
+              width={350}
+              height={200}
+              chartConfig={{
+                color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+                propsForLabels: {
+                  fontFamily: 'Poppins-SemiBold',
+                  fontSize: 100,
+                },
+
+              }}
+              accessor="amount"
+              backgroundColor="transparent"
+            />
+          )}
+        </View>
+      </View>
+    );
+  };
+
+
+  //Bar chart code
+  const BarCharts = () => {
+    const chartConfig = {
+      backgroundColor: "#fff",
+      backgroundGradientFrom: "#fff",
+      backgroundGradientTo: "#fff",
+      decimalPlaces: 2,
+      color: (opacity = 100) => `rgba(44, 38, 70, ${opacity})`,
+      style: {
+        borderRadius: 16,
+      },
+      barPercentage: 0.6,
+      categoryPercentage: 0.6,
     };
 
     return (
@@ -215,34 +264,53 @@ function Dashboard() {
             </ScrollView>
         </SafeAreaView>
     );
+  };
+
+  const handleDateSelect = (month, year) => {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
+      <View style={styles.topContainer}>
+        <MonthYearPicker onSelect={handleDateSelect} />
+        <Text style={styles.headerText}>Dashboard</Text>
+      </ View>
+      <ScrollView>
+        <ExpensesPieChart />
+        <BarCharts />
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    topContainer: {
-        paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 15,
+  topContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 15,
+  },
+  headerText: {
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 35,
+    textAlign: "center",
+    marginTop: 20,
+  },
+  pieChartContainer: {
+    backgroundColor: "#EEF5FF",
+    marginTop: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    headerText: {
-        fontFamily: "Poppins-SemiBold", 
-        fontSize: 35, 
-        textAlign:"center", 
-        marginTop: 20, 
-    }, 
-    pieChartContainer: {
-        backgroundColor: "#EEF5FF",
-        marginTop: 10, 
-        marginLeft: 15, 
-        marginRight: 15, 
-        borderRadius: 20,
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.4,
-        shadowRadius: 5, 
-    }, 
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+  },
 });
 
 

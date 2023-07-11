@@ -42,7 +42,7 @@ const SelectSortingOrder = ({ onToggle }) => {
       onValueChange={handleToggle}
       buttons={[
         { value: "Date", label: "Date" },
-        { value: "Categories", label: "Categories" },
+        { value: "Categories", label: "Categories", testID: "categories-button" },
       ]}
     />
   );
