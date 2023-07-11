@@ -1,14 +1,14 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View, Image, Text, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useState, useEffect, useCallback } from "react";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { CheckMonthlyBudgetExist, GetCategoryDetails, GetCurrentFixedIncome } from "../GetBackendData";
+import { CheckMonthlyBudgetExist, GetCategoryDetails, GetCurrentFixedIncome, GetMoneyIn } from "../GetBackendData";
 import MonthYearPicker from "../../components/MonthYearPicker";
 
-// Case when user has not created any monthly budget
+// Case when user has not created any monthly budget for current month
 const CreateBudgetDesign = () => {
   const router = useRouter();
 
@@ -30,6 +30,18 @@ const CreateBudgetDesign = () => {
     </View>
   ); 
 }
+
+// Case when user did not create any budget for previous months
+const NoBudgetDesign = () => {
+  return (
+    <View styles={{ paddingTop: 200, }}>
+      <Image style={styles.image} source={require('../../../assets/budget.jpeg')} />
+      <Text style={styles.mainText}>No Monthly Budget</Text>
+      <Text style={styles.descriptionText}>You did not create any budget for this month</Text>
+    </View>
+  ); 
+}
+
 
 // Financial tip for users with monthly budget
 const FinancialTip = () => {
@@ -58,6 +70,33 @@ export default function Budget() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
+  // Convert the selectedMonth to numerical value
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const monthIndex = monthNames.indexOf(selectedMonth) + 1;
+
+  // Get data from backend
+  const fetchData = useCallback(async () => {
+    setRefreshing(true); 
+
+    const checkBudget = await CheckMonthlyBudgetExist(selectedMonth, selectedYear); 
+    const categories = await GetCategoryDetails(selectedMonth, selectedYear);
+    const moneyIn = await GetMoneyIn(selectedMonth, selectedYear); 
+
+    setMonthlyBudgetExist(checkBudget); 
+    setCategories(categories); 
+    setMonthlyBudgetIncome(moneyIn); 
+    setRefreshing(false); 
+    
+  }, [selectedMonth, selectedYear, monthlyBudgetExist, categories, monthlyBudgetIncome]); 
+
+  useEffect(() => {
+    fetchData(); 
+  }, [fetchData]); 
+
+
   // Case when user has created a monthly budget
   const BudgetBox = () => {
     const router = useRouter(); 
@@ -67,7 +106,10 @@ export default function Budget() {
         <Text 
           style={styles.editText}
           onPress={()=> {
-            router.push('../Budget/EditBudget');
+            router.push({
+              pathname: '../Budget/EditBudget',
+              params: { selectedMonth, selectedYear, monthIndex}
+            });
           }} 
         > 
           Edit
@@ -86,38 +128,27 @@ export default function Budget() {
     );
   }
 
-  const fetchData = useCallback(async () => {
-    setRefreshing(true); 
-
-    const checkBudget = await CheckMonthlyBudgetExist(selectedMonth, selectedYear); 
-    const categories = await GetCategoryDetails(selectedMonth, selectedYear); 
-    const fixedIncome = await GetCurrentFixedIncome(selectedMonth, selectedYear); 
-
-    setMonthlyBudgetExist(checkBudget); 
-    setCategories(categories); 
-    setMonthlyBudgetIncome(fixedIncome); 
-    setRefreshing(false); 
-    
-  }, [selectedMonth, selectedYear, monthlyBudgetExist, categories, monthlyBudgetIncome]); 
-
-
-  useEffect(() => {
-    fetchData(); 
-  }, [fetchData]); 
-
-
   const handleDateSelect = (month, year) => {
     setSelectedMonth(month);
     setSelectedYear(year);
   };
-    
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       {refreshing && <ActivityIndicator />}
       <View style={styles.topContainer}>
           <MonthYearPicker onSelect={handleDateSelect}/>
       </View>
-      {monthlyBudgetExist ? (
+
+      {(selectedYear == new Date().getFullYear() && (monthIndex < new Date().getMonth() + 1)) || 
+          selectedYear < new Date().getFullYear()
+      ? (
+        <View style={{ marginTop: 110 }}>
+          <NoBudgetDesign />
+        </View>
+      ) 
+      : monthlyBudgetExist ? (
         <View style={styles.topContainer}>
           <Text style={{fontFamily:'Poppins-Regular', color:'#2C2646', fontSize: 18, textAlign: 'center'}}>Monthly Budget</Text>
           <Text style={{fontFamily:'Poppins-SemiBold', color:'#2C2646', fontSize: 48, textAlign: 'center'}}>${monthlyBudgetIncome}</Text>
@@ -128,7 +159,6 @@ export default function Budget() {
         <View style={{ marginTop: 110 }}>
           <CreateBudgetDesign />
         </View>
-
       )}
     </SafeAreaView>
   ); 
