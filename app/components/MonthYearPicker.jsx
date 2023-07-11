@@ -37,7 +37,7 @@ const MonthYearPicker = ({ onSelect }) => {
     const generateYearOptions = () => {
         const currentYear = new Date().getFullYear();
         const startYear = currentYear - 2;
-        const endYear = currentYear;
+        const endYear = currentYear + 2;
         const years = [];
 
         for (let year = startYear; year <= endYear; year++) {
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: '#FFFFFF',
-    
   },
   picker: {
     backgroundColor: '#FFFFFF',
