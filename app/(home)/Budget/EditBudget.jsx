@@ -226,7 +226,7 @@ function EditBudget() {
         await supabase
           .from('moneyIn')
           .insert([{ 
-            created_at: new Date(), 
+            created_at: `${selectedYear}-${selectedMonth}-01`, 
             user_id: userId, 
             name: newSideHustle, 
             amount: newSideHustleAmount 

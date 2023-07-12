@@ -1,35 +1,25 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View, Image, Text, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState, useEffect, useCallback } from "react";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { CheckMonthlyBudgetExist, GetCategoryDetails, GetCurrentFixedIncome, GetMoneyIn } from "../GetBackendData";
 import MonthYearPicker from "../../components/MonthYearPicker";
 
+
 // Case when user has not created any monthly budget for current month
 const CreateBudgetDesign = () => {
-  const router = useRouter();
-
   return (
     <View styles={{ paddingTop: 200, }}>
       <Image style={styles.image} source={require('../../../assets/budget.jpeg')} />
       <Text style={styles.mainText}>No Monthly Budget</Text>
       <Text style={styles.descriptionText}>You have not created this month's budget</Text>
-      <Button
-        mode="contained" 
-        style={styles.createBudgetButton}
-        labelStyle={styles.createBudgetText}
-        onPress={() => {
-          router.push('./Budget/CreateBudget')
-        }}
-      >
-        Create a budget
-      </Button>
     </View>
   ); 
 }
+
 
 // Case when user did not create any budget for previous months
 const NoBudgetDesign = () => {
@@ -62,11 +52,13 @@ const FinancialTip = () => {
 }
 
 export default function Budget() {
+  const router = useRouter();
   const [monthlyBudgetExist, setMonthlyBudgetExist] = useState(false);
   const [categories, setCategories] = useState([]);
   const [monthlyBudgetIncome, setMonthlyBudgetIncome] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Retrieve the selected months and year 
   const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
@@ -108,7 +100,7 @@ export default function Budget() {
           onPress={()=> {
             router.push({
               pathname: '../Budget/EditBudget',
-              params: { selectedMonth, selectedYear, monthIndex}
+              params: { selectedMonth, selectedYear }
             });
           }} 
         > 
@@ -158,6 +150,19 @@ export default function Budget() {
       ) : (
         <View style={{ marginTop: 110 }}>
           <CreateBudgetDesign />
+          <Button
+            mode="contained" 
+            style={styles.createBudgetButton}
+            labelStyle={styles.createBudgetText}
+            onPress={() => {
+              router.push({
+                pathname: './Budget/CreateBudget', 
+                params: { selectedMonth, selectedYear, monthIndex }
+              }); 
+            }}
+          >
+            Create a budget
+          </Button>
         </View>
       )}
     </SafeAreaView>
