@@ -4,7 +4,7 @@ import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
 import { useState, useEffect } from 'react';
-import { GetCategoryDetails, GetCurrentBudget, GetSideHustles, GetUserId } from "../../GetBackendData";
+import { GetCategoryDetails, GetCurrentBudget, GetSideHustles, GetUserId } from "../GetBackendData";
 import { useLocalSearchParams } from "expo-router";
 
 function EditBudget() {

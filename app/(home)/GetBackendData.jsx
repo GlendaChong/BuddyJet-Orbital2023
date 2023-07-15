@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 
 const monthNames = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -349,4 +349,3 @@ export const GetLastYearMonths = async (selectedMonth, selectedYear) => {
   }
   return months;
 };
-
