@@ -8,7 +8,7 @@ import {
   GetMonthlyExpensesSortedByDate, 
   GetPastYearExpensesSum,
   GetPastYearMoneyIn, 
-} from "./GetBackendData"; 
+} from "../components/GetBackendData"; 
 import VerticalBarChart from "../components/VerticalBarChart";
 import PieChartContainer from "../components/PieChartContainer";
 import { ActivityIndicator } from "react-native-paper";

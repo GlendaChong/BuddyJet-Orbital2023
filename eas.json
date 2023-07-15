@@ -17,6 +17,10 @@
       "distribution": "internal",
       "channel": "preview"
     },
+    "dashboard": {
+      "distribution": "internal",
+      "channel": "dashboard"
+    },
     "production": {
       "channel": "production"
     }
