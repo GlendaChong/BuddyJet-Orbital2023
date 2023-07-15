@@ -11,7 +11,7 @@ import {
   GetMonthlyExpensesSortedByCat, 
   GetMonthlyExpensesSortedByDate, 
   GetMoneyIn
-} from "../GetBackendData";
+} from "../../components/GetBackendData";
 
 
 const AddExpensesButton = () => {

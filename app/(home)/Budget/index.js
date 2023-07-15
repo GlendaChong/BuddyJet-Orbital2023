@@ -9,7 +9,7 @@ import {
   CheckMonthlyBudgetExist, 
   GetCategoryDetails, 
   GetMoneyIn 
-} from "../GetBackendData";
+} from "../../components/GetBackendData";
 import MonthYearPicker from "../../components/MonthYearPicker";
 
 
