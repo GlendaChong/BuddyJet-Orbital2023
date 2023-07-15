@@ -58,7 +58,7 @@ export const GetPastYearExpenses = async (selectedMonth, selectedYear) => {
     const expenses = [];
 
     // Fetch expenses for the past 6 months
-    for (let i = 12; i >= 0; i--) {
+    for (let i = 11; i >= 0; i--) {
       let targetYear = selectedYear;
       let targetMonth = monthIndex - i;
 
@@ -91,7 +91,7 @@ export const GetPastYearExpensesSum = async (selectedMonth, selectedYear) => {
     const monthlyExpensesSum = [];
     const expenses = await GetPastYearExpenses(selectedMonth, selectedYear); 
 
-    for (let i = 0; i < 13; i++) {
+    for (let i = 0; i < 12; i++) {
       const totalExpenses = expenses[i]?.reduce((sum, expense) => sum + expense.amount, 0);
       monthlyExpensesSum.push(totalExpenses);
     }
@@ -183,7 +183,8 @@ export const GetCurrentFixedIncome = async (selectedMonth, selectedYear) => {
 
 
   if (budgetError) {
-    console.error('Error fetching income', budgetError);
+    console.log(selectedMonth, selectedYear); 
+    console.error('Error fetching fixed income', budgetError);
     return;
   }
 
@@ -192,7 +193,7 @@ export const GetCurrentFixedIncome = async (selectedMonth, selectedYear) => {
   if (budgetsArray.length == 0) {
     return 0; 
   } else {
-    return currentIncome; 
+    return currentIncome; x
   }
 }; 
 
@@ -258,22 +259,24 @@ export const GetMoneyIn = async (selectedMonth, selectedYear) => {
   try {
     const monthIndex = monthNames.indexOf(selectedMonth) + 1;
 
-    let { data: moneyIn } = await supabase
-        .from('moneyIn')
-        .select('*')
-        .order("created_at", { ascending: false })
-        .gte('created_at', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
-        .lt('created_at', `${selectedYear}-${(monthIndex + 1).toString().padStart(2, '0')}-01`);
-
+    let endYear = selectedYear;
+    let endMonth = monthIndex + 1;
+  
+    // Adjust the end year and month if it goes beyond December
+    if (endMonth > 12) {
+      endYear++;
+      endMonth = 1;
+    }
+  
+    let sideHustles = await GetSideHustles(selectedMonth, selectedYear); 
     let fixedIncome = await GetCurrentFixedIncome(selectedMonth, selectedYear); 
+    let moneyIn = 0; 
 
-    let sideHustlesIncome = 0; 
-
-    if (moneyIn == null) {
+    if (sideHustles == null) {
       return fixedIncome;
     } else {
-      sideHustlesIncome = parseInt(moneyIn.reduce((sum, item) => sum + item.amount, 0));
-      const total = sideHustlesIncome + parseInt(fixedIncome); 
+      moneyIn = parseInt(sideHustles.reduce((sum, item) => sum + item.amount, 0));
+      const total = moneyIn + parseInt(fixedIncome); 
       return total; 
     }
 
@@ -284,14 +287,14 @@ export const GetMoneyIn = async (selectedMonth, selectedYear) => {
 };
 
 
-export const GetPastYearMoneyIn = async (selectedMonth, selectedYear, fixedIncome) => {
+export const GetPastYearMoneyIn = async (selectedMonth, selectedYear) => {
   const monthIndex = monthNames.indexOf(selectedMonth) + 1;
 
   try {
     const moneyIn = [];
 
-    // Fetch expenses for the past 6 months
-    for (let i = 12; i >= 0; i--) {
+    // Fetch expenses for the past year
+    for (let i = 11; i >= 0; i--) {
       let targetYear = selectedYear;
       let targetMonth = monthIndex - i;
 
@@ -299,36 +302,16 @@ export const GetPastYearMoneyIn = async (selectedMonth, selectedYear, fixedIncom
       if (targetMonth < 1) {
         targetYear--; 
         targetMonth = 12 + targetMonth;
-        
       }
 
-      const data = await GetMoneyIn(selectedMonth, selectedYear, fixedIncome); 
+      const data = await GetMoneyIn(monthNames[targetMonth - 1], targetYear); 
       moneyIn.push(data);
     }
-
+    
     return moneyIn; 
 
   } catch (error) {
     console.error('Error fetching money in :', error);
-    return [];
-  }
-}; 
-
-
-export const GetPastYearMoneyInSum = async (selectedMonth, selectedYear, fixedIncome) => {
-  try {
-    const monthlyMoneyInSum = [];
-    const moneyIn = await GetPastYearMoneyIn(selectedMonth, selectedYear, fixedIncome); 
-
-    for (let i = 0; i < 13; i++) {
-      const totalMoneyIn = moneyIn[i]?.reduce((sum, expense) => sum + expense.amount, 0);
-      monthlyMoneyInSum.push(totalMoneyIn);
-    }
-
-    return monthlyMoneyInSum;
-
-  } catch (error) {
-    console.error('Error fetching money in sum:', error);
     return [];
   }
 }; 
@@ -348,3 +331,22 @@ export const GetUserId = async () => {
     return; 
   }
 };
+
+
+// Get the last year's worth of months from the selected month and year
+export const GetLastYearMonths = async (selectedMonth, selectedYear) => {
+  const months = [];
+  let month = selectedMonth;
+  let year = selectedYear;
+  for (let i = 0; i < 12; i++) {
+    months.unshift(month);
+    if (month === 'January') {
+      month = 'December';
+      year--;
+    } else {
+      month = monthNames[monthNames.indexOf(month) - 1];
+    }
+  }
+  return months;
+};
+

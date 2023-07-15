@@ -183,7 +183,6 @@ const styles = StyleSheet.create({
     width: 254,
     height: 280,
     alignSelf: 'center', 
-    
   }, 
   mainText: {
     fontFamily: 'Poppins-SemiBold',
