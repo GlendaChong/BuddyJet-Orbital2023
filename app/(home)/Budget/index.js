@@ -9,7 +9,7 @@ import {
   CheckMonthlyBudgetExist, 
   GetCategoryDetails, 
   GetMoneyIn 
-} from "../../GetBackendData";
+} from "../GetBackendData";
 import MonthYearPicker from "../../components/MonthYearPicker";
 
 
@@ -187,7 +187,6 @@ const styles = StyleSheet.create({
     width: 254,
     height: 280,
     alignSelf: 'center', 
-    
   }, 
   mainText: {
     fontFamily: 'Poppins-SemiBold',
