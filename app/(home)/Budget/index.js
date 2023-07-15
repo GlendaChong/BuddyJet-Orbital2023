@@ -5,7 +5,11 @@ import { useRouter } from 'expo-router';
 import { useState, useEffect, useCallback } from "react";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { CheckMonthlyBudgetExist, GetCategoryDetails, GetCurrentFixedIncome, GetMoneyIn } from "../GetBackendData";
+import { 
+  CheckMonthlyBudgetExist, 
+  GetCategoryDetails, 
+  GetMoneyIn 
+} from "../../GetBackendData";
 import MonthYearPicker from "../../components/MonthYearPicker";
 
 
