@@ -1,6 +1,6 @@
 {
   "expo": {
-    "scheme": "io.supabase.BuddyJet-Orbital2023",
+    "scheme": "buddyjet",
     "plugins": [
       [
         "expo-image-picker",
@@ -39,6 +39,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "99a074de-8ec0-486e-b67e-bb306d7ec8d9"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }, 
+    "updates": {
+      "url": "https://u.expo.dev/99a074de-8ec0-486e-b67e-bb306d7ec8d9"
     }
   }
 }
