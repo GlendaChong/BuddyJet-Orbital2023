@@ -11,7 +11,7 @@ import {
   GetMonthlyExpensesSortedByDate, 
   GetPastYearExpensesSum,
   GetPastYearMoneyInSum, 
-} from "./GetBackendData"; 
+} from "../GetBackendData"; 
 
 
 function Dashboard() {
