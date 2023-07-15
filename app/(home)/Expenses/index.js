@@ -10,9 +10,8 @@ import BudgetProgressBar from "../../components/BudgetProgressBar";
 import { 
   GetMonthlyExpensesSortedByCat, 
   GetMonthlyExpensesSortedByDate, 
-  GetCurrentFixedIncome, 
   GetMoneyIn
-} from "../../GetBackendData";
+} from "../GetBackendData";
 
 
 const AddExpensesButton = () => {

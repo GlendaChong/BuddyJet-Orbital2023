@@ -6,7 +6,7 @@ import TextFieldInput from "./TextFieldInput";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/BackButton";
 import { supabase } from "../../../lib/supabase";
-import { GetCurrentBudget } from "../../GetBackendData";
+import { GetCurrentBudget } from "../GetBackendData";
 import SampleBudget from "../../components/SampleBudget";
 
 
