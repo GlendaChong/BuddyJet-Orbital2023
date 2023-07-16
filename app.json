@@ -1,6 +1,7 @@
 {
   "expo": {
     "scheme": "buddyjet",
+    "owner": "buddyjet",
     "plugins": [
       [
         "expo-image-picker",
@@ -9,7 +10,7 @@
         }
       ]
     ],
-    "name": "BuddyJet-Orbital2023",
+    "name": "BuddyJet-Orbital2023", 
     "slug": "orbital-app",
     "version": "1.0.0",
     "orientation": "portrait",

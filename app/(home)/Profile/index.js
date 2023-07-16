@@ -480,7 +480,7 @@ function Profile() {
         <View style={{ alignItems: "center", marginTop: 30 }}>
           <Button
             style={styles.logoutButton}
-            labelStyle={{ color: "white", fontSize: 18 }}
+            labelStyle={styles.logoutText}
             onPress={handleLogOut}
           >
             Logout
@@ -561,11 +561,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   logoutButton: {
-    marginHorizontal: 40,
-    marginTop: 10,
-    height: 40,
-    width: 280,
-    backgroundColor: "#3D70FF",
+    backgroundColor: '#3D70FF',
+    borderRadius: 40,
+    marginHorizontal: 30, 
+    height: 56,
+    marginTop: 50,
+  },
+  logoutText: {
+      color: 'white',
+      fontFamily: 'Poppins-SemiBold',
+      fontWeight: 600,
+      fontSize: 18,
+      paddingVertical: 12, 
   },
 });
 
