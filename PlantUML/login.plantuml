@@ -1,0 +1,81 @@
+@startuml authentication
+
+skinparam monochrome true
+skinparam Style strictuml
+
+actor User
+participant CreateAccountPage as Cap
+participant LoginPage as LoginComponent
+participant AuthController as AuthController
+participant SupabaseAuth as SupabaseAuth
+participant UserController as UserController
+participant Supabase as Supabase
+
+alt Login
+    activate LoginComponent
+    User -> LoginComponent: 1. Enter login credentials
+    User -> LoginComponent: 2. Click on login
+
+    activate AuthController
+    LoginComponent -> AuthController: 3. signIn(email, password)
+    AuthController -> SupabaseAuth: 4. signInWithPassword(email, password)
+
+    alt Successful Sign-In
+        activate UserController
+        AuthController -> UserController: 5. Get user profile
+        UserController -> Supabase: 6. queryUserProfile(userId)
+        activate Supabase
+        Supabase --> UserController: 7. User profile data
+        deactivate Supabase
+        UserController -> AuthController: 8. Return user profile
+        deactivate UserController
+        AuthController -> User: 9. Routers user to the Home page
+    else Failed Sign-In
+        activate SupabaseAuth
+        SupabaseAuth -> AuthController: 5. SupabaseAuthException
+        deactivate SupabaseAuth
+        AuthController -> LoginComponent: 6. Display error message
+    end
+
+    deactivate LoginComponent
+    deactivate AuthController
+
+else Create Account
+    User -> Cap: 1. Enter personal credentials
+    activate Cap
+    User -> Cap: 2. Click on Create Account
+
+    activate AuthController
+    Cap -> AuthController: 3. signUp(email, password, data)
+    AuthController -> SupabaseAuth: 4. signUp(email, password, data)
+    SupabaseAuth --> AuthController: Response with success or error
+
+    alt Success
+
+        AuthController -> Supabase: 5. uploadUserProfile(data)
+        activate Supabase
+        Supabase --> AuthController: Response with success or error
+        deactivate Supabase
+         AuthController -> User: 6. Routes user to the Create Account successful page
+    else Error
+        AuthController -> Cap: 5. Return error response
+    end
+
+    deactivate Cap
+    deactivate AuthController
+
+end
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
