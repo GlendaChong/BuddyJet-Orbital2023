@@ -34,6 +34,7 @@ function Login() {
             return;
         }
     }
+    
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <KeyboardAvoidingView
@@ -47,7 +48,9 @@ function Login() {
                     <Text style={styles.descriptionText}>Please sign in to continue</Text>
                     <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                     <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
-                    <Text onPress={() => { router.push('./ForgotPassword') }} style={styles.passwordText}>Forgot Password?</Text>
+                    {errMsg !== "" && <Text style={styles.errorText}>{errMsg}</Text>}
+                    {/* <Text onPress={() => { router.push('./ForgotPassword') }} style={styles.passwordText}>Forgot Password?</Text> */}
+
                     <Button
                         style={styles.loginButton}
                         labelStyle={styles.loginText}
@@ -56,7 +59,6 @@ function Login() {
                         Login
                     </Button>
 
-                    {errMsg !== "" && <Text>{errMsg}</Text>}
                     {loading && <ActivityIndicator />}
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -104,6 +106,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         paddingVertical: 12, 
     },
+    errorText: {
+        left: 30,  
+        paddingVertical: 10, 
+        color: 'red'
+    }
 })
 
 export default Login; 
