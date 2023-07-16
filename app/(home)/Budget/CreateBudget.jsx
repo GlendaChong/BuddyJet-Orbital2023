@@ -78,8 +78,7 @@ function CreateBudget() {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <ScrollView>
         <BackButton />
-        <Text style={styles.CreateText}>Create</Text>
-        <Text style={styles.DescriptionText}>A budget</Text>
+        <Text style={styles.createBudgetText}>Create A Budget</Text>
         <TextFieldInput label='Fixed Income' value={income} onChangeText={setIncome} />
         <SampleBudget
           index={1}
@@ -125,21 +124,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-
-
-  CreateText: {
-    position: 'absolute',
+  createBudgetText: {
     fontFamily: 'Poppins-SemiBold',
-    fontWeight: 600,
     fontSize: 35,
-    lineHeight: 52,
-    width: 122,
     marginTop: 45,
     left: 30,
     alignContent: 'center',
     color: '#100D40',
   },
-
   DescriptionText: {
     position: 'absolute',
     fontFamily: 'Poppins-Regular',
@@ -153,7 +145,6 @@ const styles = StyleSheet.create({
     color: '#100D40',
 
   },
-
   roundedRect: {
     width: 311,
     height: 260,
@@ -164,7 +155,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column', 
     justifyContent: 'space-evenly'
   },
-
   MakeBudgetButton: {
     backgroundColor: '#3D70FF',
     borderRadius: 40,
@@ -172,7 +162,6 @@ const styles = StyleSheet.create({
     height: 56,
     left: 30,
     bottom: 130
-
   },
   MakeBudgetText: {
     color: 'white',
@@ -182,88 +171,6 @@ const styles = StyleSheet.create({
     lineHeight: 35,
     textAlign: 'center',
   },
-
-},
-);
+});
 
 export default CreateBudget; 
-
-// const Budget1Desc = () => {
-//   const router = useRouter(); 
-
-//   return (
-//       <View style={{ flexDirection: 'row' }}>
-//         <View style={styles.roundedRect}>
-//           <View style={{ flexDirection: 'row'}}>
-//             <FontAwesomeIcon
-//               icon={faCircle}
-//               style={{ color: '#64D2FF', left: 29 }}
-//               size={15}
-//             />
-//             <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#2C2646',  fontSize: 17, left: 70, bottom: 5 }}>Savings :  20% </Text>
-//           </View>
-          
-//           <View style={{ flexDirection: 'row' }}>
-//             <FontAwesomeIcon
-//               icon={faCircle}
-//               style={{ color: '#BF5AF2', left: 29 }}
-//               size={15}
-//             />
-//             <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#2C2646',  fontSize: 17 , left: 70, bottom: 5 }}>Food :  25% </Text>
-//           </View>
-
-//           <View style={{ flexDirection: 'row' }}>
-//             <FontAwesomeIcon
-//               icon={faCircle}
-//               style={{ color: '#0A84FF', left: 29 }}
-//               size={15}
-//             />
-//             <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#2C2646', fontSize: 17, left: 70, bottom: 5 }}>Transport :  15% </Text>
-//           </View>
-
-//           <View style={{ flexDirection: 'row' }}>
-//             <FontAwesomeIcon
-//               icon={faCircle}
-//               style={{ color: '#F46040', left: 29 }}
-//               size={15}
-//             />
-//             <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#2C2646', fontSize: 17, left: 70, bottom: 5 }}>Recreation :  30% </Text>
-//           </View>
-
-//           <View style={{ flexDirection: 'row' }}>
-//             <FontAwesomeIcon
-//               icon={faCircle}
-//               style={{ color: '#32D74B', left: 29 }}
-//               size={15}
-//             />
-//             <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#2C2646', fontSize: 17, left: 70, bottom: 5 }}>Bills :  10% </Text>
-//           </View>
-
-//         </View>
-
-//     <View style={{top: 40, right: 45 }}>
-//       <TouchableOpacity onPress={() => {
-//           handleSubmit(); 
-//           router.push('./');
-//           }} 
-//       >
-//         <FontAwesomeIcon
-//             icon={faChevronRight}
-//             size={25}
-//         />
-//       </TouchableOpacity>
-//       </View >
-//     </View>
-//   );
-// };
-
-
-// const SampleBudget = () => {
-//   return (
-//     <View style={{ padding: 35 }}>
-//       <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#2C2646', fontSize: 18 }}>Sample Budget</Text>
-//       <Text style={{ fontFamily: 'Poppins-Regular', color: '#2C2646', fontSize: 13, top: 10 }}>Basic needs budget</Text>
-//       <Budget1Desc />
-//     </View>
-//   );
-// };
