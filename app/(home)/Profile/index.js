@@ -21,7 +21,7 @@ import {
   faChevronRight,
   faLock,
   faCamera,
-  faUserCircle,
+  faFileCircleQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 import * as ImagePicker from "expo-image-picker";
 
@@ -367,6 +367,59 @@ function Profile() {
     );
   };
 
+  const Faq = () => {
+    return (
+      <View style={{ marginTop: 30 }}>
+        <Text
+          style={{
+            fontFamily: "Poppins-Medium",
+            fontSize: 17,
+            marginBottom: 10,
+            left: 40,
+          }}
+        >
+          General information
+        </Text>
+        <View
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 18,
+            marginHorizontal: 30,
+            paddingHorizontal: 25,
+            paddingTop: 20,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.resetOption}
+            onPress={() => {
+              router.push("../Profile/Faq");
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#FF9F0A",
+                borderRadius: 10,
+                padding: 10,
+                marginRight: 25,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faFileCircleQuestion}
+                color="white"
+                size={18}
+              />
+            </View>
+            <Text style={styles.resetOptionText}>FAQs</Text>
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              style={{ marginLeft: 135 }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA" }}>
       <ScrollView>
@@ -477,6 +530,7 @@ function Profile() {
         )}
         <AccountBox />
         <ResetBox />
+        <Faq />
         <View style={{ alignItems: "center", marginTop: 30 }}>
           <Button
             style={styles.logoutButton}
@@ -561,18 +615,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   logoutButton: {
-    backgroundColor: '#3D70FF',
+    backgroundColor: "#3D70FF",
     borderRadius: 40,
-    marginHorizontal: 30, 
-    height: 56,
-    marginTop: 50,
+    marginHorizontal: 30,
+    marginTop: 10,
+    width: 330,
   },
   logoutText: {
-      color: 'white',
-      fontFamily: 'Poppins-SemiBold',
-      fontWeight: 600,
-      fontSize: 18,
-      paddingVertical: 12, 
+    color: "white",
+    fontFamily: "Poppins-SemiBold",
+    fontWeight: 600,
+    fontSize: 18,
+    lineHeight: 40,
   },
 });
 
