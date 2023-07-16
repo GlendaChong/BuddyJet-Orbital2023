@@ -13,6 +13,7 @@ const BudgetProgressBar = ({ expenses, income } ) => {
       
       if (income === 0) {
         setProgressValue(0);
+        setBalance(0); 
       } else {
         setProgressValue(monthlyExpenses / income);
         setBalance(income - monthlyExpenses);

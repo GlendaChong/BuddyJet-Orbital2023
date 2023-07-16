@@ -35,26 +35,24 @@ function AddExpenses() {
     const [isFocus, setIsFocus] = useState(false);
 
     return (
-      <View style={styles.dropdownContainer}>
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          data={categories}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'Select item' : '...'}
-          value={selectedCategory}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setSelectedCategory(item.value);
-            setIsFocus(false);
-          }}
-        />
-      </View>
+      <Dropdown
+        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        data={categories}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={!isFocus ? 'Select item' : '...'}
+        value={selectedCategory}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        onChange={item => {
+          setSelectedCategory(item.value);
+          setIsFocus(false);
+        }}
+      />
     );
   };
 
@@ -70,25 +68,23 @@ function AddExpenses() {
     const [isFocus, setIsFocus] = useState(false); 
   
     return (
-      <View style={styles.dropdownContainer}>
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          data={paymentModes}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          value={selectedPaymentMode}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setSelectedPaymentMode(item.value);
-            setIsFocus(false);
-          }}
-        />
-      </View>
+      <Dropdown
+        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        data={paymentModes}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        value={selectedPaymentMode}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        onChange={item => {
+          setSelectedPaymentMode(item.value);
+          setIsFocus(false);
+        }}
+      />
     );
   };
 
@@ -208,11 +204,11 @@ const styles = StyleSheet.create({
   addExpenseButton: {
     backgroundColor: '#3D70FF',
     borderRadius: 40, 
-    width: 327, 
+    alignSelf: 'center', 
     height: 56, 
     marginTop: 50, 
-    left: 30, 
-    justifyContent: 'center', 
+    justifyContent: 'center',
+    width: 330,
   }, 
   addExpenseText: {
       color: 'white', 
@@ -221,6 +217,7 @@ const styles = StyleSheet.create({
       fontSize: 18, 
       lineHeight: 35,  
       textAlign: 'center', 
+      marginBottom: 20, 
   },
   textfieldName: {
     left: 30,
@@ -235,14 +232,15 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 55,
     borderRadius: 4, 
-    paddingHorizontal: 10,
-    backgroundColor: 'rgb(237, 221, 246)', 
+    backgroundColor: "rgb(237, 221, 246)", 
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.25,
     shadowRadius: 3,
-    width: 327, 
-    left: 32,
+    paddingHorizontal: 20, 
+    paddingRight: 20,   
+    left: 30, 
     marginTop: 10, 
+    marginRight: 60
   },
   label: {
     position: 'absolute',

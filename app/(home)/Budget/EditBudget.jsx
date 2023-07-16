@@ -260,7 +260,6 @@ function EditBudget() {
                     .eq("id", moneyInId);
 
                   setSideHustlesChanged(!sideHustlesChanged); // Toggle sideHustlesChanged state to trigger re-render
-
     
                 } catch (error) {
                   console.error("Error deleting expense:", error.message);
@@ -304,7 +303,7 @@ function EditBudget() {
             />
           </View>
           <View style={{ marginTop: 30 }}>
-            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#8E8E93', opacity: 0.7, paddingHorizontal: 5  }} />
+            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#8E8E93', opacity: 0.7, paddingHorizontal: 5 }} />
             <Button title="Add" onPress={addSideHustle} />
           </View>
         </View>
