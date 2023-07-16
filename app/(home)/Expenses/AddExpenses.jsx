@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, React } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
@@ -145,7 +145,12 @@ function AddExpenses() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior="padding"
+        keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Text style={styles.headerText}>Entry</Text>
           <Text style={styles.subHeaderText}>Create a new expenses entry</Text>
           <BackButton />
@@ -169,7 +174,8 @@ function AddExpenses() {
 
           {errMsg !== '' && <Text>{errMsg}</Text>}
           {loading && <ActivityIndicator />}
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
