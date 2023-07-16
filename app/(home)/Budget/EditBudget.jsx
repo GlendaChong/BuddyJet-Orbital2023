@@ -4,7 +4,7 @@ import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
 import { useState, useEffect } from 'react';
-import { GetCategoryDetails, GetCurrentBudget, GetSideHustles, GetUserId } from "../../components/GetBackendData";
+import { GetCategoryDetails, GetCurrentBudget, GetSideHustles } from "../../components/GetBackendData";
 import { useLocalSearchParams } from "expo-router";
 
 function EditBudget() {
@@ -14,7 +14,6 @@ function EditBudget() {
   const [category, setCategory] = useState([]);
   const [editing, setEditing] = useState(false);
   const [oldIncome, setOldIncome] = useState(0);
-  const [newIncome, setNewIncome] = useState(0);
   const [sideHustles, setSideHustles] = useState([]);
   const { selectedMonth, selectedYear } = useLocalSearchParams(); 
 
@@ -50,25 +49,27 @@ function EditBudget() {
   }, []);
 
 
-  // Update income in backend
-  const updateIncome = async () => {
-    try {
-      await supabase
-        .from('budget')
-        .update({ income: newIncome, in_use: true })
-        .eq('budget_id', budgetId)
-        .eq('user_id', userId)
-        .gte('created_at', `${selectedYear}-${selectedMonth}-01`)
-        .lte('created_at', `${selectedYear}-${selectedMonth}-31`);
-      // console.log(newIncome); 
-      console.log('Income updated successfully');
-    } catch (error) {
-      console.error('Error updating income:', error.message);
-    }
-  };
-
   // Income component 
   const Income = () => {
+    const [newIncome, setNewIncome] = useState(0);
+
+    // Update income in backend
+    const updateIncome = async () => {
+      try {
+        await supabase
+          .from('budget')
+          .update({ income: newIncome, in_use: true })
+          .eq('budget_id', budgetId)
+          .eq('user_id', userId)
+          .gte('created_at', `${selectedYear}-${selectedMonth}-01`)
+          .lte('created_at', `${selectedYear}-${selectedMonth}-31`);
+
+        console.log('Income updated successfully');
+      } catch (error) {
+        console.error('Error updating income:', error.message);
+      }
+    };
+
     const handleEdit = () => {
       setEditing(true);
     };
@@ -78,7 +79,7 @@ function EditBudget() {
       updateIncome();
       setEditing(false);
     };
-
+ 
     if (editing) {
       return (
         <View style={styles.container}>
@@ -173,8 +174,7 @@ function EditBudget() {
 
       setCategory(updatedCategories); 
       setErrorMessage('');
-      updateCategory(updatedCategories);    
-      console.log('Updated categories', category);    
+      updateCategory(updatedCategories);       
     };
 
     return (
@@ -233,7 +233,8 @@ function EditBudget() {
           }]); 
           
       } catch (error) {
-        console.log('Error adding side hustle:', error.message);
+        console.error('Error adding side hustle:', error.message);
+        
       } finally {
         fetchSideHustles(); 
         setNewSideHustle(''); 
