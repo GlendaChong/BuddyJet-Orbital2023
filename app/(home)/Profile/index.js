@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,13 +20,21 @@ import {
   faBan,
   faChevronRight,
   faLock,
+  faCamera,
+  faFileCircleQuestion,
 } from "@fortawesome/free-solid-svg-icons";
+import * as ImagePicker from "expo-image-picker";
 
 function Profile() {
   const router = useRouter();
   const [userData, setUserData] = useState(null);
   const [userId, setUserId] = useState("");
-  const [updatedUserData, setUpdatedUserData] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
+  const [dob, setDob] = useState("");
+
   const handleLogOut = async () => {
     await supabase.auth.signOut();
   };
@@ -48,55 +57,122 @@ function Profile() {
   const fetchProfile = async () => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("full_name, phone_number, email, date_of_birth");
+      .select("full_name, phone_number, email, date_of_birth, avatar_url");
     if (error) {
       console.error("Error fetching profile:", error.message);
       return;
     }
     setUserData(data[0]);
-    setUpdatedUserData(data[0]);
+    setName(data[0]?.full_name);
+    setNumber(data[0]?.phone_number);
+    setEmail(data[0]?.email);
+    setDob(data[0]?.date_of_birth);
+
+    if (data[0]?.avatar_url !== null) {
+      setProfilePicture(data[0]?.avatar_url);
+    }
   };
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
-  const ProfileBox = ({ label, value }) => (
-    <View style={styles.rowContainer}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        value={updatedUserData ? updatedUserData[value] : ""}
-        onChangeText={(text) =>
-          setUpdatedUserData((prevState) => ({
-            ...prevState,
-            [value]: text,
-          }))
-        }
-        style={styles.input}
-        underlineColorAndroid="transparent" // Remove default underline
-      />
-    </View>
-  );
-
   const handleUpdateProfile = async () => {
-    console.log(updatedUserData);
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        full_name: updatedUserData.full_name,
-        email: updatedUserData.email,
-        phone_number: updatedUserData.phone_number,
-        date_of_birth: updatedUserData.date_of_birth,
-      })
-      .eq("id", userId);
+    const dateFormat = /^(\d{2}-)(\d{2}-)(\d{4})$/;
 
-    if (error) {
-      console.error("Error updating profile:", error.message);
+    if (!/^\d+$/.test(number)) {
+      Alert.alert("Error", "Please enter a valid phone number", [
+        { text: "OK", style: "destructive" },
+      ]);
       return;
     }
 
-    setUserData(updatedUserData);
-    console.log("Profile updated successfully");
+    if (dob == "") {
+      Alert.alert("Error", "Date of Birth cannot be empty", [
+        { text: "OK", style: "destructive" },
+      ]);
+      return;
+    } else if (!dob.match(dateFormat)) {
+      Alert.alert("Error", "Date of Birth must be in DD-MM-YYYY format", [
+        { text: "OK", style: "destructive" },
+      ]);
+      return;
+    }
+
+    if (email == "") {
+      Alert.alert("Error", "Email cannot be empty", [
+        { text: "OK", style: "destructive" },
+      ]);
+      return;
+    }
+
+    if (profilePicture) {
+      // Upload the profile picture to Supabase Storage
+      const { data, error: uploadError } = await supabase.storage
+        .from("avatars")
+        // .upload(`user_${userId}.jpg`, file);
+        .upload(`${new Date().getTime()}`, {
+          uri: profilePicture,
+          type: "jpeg",
+          name: "name.jpeg",
+        });
+
+      if (uploadError) {
+        console.error("Error uploading profile picture:", uploadError);
+        return;
+      }
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("avatars").getPublicUrl(data.path);
+
+      console.log(publicUrl);
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          full_name: name,
+          email: email,
+          phone_number: number,
+          date_of_birth: dob,
+          avatar_url: publicUrl,
+        })
+        .eq("id", userId);
+
+      Alert.alert("Success", "Profile updated successfully");
+
+      if (error) {
+        console.error("Error updating profile:", error.message);
+        return;
+      }
+    } else {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          full_name: name,
+          email: email,
+          phone_number: number,
+          date_of_birth: dob,
+        })
+        .eq("id", userId);
+
+      if (error) {
+        console.error("Error updating profile:", error.message);
+        return;
+      }
+      console.log("Profile updated successfully");
+      Alert.alert("Success", "Profile updated successfully");
+    }
+  };
+
+  const handleSelectProfilePicture = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    });
+
+    if (!result.canceled) {
+      setProfilePicture(result.assets[0].uri);
+    }
   };
 
   const handleResetData = (type) => {
@@ -227,7 +303,9 @@ function Profile() {
               <FontAwesomeIcon icon={faLock} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Change Password</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 30 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -264,7 +342,9 @@ function Profile() {
               <FontAwesomeIcon icon={faTrashAlt} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Reset Expenses</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 50 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.resetOption}
@@ -274,7 +354,9 @@ function Profile() {
               <FontAwesomeIcon icon={faBan} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Reset Budget</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 70 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.resetOption}
@@ -284,7 +366,61 @@ function Profile() {
               <FontAwesomeIcon icon={faSyncAlt} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Reset All Data</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 65 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
+  const Faq = () => {
+    return (
+      <View style={{ marginTop: 30 }}>
+        <Text
+          style={{
+            fontFamily: "Poppins-Medium",
+            fontSize: 17,
+            marginBottom: 10,
+            left: 40,
+          }}
+        >
+          General information
+        </Text>
+        <View
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 18,
+            marginHorizontal: 30,
+            paddingHorizontal: 25,
+            paddingTop: 20,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.resetOption}
+            onPress={() => {
+              router.push("../Profile/Faq");
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#FF9F0A",
+                borderRadius: 10,
+                padding: 10,
+                marginRight: 25,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faFileCircleQuestion}
+                color="white"
+                size={18}
+              />
+            </View>
+            <Text style={styles.resetOptionText}>FAQs</Text>
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -298,10 +434,89 @@ function Profile() {
 
         {userData && (
           <View style={styles.userDataContainer}>
-            <ProfileBox label="Name" value="full_name" />
-            <ProfileBox label="Number" value="phone_number" />
-            <ProfileBox label="Email" value="email" />
-            <ProfileBox label="Date of Birth" value="date_of_birth" />
+            {profilePicture !== null ? (
+              <Image
+                source={{ uri: profilePicture }}
+                style={{ width: 120, height: 120, borderRadius: 100, top: 10 }}
+              />
+            ) : (
+              <Image
+                source={{
+                  url: "https://ewkkuvaxpicleusjtxdm.supabase.co/storage/v1/object/public/avatars/blank-profile-picture-973460_1280.webp?t=2023-07-10T15%3A40%3A57.854Z",
+                }}
+                style={{ width: 120, height: 120, borderRadius: 100, top: 10 }}
+              />
+            )}
+            <View>
+              <TouchableOpacity
+                onPress={handleSelectProfilePicture}
+                style={{
+                  backgroundColor: "#0A84FF",
+                  width: 40,
+                  height: 40,
+                  borderRadius: 100,
+                  left: 80,
+                  top: -30,
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCamera}
+                  color="white"
+                  size={20}
+                  style={{
+                    left: 11,
+                    top: 10,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{ left: 160, marginTop: -155 }}>
+              <TextInput
+                value={name}
+                style={{
+                  width: 130,
+                  fontSize: 25,
+                  marginBottom: 10,
+                  fontFamily: "Poppins-SemiBold",
+                }}
+                onChangeText={setName}
+                placeholder={name}
+              />
+
+              <TextInput
+                value={number}
+                style={{
+                  width: 130,
+                  fontSize: 15,
+                  marginBottom: 8,
+                  fontFamily: "Poppins-Regular",
+                }}
+                onChangeText={setNumber}
+                placeholder={number}
+              />
+              <TextInput
+                value={dob}
+                style={{
+                  width: 130,
+                  fontSize: 15,
+                  marginBottom: 8,
+                  fontFamily: "Poppins-Regular",
+                }}
+                onChangeText={setDob}
+                placeholder={dob}
+              />
+              <TextInput
+                value={email}
+                style={{
+                  width: 130,
+                  fontSize: 15,
+                  marginBottom: 20,
+                  fontFamily: "Poppins-Regular",
+                }}
+                onChangeText={setEmail}
+                placeholder={email}
+              />
+            </View>
             <View
               style={{
                 borderBottomWidth: 0.5,
@@ -322,10 +537,11 @@ function Profile() {
         )}
         <AccountBox />
         <ResetBox />
+        <Faq />
         <View style={{ alignItems: "center", marginTop: 30 }}>
           <Button
             style={styles.logoutButton}
-            labelStyle={{ color: "white", fontSize: 18 }}
+            labelStyle={styles.logoutText}
             onPress={handleLogOut}
           >
             Logout
@@ -354,7 +570,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 2,
     alignItems: "center",
   },
   label: {
@@ -406,11 +622,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   logoutButton: {
-    marginHorizontal: 40,
-    marginTop: 10,
-    height: 40,
-    width: 280,
     backgroundColor: "#3D70FF",
+    borderRadius: 40,
+    marginHorizontal: 30,
+    marginTop: 10,
+    width: 330,
+  },
+  logoutText: {
+    color: "white",
+    fontFamily: "Poppins-SemiBold",
+    fontWeight: 600,
+    fontSize: 18,
+    lineHeight: 40,
   },
 });
 
