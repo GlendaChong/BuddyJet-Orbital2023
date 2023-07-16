@@ -23,8 +23,8 @@ const BudgetDesc = ({ categories, handleSubmit }) => {
     const router = useRouter(); 
   
     return (
-        <View style={{ flexDirection: 'row',  }}>
-            <View style={styles.roundedRect}>
+        <View style={styles.roundedRect}>
+            <View style={styles.categoryContainer}>
                 {categories.map((category) => (
                 <CategoryRow 
                     key={category.categoryName} 
@@ -35,7 +35,7 @@ const BudgetDesc = ({ categories, handleSubmit }) => {
                 ))}
             </View>
 
-            <View style={{ top: 40, right: 45 }}>
+            <View style={{ right: 20 }}>
                 <TouchableOpacity onPress={() => {
                     handleSubmit();
                     router.push('./');
@@ -64,14 +64,13 @@ const SampleBudget = ({ index, budgetType, categories, handleSubmit }) => {
 
 const styles = StyleSheet.create({
     roundedRect: {
-        width: 327,
+        flex: 1, 
+        flexDirection: 'row', 
         height: 180,
         backgroundColor: '#F3F6FA',
         borderRadius: 18,
         top: 25,
-        paddingVertical: 18, 
-        paddingBottom: 10, 
-        justifyContent: 'space-between', 
+        paddingVertical: 18,  
         shadowColor: "#000",
         shadowOffset: {
           width: 0,
@@ -79,7 +78,12 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.4,
         shadowRadius: 5, 
-    },
+    }, 
+    categoryContainer: {
+        flex: 1, 
+        justifyContent: 'space-between', 
+        marginTop: 5 
+    }, 
     rowText: { 
         fontFamily: 'Poppins-SemiBold', 
         color: '#2C2646',  
