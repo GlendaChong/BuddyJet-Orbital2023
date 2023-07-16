@@ -247,7 +247,6 @@ export const GetSideHustles = async (selectedMonth, selectedYear) => {
     
     return sideHustles; 
 
-
   } catch (error) {
     console.log('Error fetching side hustles:', error.message);
     return;

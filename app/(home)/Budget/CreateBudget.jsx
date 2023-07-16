@@ -16,7 +16,7 @@ function CreateBudget() {
   const { selectedMonth, selectedYear, monthIndex } = useLocalSearchParams(); 
   const budgetStartDate = `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`; 
 
-  const updateData = async () => { 
+  const updateData = async ({ categories }) => { 
     // Obtain the user_id from the profile database 
     let { data: profiles } = await supabase
     .from('profiles')
@@ -39,14 +39,19 @@ function CreateBudget() {
       // Get the current budget of the month
       const budget = await GetCurrentBudget(selectedMonth, selectedYear); 
 
-      // Insert data into category table
-      await supabase.from('categories').insert([
-        { created_at: budgetStartDate, user_id: selectedID, budget_id: budget.budget_id, category: 'Food', spending: 0.25, color: '#BF5AF2' }
-        , { created_at: budgetStartDate, user_id: selectedID, budget_id: budget.budget_id, category: 'Transport', spending: 0.15, color: '#0A84FF' }
-        , { created_at: budgetStartDate, user_id: selectedID, budget_id: budget.budget_id, category: 'Recreation', spending: 0.3, color: '#F46040' }
-        , { created_at: budgetStartDate, user_id: selectedID, budget_id: budget.budget_id, category: 'Bills', spending: 0.10, color: '#32D74B' }
-        , { created_at: budgetStartDate, user_id: selectedID, budget_id: budget.budget_id, category: 'Saving', spending: 0.20, color: '#64D2FF' }
-      ]);
+      // Insert data into category table based on the categories array
+      await Promise.all(
+        categories.map(async (category) => {
+          await supabase.from('categories').insert({
+            created_at: budgetStartDate,
+            user_id: selectedID,
+            budget_id: budget.budget_id,
+            category: category.categoryName,
+            spending: parseInt(category.percentage) / 100,
+            color: category.color,
+          });
+        })
+      );
 
       console.log('Can insert budget'); 
       setLoading(false);  
@@ -57,7 +62,7 @@ function CreateBudget() {
   }
   
   // Handle the submission for budget
-  const handleSubmit = async () => {
+  const handleSubmit = async (categories) => {
     if (income == '') {
       Alert.alert(
         "Missing Information",
@@ -71,7 +76,7 @@ function CreateBudget() {
       ); 
       return; 
     } 
-    updateData();
+    updateData(categories);
   }
   
   return (
@@ -88,7 +93,13 @@ function CreateBudget() {
             { categoryName: 'Wants', percentage: '30', color: '#32D74B' },
             { categoryName: 'Savings', percentage: '20', color: '#F46040' },
           ]}
-          handleSubmit={handleSubmit}
+          handleSubmit={() => handleSubmit({
+            categories: [
+              { categoryName: 'Needs', percentage: '50', color: '#0A84FF' },
+              { categoryName: 'Wants', percentage: '30', color: '#32D74B' },
+              { categoryName: 'Savings', percentage: '20', color: '#F46040' },
+            ],
+          })}
         />
         <SampleBudget
           index={2}
@@ -98,7 +109,13 @@ function CreateBudget() {
             { categoryName: 'Debt/Savings', percentage: '20', color: '#32D74B' },
             { categoryName: 'Wants', percentage: '10', color: '#F46040' },
           ]}
-          handleSubmit={handleSubmit}
+          handleSubmit={() => handleSubmit({
+            categories: [
+              { categoryName: 'Expenses', percentage: '70', color: '#0A84FF' },
+              { categoryName: 'Debt/Savings', percentage: '20', color: '#32D74B' },
+              { categoryName: 'Wants', percentage: '10', color: '#F46040' },
+            ],
+          })}
         />
         <SampleBudget
           index={3}
@@ -110,7 +127,15 @@ function CreateBudget() {
             { categoryName: 'Bills', percentage: '10', color: '#32D74B' },
             { categoryName: 'Others', percentage: '30', color: '#F46040' },
           ]}
-          handleSubmit={handleSubmit}
+          handleSubmit={() => handleSubmit({
+            categories: [
+              { categoryName: 'Savings', percentage: '20', color: '#64D2FF' },
+              { categoryName: 'Food', percentage: '25', color: '#BF5AF2' },
+              { categoryName: 'Transportation', percentage: '15', color: '#0A84FF' },
+              { categoryName: 'Bills', percentage: '10', color: '#32D74B' },
+              { categoryName: 'Others', percentage: '30', color: '#F46040' },
+            ],
+          })}
         />
       </ScrollView>
       {loading && <ActivityIndicator />}
@@ -143,7 +168,6 @@ const styles = StyleSheet.create({
     left: 34,
     alignContent: 'center',
     color: '#100D40',
-
   },
   roundedRect: {
     width: 311,
