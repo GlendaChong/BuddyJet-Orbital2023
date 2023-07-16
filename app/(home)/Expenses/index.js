@@ -26,7 +26,6 @@ const AddExpensesButton = () => {
   );
 };
 
-// Button to toggle between sorted orders
 const SelectSortingOrder = ({ onToggle }) => {
   const [value, setValue] = useState("Date");
 
@@ -73,15 +72,21 @@ function Expenses() {
     setSelectedYear(year);
   };
 
-  // Fetch monthly expenses and income from backend
+  // Fetch monthly expenses from backend
   const fetchExpenses = useCallback(async () => {
     setRefreshing(true);
-    const expensesSortedByCat = await GetMonthlyExpensesSortedByCat(selectedMonth, selectedYear); 
-    const expensesSortedByDate = await GetMonthlyExpensesSortedByDate(selectedMonth, selectedYear); 
-    const currentIncome = await GetCurrentIncome(selectedMonth, selectedYear);
+    const expensesSortedByCat = await GetMonthlyExpensesSortedByCat(
+      selectedMonth,
+      selectedYear
+    );
+    const expensesSortedByDate = await GetMonthlyExpensesSortedByDate(
+      selectedMonth,
+      selectedYear
+    );
+    const moneyIn = await GetMoneyIn(selectedMonth, selectedYear);
     setExpensesSortedByCat(expensesSortedByCat);
     setExpensesSortedByDate(expensesSortedByDate);
-    setCurrentIncome(currentIncome); 
+    setCurrentIncome(moneyIn);
     setRefreshing(false);
   }, [selectedYear, selectedMonth, expensesSortedByDate, currentIncome]);
 
