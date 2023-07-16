@@ -97,7 +97,7 @@ function Expenses() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
-        <View style={{ marginBottom: -40 }}>
+        <View style={{ marginBottom: -45 }}>
           <ProfilePic />
         </View>
         <MonthYearPicker onSelect={handleDateSelect} />
