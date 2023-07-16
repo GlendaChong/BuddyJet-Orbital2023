@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, KeyboardAvoidingView } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -34,26 +34,34 @@ function Login() {
             return;
         }
     }
+    
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
-                <BackButton />
-                <Text style={styles.welcomeText}>Welcome!</Text>
-                <Text style={styles.descriptionText}>Please sign in to continue</Text>
-                <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
-                <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
-                <Text onPress={() => { router.push('./ForgotPassword') }} style={styles.passwordText}>Forgot Password?</Text>
-                <Button
-                    style={styles.loginButton}
-                    labelStyle={styles.loginText}
-                    onPress={handleSubmit}
-                >
-                    Login
-                </Button>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior="padding"
+                keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
+            >
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <BackButton />
+                    <Text style={styles.welcomeText}>Welcome!</Text>
+                    <Text style={styles.descriptionText}>Please sign in to continue</Text>
+                    <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
+                    <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
+                    {errMsg !== "" && <Text style={styles.errorText}>{errMsg}</Text>}
+                    {/* <Text onPress={() => { router.push('./ForgotPassword') }} style={styles.passwordText}>Forgot Password?</Text> */}
 
-                {errMsg !== "" && <Text>{errMsg}</Text>}
-                {loading && <ActivityIndicator />}
-            </ScrollView>
+                    <Button
+                        style={styles.loginButton}
+                        labelStyle={styles.loginText}
+                        onPress={handleSubmit}
+                    >
+                        Login
+                    </Button>
+
+                    {loading && <ActivityIndicator />}
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -87,9 +95,8 @@ const styles = StyleSheet.create({
     loginButton: {
         backgroundColor: '#3D70FF',
         borderRadius: 40,
-        width: 327,
+        marginHorizontal: 30, 
         height: 56,
-        left: 30,
         marginTop: 50,
     },
     loginText: {
@@ -97,8 +104,13 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 600,
         fontSize: 18,
-        lineHeight: 35,
+        paddingVertical: 12, 
     },
+    errorText: {
+        left: 30,  
+        paddingVertical: 10, 
+        color: 'red'
+    }
 })
 
 export default Login; 

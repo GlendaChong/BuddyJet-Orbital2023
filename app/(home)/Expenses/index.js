@@ -10,8 +10,8 @@ import BudgetProgressBar from "../../components/BudgetProgressBar";
 import {
   GetMonthlyExpensesSortedByCat,
   GetMonthlyExpensesSortedByDate,
-  GetCurrentFixedIncome,
-} from "../GetBackendData";
+  GetMoneyIn,
+} from "../../components/GetBackendData";
 
 const AddExpensesButton = () => {
   const router = useRouter();
@@ -82,13 +82,10 @@ function Expenses() {
       selectedMonth,
       selectedYear
     );
-    const currentIncome = await GetCurrentFixedIncome(
-      selectedMonth,
-      selectedYear
-    );
+    const moneyIn = await GetMoneyIn(selectedMonth, selectedYear);
     setExpensesSortedByCat(expensesSortedByCat);
     setExpensesSortedByDate(expensesSortedByDate);
-    setCurrentIncome(currentIncome);
+    setCurrentIncome(moneyIn);
     setRefreshing(false);
   }, [selectedYear, selectedMonth, expensesSortedByDate, currentIncome]);
 
