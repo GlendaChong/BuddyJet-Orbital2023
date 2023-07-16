@@ -303,7 +303,9 @@ function Profile() {
               <FontAwesomeIcon icon={faLock} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Change Password</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 30 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -340,7 +342,9 @@ function Profile() {
               <FontAwesomeIcon icon={faTrashAlt} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Reset Expenses</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 50 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.resetOption}
@@ -350,7 +354,9 @@ function Profile() {
               <FontAwesomeIcon icon={faBan} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Reset Budget</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 70 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.resetOption}
@@ -360,7 +366,9 @@ function Profile() {
               <FontAwesomeIcon icon={faSyncAlt} color="white" size={18} />
             </View>
             <Text style={styles.resetOptionText}>Reset All Data</Text>
-            <FontAwesomeIcon icon={faChevronRight} style={{ marginLeft: 65 }} />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -410,10 +418,9 @@ function Profile() {
               />
             </View>
             <Text style={styles.resetOptionText}>FAQs</Text>
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              style={{ marginLeft: 135 }}
-            />
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>

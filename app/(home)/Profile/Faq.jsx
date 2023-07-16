@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Medium',
         fontSize: 18,
         color: "#0A84FF",
+        paddingRight: 10
     },
     iconContainer: {
         padding: 10,
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
         color: "#100D40",
         paddingBottom: 20,
         paddingHorizontal: 20,
+        lineHeight: 25,
     },
 });
 
@@ -103,15 +105,15 @@ const styles = StyleSheet.create({
 const faqData = [
     {
         question: "How to edit profile?",
-        answer: "Navigate to the profile tab, tap on the field which you wish to edit and click on the update button",
+        answer: "Navigate to the Profile tab, tap on the field which you wish to edit and click on the update button",
     },
     {
-        question: "Question 2",
-        answer: "Answer 2",
+        question: "How to add a new expense entry?",
+        answer: "Navigate to the Expenses tab, tap on the plus botton and field up the required detials in the approperiate format",
     },
     {
-        question: "Question 2",
-        answer: "Answer 2",
+        question: "How to create a budget?",
+        answer: "Navigate to the Budget tab, select the month and year that you wish to create the budget for, fill in the required details and select a sample budget",
     },
     // Can add more Faq
 ];
