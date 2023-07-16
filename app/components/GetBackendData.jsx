@@ -41,11 +41,11 @@ export const GetMonthlyExpensesSortedByCat = async (selectedMonth, selectedYear)
   }
 
   const { data } = await supabase
-  .from('expenses')
-  .select('*')
-  .order("date", { ascending: false })
-  .gte('date', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
-  .lt('date', `${endYear}-${endMonth.toString().padStart(2, '0')}-01`);
+    .from('expenses')
+    .select('*')
+    .order("date", { ascending: false })
+    .gte('date', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
+    .lt('date', `${endYear}-${endMonth.toString().padStart(2, '0')}-01`);
 
   return data;
 };
@@ -64,32 +64,32 @@ export const GetPastYearExpenses = async (selectedMonth, selectedYear) => {
 
       // Adjust the target month and year to previous year if it goes below 1
       if (targetMonth < 1) {
-        targetYear--; 
+        targetYear--;
         targetMonth = 12 + targetMonth;
-        
+
       }
       const data = await GetMonthlyExpensesSortedByDate(
         monthNames[targetMonth - 1],
         targetYear
       );
-      
+
       expenses.push(data);
     }
 
-    return expenses; 
+    return expenses;
 
   } catch (error) {
     console.error('Error fetching expenses:', error);
     return [];
   }
 
-}; 
+};
 
 
 export const GetPastYearExpensesSum = async (selectedMonth, selectedYear) => {
   try {
     const monthlyExpensesSum = [];
-    const expenses = await GetPastYearExpenses(selectedMonth, selectedYear); 
+    const expenses = await GetPastYearExpenses(selectedMonth, selectedYear);
 
     for (let i = 0; i < 12; i++) {
       const totalExpenses = expenses[i]?.reduce((sum, expense) => sum + expense.amount, 0);
@@ -102,10 +102,10 @@ export const GetPastYearExpensesSum = async (selectedMonth, selectedYear) => {
     console.error('Error fetching expenses:', error);
     return [];
   }
-}; 
+};
 
 
-export const CheckMonthlyBudgetExist = async(selectedMonth, selectedYear) => {
+export const CheckMonthlyBudgetExist = async (selectedMonth, selectedYear) => {
   const monthIndex = monthNames.indexOf(selectedMonth) + 1;
 
   let endYear = selectedYear;
@@ -116,7 +116,7 @@ export const CheckMonthlyBudgetExist = async(selectedMonth, selectedYear) => {
     endYear++;
     endMonth = 1;
   }
-  
+
   let { data: budget, error } = await supabase
     .from('budget')
     .select('budget_id')
@@ -124,14 +124,14 @@ export const CheckMonthlyBudgetExist = async(selectedMonth, selectedYear) => {
     .gte('created_at', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
     .lt('created_at', `${endYear}-${endMonth.toString().padStart(2, '0')}-01`);
 
-  const budget_id = budget[0]?.budget_id; 
+  const budget_id = budget[0]?.budget_id;
 
   if (error) {
     console.error('Error fetching budget', error);
-  }  
-  
-  return (budget_id != undefined); 
-}; 
+  }
+
+  return (budget_id != undefined);
+};
 
 
 export const GetCurrentBudget = async (selectedMonth, selectedYear) => {
@@ -183,7 +183,7 @@ export const GetCurrentFixedIncome = async (selectedMonth, selectedYear) => {
 
 
   if (budgetError) {
-    console.log(selectedMonth, selectedYear); 
+    console.log(selectedMonth, selectedYear);
     console.error('Error fetching fixed income', budgetError);
     return;
   }
@@ -191,14 +191,14 @@ export const GetCurrentFixedIncome = async (selectedMonth, selectedYear) => {
   const currentIncome = parseInt(budgetsArray[0]?.income);
 
   if (budgetsArray.length == 0) {
-    return 0; 
+    return 0;
   } else {
     return currentIncome; x
   }
-}; 
+};
 
 
-export const GetCategoryDetails = async(selectedMonth, selectedYear) => {
+export const GetCategoryDetails = async (selectedMonth, selectedYear) => {
   const monthIndex = monthNames.indexOf(selectedMonth) + 1;
 
   let endYear = selectedYear;
@@ -211,22 +211,22 @@ export const GetCategoryDetails = async(selectedMonth, selectedYear) => {
   }
 
   try {
-    let {data: categoryData} = await supabase
-    .from('categories')
-    .select('*')
-    .eq('in_use', true)
-    .gte('created_at', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
-    .lt('created_at', `${endYear}-${endMonth.toString().padStart(2, '0')}-01`);
+    let { data: categoryData } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('in_use', true)
+      .gte('created_at', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
+      .lt('created_at', `${endYear}-${endMonth.toString().padStart(2, '0')}-01`);
 
-    return categoryData; 
+    return categoryData;
 
   } catch (error) {
     console.error('Error fetching category details:', error);
     return [];
   }
-}; 
+};
 
-export const GetSideHustles = async(selectedMonth, selectedYear) => {
+export const GetSideHustles = async (selectedMonth, selectedYear) => {
   const monthIndex = monthNames.indexOf(selectedMonth) + 1;
 
   let endYear = selectedYear;
@@ -249,9 +249,9 @@ export const GetSideHustles = async(selectedMonth, selectedYear) => {
 
   } catch (error) {
     console.log('Error fetching side hustles:', error.message);
-    return; 
+    return;
   }
-}; 
+};
 
 
 export const GetMoneyIn = async (selectedMonth, selectedYear) => {
@@ -260,28 +260,28 @@ export const GetMoneyIn = async (selectedMonth, selectedYear) => {
 
     let endYear = selectedYear;
     let endMonth = monthIndex + 1;
-  
+
     // Adjust the end year and month if it goes beyond December
     if (endMonth > 12) {
       endYear++;
       endMonth = 1;
     }
-  
-    let sideHustles = await GetSideHustles(selectedMonth, selectedYear); 
-    let fixedIncome = await GetCurrentFixedIncome(selectedMonth, selectedYear); 
-    let moneyIn = 0; 
+
+    let sideHustles = await GetSideHustles(selectedMonth, selectedYear);
+    let fixedIncome = await GetCurrentFixedIncome(selectedMonth, selectedYear);
+    let moneyIn = 0;
 
     if (sideHustles == null) {
       return fixedIncome;
     } else {
       moneyIn = parseInt(sideHustles.reduce((sum, item) => sum + item.amount, 0));
-      const total = moneyIn + parseInt(fixedIncome); 
-      return total; 
+      const total = moneyIn + parseInt(fixedIncome);
+      return total;
     }
 
   } catch (error) {
     console.error('Error fetching money in data', error);
-    return; 
+    return;
   }
 };
 
@@ -299,37 +299,49 @@ export const GetPastYearMoneyIn = async (selectedMonth, selectedYear) => {
 
       // Adjust the target month and year to previous year if it goes below 1
       if (targetMonth < 1) {
-        targetYear--; 
+        targetYear--;
         targetMonth = 12 + targetMonth;
       }
 
-      const data = await GetMoneyIn(monthNames[targetMonth - 1], targetYear); 
+      const data = await GetMoneyIn(monthNames[targetMonth - 1], targetYear);
       moneyIn.push(data);
     }
-    
-    return moneyIn; 
+
+    return moneyIn;
 
   } catch (error) {
     console.error('Error fetching money in :', error);
     return [];
   }
-}; 
+};
 
 
 export const GetUserId = async () => {
   try {
     let { data: profiles } = await supabase
       .from('profiles')
-      .select('id'); 
+      .select('id');
 
     const UserID = profiles[0]?.id;
-    return UserID; 
+    return UserID;
 
   } catch (error) {
     console.error('Error fetching userId', error);
-    return; 
+    return;
   }
 };
+
+export const getProfilePic = async () => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("avatar_url");
+  if (error) {
+    console.error("Error fetching profile:", error.message);
+    return;
+  }
+  const url = data[0]?.avatar_url
+  return url;
+}
 
 
 // Get the last year's worth of months from the selected month and year
