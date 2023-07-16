@@ -85,11 +85,10 @@ const MonthYearPicker = ({ onSelect }) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
     backgroundColor: '#EEF5FF', 
     borderRadius: 20, 
     width: 200, 
-    marginLeft: 80, 
     shadowOffset: {
         width: 0,
         height: 3,
