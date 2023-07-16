@@ -12,6 +12,7 @@ import {
   GetMonthlyExpensesSortedByDate,
   GetMoneyIn,
 } from "../../components/GetBackendData";
+import ProfilePic from "../../components/ProfilePic";
 
 const AddExpensesButton = () => {
   const router = useRouter();
@@ -96,7 +97,11 @@ function Expenses() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
+        <View style={{ marginBottom: -45 }}>
+          <ProfilePic />
+        </View>
         <MonthYearPicker onSelect={handleDateSelect} />
+
         <View>
           <BudgetProgressBar
             expenses={expensesSortedByDate}

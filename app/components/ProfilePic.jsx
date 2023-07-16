@@ -27,7 +27,7 @@ function ProfilePic() {
         return (
             <Image
                 source={{ url: profilePicture }}
-                style={{ width: 60, height: 60, borderRadius: 60 }}
+                style={{ width: 50, height: 50, borderRadius: 50 }}
             />
         )
     } else {
@@ -36,7 +36,7 @@ function ProfilePic() {
                 source={{
                     url: "https://ewkkuvaxpicleusjtxdm.supabase.co/storage/v1/object/public/avatars/blank-profile-picture-973460_1280.webp?t=2023-07-10T15%3A40%3A57.854Z",
                 }}
-                style={{ width: 100, height: 100, borderRadius: 100, top: 10 }}
+                style={{ width: 50, height: 50, borderRadius: 50 }}
             />
         )
     }
