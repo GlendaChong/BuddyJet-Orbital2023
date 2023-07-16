@@ -12,6 +12,7 @@ npm-debug.*
 web-build/
 .DS_Store
 coverage/**/*
+.plantuml
 
 # macOS
 .DS_Store
