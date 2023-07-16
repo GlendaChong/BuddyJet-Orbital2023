@@ -30,8 +30,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     textfieldInput: {
-        width: 327,
-        left: 30,
+        marginHorizontal: 30,  
         fontFamily: 'Poppins-Medium',
         color: 'black',
         borderRadius: 4,

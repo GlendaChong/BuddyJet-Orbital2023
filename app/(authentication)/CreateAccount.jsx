@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, KeyboardAvoidingView } from "react-native";
 import { supabase } from "../../lib/supabase";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
@@ -63,31 +63,38 @@ function CreateAccount() {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
-                <Text style={styles.helloText}>Hello!</Text>
-                <Text style={styles.descriptionText}>Create a new account</Text>
-                <BackButton />
-                <TextFieldInput label='Name' value={name} onChangeText={setName} />
-                <TextFieldInput label='Date of Birth (DD-MM-YYYY)' value={dateOfBirth} placeholder='DD/MM/YYYY' onChangeText={setDateOfBirth} />
-                <TextFieldInput label='Phone Number' value={phoneNumber} onChangeText={setPhoneNumber} />
-                <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
-                <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
-                <TextFieldInput label='Confirm Password' value={confirmPassword} onChangeText={setConfirmPassword} />
-                <Button
-                    style={styles.signUpButton}
-                    labelStyle={styles.signUpText}
-                    onPress={() => {
-                        handleSubmit();
-                    }}
-                >
-                    Sign Up
-                </Button>
-                {errMsg !== "" && <Text>{errMsg}</Text>}
-                {loading && <ActivityIndicator />}
-            </ScrollView>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior="padding"
+                keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
+            >
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <Text style={styles.helloText}>Hello!</Text>
+                    <Text style={styles.descriptionText}>Create a new account</Text>
+                    <BackButton />
+                    <TextFieldInput label='Name' value={name} onChangeText={setName} />
+                    <TextFieldInput label='Date of Birth (DD-MM-YYYY)' value={dateOfBirth} placeholder='DD/MM/YYYY' onChangeText={setDateOfBirth} />
+                    <TextFieldInput label='Phone Number' value={phoneNumber} onChangeText={setPhoneNumber} />
+                    <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
+                    <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
+                    <TextFieldInput label='Confirm Password' value={confirmPassword} onChangeText={setConfirmPassword} />
+                    <Button
+                        style={styles.signUpButton}
+                        labelStyle={styles.signUpText}
+                        onPress={() => {
+                            handleSubmit();
+                        }}
+                    >
+                        Sign Up
+                    </Button>
+                    {errMsg !== "" && <Text>{errMsg}</Text>}
+                    {loading && <ActivityIndicator />}
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
+
 
 const styles = StyleSheet.create({
     helloText: {
@@ -112,9 +119,8 @@ const styles = StyleSheet.create({
     signUpButton: {
         backgroundColor: '#3D70FF',
         borderRadius: 40,
-        width: 327,
+        marginHorizontal: 30, 
         height: 56,
-        left: 30,
         marginTop: 50,
     },
     signUpText: {
@@ -122,8 +128,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 600,
         fontSize: 18,
-        lineHeight: 35,
-        textAlign: 'center',
+        paddingVertical: 12
     },
 });
 
