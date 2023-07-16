@@ -7,12 +7,12 @@ import SortExpensesByDate from "./SortExpensesByDate";
 import SortExpensesByCategories from "./SortExpensesByCategories";
 import MonthYearPicker from "../../components/MonthYearPicker";
 import BudgetProgressBar from "../../components/BudgetProgressBar";
-import { 
-  GetMonthlyExpensesSortedByCat, 
-  GetMonthlyExpensesSortedByDate, 
-  GetCurrentFixedIncome
-} from "../GetBackendData";
-
+import {
+  GetMonthlyExpensesSortedByCat,
+  GetMonthlyExpensesSortedByDate,
+  GetMoneyIn,
+} from "../../components/GetBackendData";
+import ProfilePic from "../../components/ProfilePic";
 
 const AddExpensesButton = () => {
   const router = useRouter();
@@ -42,7 +42,11 @@ const SelectSortingOrder = ({ onToggle }) => {
       onValueChange={handleToggle}
       buttons={[
         { value: "Date", label: "Date" },
-        { value: "Categories", label: "Categories" },
+        {
+          value: "Categories",
+          label: "Categories",
+          testID: "categories-button",
+        },
       ]}
     />
   );
@@ -51,11 +55,13 @@ const SelectSortingOrder = ({ onToggle }) => {
 function Expenses() {
   const [sortingOrder, setSortingOrder] = useState("Date");
   const [refreshing, setRefreshing] = useState(false);
-  const [expensesSortedByCat, setExpensesSortedByCat] = useState([]); 
-  const [expensesSortedByDate, setExpensesSortedByDate] = useState([]); 
-  const [currentIncome, setCurrentIncome] = useState(0);   
+  const [expensesSortedByCat, setExpensesSortedByCat] = useState([]);
+  const [expensesSortedByDate, setExpensesSortedByDate] = useState([]);
+  const [currentIncome, setCurrentIncome] = useState(0);
 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleString('default', { month: 'long' }));
+  const [selectedMonth, setSelectedMonth] = useState(
+    new Date().toLocaleString("default", { month: "long" })
+  );
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const handleSortingOrderToggle = (selectedOrder) => {
@@ -70,20 +76,15 @@ function Expenses() {
   // Fetch monthly expenses and income from backend
   const fetchExpenses = useCallback(async () => {
     setRefreshing(true);
-    
-    // Get required data 
     const expensesSortedByCat = await GetMonthlyExpensesSortedByCat(selectedMonth, selectedYear); 
     const expensesSortedByDate = await GetMonthlyExpensesSortedByDate(selectedMonth, selectedYear); 
-    const currentIncome = await GetCurrentFixedIncome(selectedMonth, selectedYear);
-
-    // Update states
+    const currentIncome = await GetCurrentIncome(selectedMonth, selectedYear);
     setExpensesSortedByCat(expensesSortedByCat);
     setExpensesSortedByDate(expensesSortedByDate);
     setCurrentIncome(currentIncome); 
-
     setRefreshing(false);
-  }, [selectedYear, selectedMonth, expensesSortedByDate, currentIncome]); 
-  
+  }, [selectedYear, selectedMonth, expensesSortedByDate, currentIncome]);
+
   useEffect(() => {
     fetchExpenses();
   }, [fetchExpenses]);
@@ -91,17 +92,32 @@ function Expenses() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
-        <MonthYearPicker onSelect={handleDateSelect}/>
-      <View>
-      <BudgetProgressBar expenses={expensesSortedByDate} income={currentIncome} />
-      </View>
-        <SelectSortingOrder onToggle={handleSortingOrderToggle}/>
+        <View style={{ marginBottom: -45 }}>
+          <ProfilePic />
+        </View>
+        <MonthYearPicker onSelect={handleDateSelect} />
+
+        <View>
+          <BudgetProgressBar
+            expenses={expensesSortedByDate}
+            income={currentIncome}
+          />
+        </View>
+        <SelectSortingOrder onToggle={handleSortingOrderToggle} />
       </View>
       {refreshing && <ActivityIndicator />}
       {sortingOrder === "Date" ? (
-        <SortExpensesByDate expenses={expensesSortedByDate}selectedMonth={selectedMonth} selectedYear={selectedYear} />
+        <SortExpensesByDate
+          expenses={expensesSortedByDate}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+        />
       ) : (
-        <SortExpensesByCategories expenses={expensesSortedByCat} selectedMonth={selectedMonth} selectedYear={selectedYear} />
+        <SortExpensesByCategories
+          expenses={expensesSortedByCat}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+        />
       )}
       <AddExpensesButton />
     </SafeAreaView>
@@ -120,22 +136,21 @@ const styles = StyleSheet.create({
   },
   addExpensesButton: {
     width: 65,
-    height: 65, 
-    backgroundColor: "#3D70FF", 
-    borderRadius: 100, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    right: 20, 
+    height: 65,
+    backgroundColor: "#3D70FF",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 20,
     bottom: 7,
-    color: "#FFFFFF", 
+    color: "#FFFFFF",
     shadowOffset: {
       width: 1,
       height: 3,
     },
     shadowOpacity: 0.5,
     shadowRadius: 5,
-    
   },
   segmentedButtonContainer: {
     marginTop: 20,

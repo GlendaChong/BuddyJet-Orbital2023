@@ -52,8 +52,8 @@ const IndividualExpenseBox = ({ expense }) => {
                 size={15}
                 color="red"
             />
-        </TouchableOpacity>
-        <Text style={styles.expenseAmount}>SGD {expense.amount}</Text>
+          </TouchableOpacity>
+          <Text style={styles.expenseAmount}>SGD {expense.amount}</Text>
         </View>
         
       </View>

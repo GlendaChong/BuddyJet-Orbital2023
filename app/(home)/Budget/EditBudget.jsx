@@ -1,113 +1,92 @@
-import { Text, View, TextInput, StyleSheet, Button } from "react-native";
+import { Text, View, TextInput, StyleSheet, Button, KeyboardAvoidingView, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
 import { useState, useEffect } from 'react';
+import { GetCategoryDetails, GetCurrentBudget, GetSideHustles } from "../../components/GetBackendData";
+import { useLocalSearchParams } from "expo-router";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import BackButton from "../../components/BackButton";
 
 function EditBudget() {
 
-  let [budgetId, setbudgetId] = useState(0)
-  let [userId, setUserId] = useState('')
+  const [budgetId, setBudgetId] = useState(0); 
+  const [userId, setUserId] = useState(''); 
   const [category, setCategory] = useState([]);
   const [editing, setEditing] = useState(false);
   const [oldIncome, setOldIncome] = useState(0);
-  const [newIncome, setNewIncome] = useState(0);
+  const [sideHustles, setSideHustles] = useState([]);
+  const [sideHustlesChanged, setSideHustlesChanged] = useState(false); // State variable to track changes in side hustles
+  const { selectedMonth, selectedYear } = useLocalSearchParams(); 
 
-  const fetchUserId = async () => {
-    try {
-      let { data: profiles } = await supabase
-        .from('profiles')
-        .select('id')
-
-      const UserID = profiles[0]?.id;
-      setUserId(UserID);
-    } catch (error) {
-      console.error('Error fetching userId', error);
-    }
-  };
-
-  const fetchbudgetId = async () => {
-    try {
-      let { data: budget } = await supabase
-        .from('budget')
-        .select('budget_id')
-        .eq('in_use', true);
-
-      const BudgetID = budget[0]?.budget_id;
-      console.log(BudgetID);
-      setbudgetId(BudgetID);
-    } catch (error) {
-      console.error('Error fetching budgetId', error);
-    }
-  };
-
-  const fetchOldIncome = async () => {
-    let { data: budget, error } = await supabase
-      .from('budget')
-      .select('income')
-      .eq('in_use', true);
-
-    if (error) {
-      console.error('Error fetching income', error);
-      return;
-    }
-
-    const fetchedIncome = parseInt(budget[0]?.income);
-    setOldIncome(fetchedIncome);
-    setNewIncome(fetchedIncome);
-  };
+  // Fetch backend data 
+  const fetchBudgetData = async () => {
+    const budget = await GetCurrentBudget(selectedMonth, selectedYear);
+    setUserId(budget.user_id); 
+    setBudgetId(budget.budget_id); 
+    setOldIncome(budget.income);
+  }
 
   const fetchCategoryDetail = async () => {
-    let { data: categoryData } = await supabase
-      .from('categories')
-      .select('category, spending, color, category_id')
-      .eq('in_use', true)
-      .eq('budget_id', budgetId);
-    setCategory(categoryData);
+    const categories = await GetCategoryDetails(selectedMonth, selectedYear);
+    setCategory(categories); 
+  };
+
+  // Fetch the side hustles from Supabase
+  const fetchSideHustles = async () => {
+    const sideHustles = await GetSideHustles(selectedMonth, selectedYear); 
+    setSideHustles(sideHustles); 
   };
 
   useEffect(() => {
-    fetchUserId();
-    fetchbudgetId();
-    fetchOldIncome();
+    fetchBudgetData(); 
   }, []);
 
   useEffect(() => {
     fetchCategoryDetail();
-  }, [budgetId])
+  }, [budgetId]); 
 
-  const updateIncome = async () => {
-    console.log(newIncome)
-    try {
-      await supabase
-        .from('budget')
-        .update({ income: newIncome, in_use: true })
-        .eq('budget_id', budgetId)
-        .eq('user_id', userId);
-      console.log('Income updated successfully');
-      fetchOldIncome();
-    } catch (error) {
-      console.error('Error updating income:', error.message);
-    }
-  };
+  useEffect(() => {
+    fetchSideHustles();
+  }, [sideHustlesChanged]);
 
-  const Income = ({ onEdit }) => {
+
+  // Income component 
+  const Income = () => {
+    const [newIncome, setNewIncome] = useState(0);
+
+    // Update income in backend
+    const updateIncome = async () => {
+      try {
+        await supabase
+          .from('budget')
+          .update({ income: newIncome, in_use: true })
+          .eq('budget_id', budgetId)
+          .eq('user_id', userId)
+          .gte('created_at', `${selectedYear}-${selectedMonth}-01`)
+          .lte('created_at', `${selectedYear}-${selectedMonth}-31`);
+
+        console.log('Income updated successfully');
+      } catch (error) {
+        console.error('Error updating income:', error.message);
+      }
+    };
+
     const handleEdit = () => {
       setEditing(true);
     };
-    const handleSave = () => {
-      // Perform any necessary validation or API calls to save the new income
-      // Once saved successfully, exit editing mode and call the onEdit callback function
-      setOldIncome(newIncome)
-      setEditing(false);
-      updateIncome();
-    };
 
+    const handleSave = () => {
+      setOldIncome(newIncome); 
+      updateIncome();
+      setEditing(false);
+    };
+ 
     if (editing) {
       return (
         <View style={styles.container}>
-          <View style={styles.incomeContainer}>
+          <View style={styles.editIncomeContainer}>
             <Text style={styles.labelText}>New Income:</Text>
             <TextInput
               value={newIncome.toString()}
@@ -123,64 +102,69 @@ function EditBudget() {
     }
 
     return (
-      <View style={{ alignItems: 'center', marginTop: 30 }}>
-        <View style={{ backgroundColor: "#F3F6FA", borderRadius: 20, width: 280, height: 90, justifyContent: 'center', alignItems: 'center', marginBottom: 0 }}>
-          <Text style={{ color: '#2C2646', fontFamily: 'Poppins-Medium', fontWeight: '600', fontSize: 18, lineHeight: 20, textAlign: 'center' }}>Income:</Text>
+      <View style={styles.container}>
+        <View style={styles.displayIncomeContainer}>
+          <Text style={{ color: '#2C2646', fontFamily: 'Poppins-Medium', fontWeight: '600', fontSize: 18, lineHeight: 20, textAlign: 'center' }}>Fixed Income:</Text>
           <Text style={{ color: '#2C2646', fontFamily: 'Poppins-SemiBold', fontWeight: '600', fontSize: 24, lineHeight: 26, textAlign: 'center', marginTop: 15 }}>${oldIncome}</Text>
         </View>
-        <Text onPress={handleEdit} style={{ bottom: 38, left: 100 }}>Edit</Text>
+        <Text onPress={handleEdit} style={styles.editText}>Edit</Text>
       </View>
     );
   };
 
 
+  // Update category in backend
   const updateCategory = async (updatedCategories) => {
     try {
       await Promise.all(
         updatedCategories.map((category) =>
           supabase
             .from('categories')
-            .update({ category: category.category, spending: category.percentage / 100 })
+            .update({ category: category.category, spending: category.spending })
             .eq('budget_id', budgetId)
             .eq('user_id', userId)
             .eq('category_id', category.category_id)
             .eq('in_use', true)
+            .gte('created_at', `${selectedYear}-${selectedMonth}-01`)
+            .lte('created_at', `${selectedYear}-${selectedMonth}-31`)
         )
       );
       console.log('Categories updated successfully');
-      fetchCategoryDetail();
+      
     } catch (error) {
       console.error('Error updating categories:', error.message);
     }
   };
 
+  
+  // Category box component 
   const SpendingBox = () => {
     const [percentages, setPercentages] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
+    // Initialize the percentages array with default values based on the category data
     useEffect(() => {
-      // Initialize the percentages array with default values based on the category data
       const initialPercentages = category.map((item) => ({
-        category: item.category,
-        percentage: item.spending * 100,
+        ...item, 
+        spending: parseInt(item.spending * 100),
       }));
       setPercentages(initialPercentages);
-    }, [category]);
+    }, []);
 
+    // Update the percentage value for a specific category
     const handlePercentageChange = (category, value) => {
-      // Update the percentage value for a specific category
       const updatedPercentages = percentages.map((item) =>
-        item.category === category ? { ...item, percentage: value } : item
+        (item.category == category) ? { ...item, spending: value } : item
       );
       setPercentages(updatedPercentages);
     };
 
     const handleSave = async () => {
       // Calculate the total sum of percentages
-      const totalPercentage = percentages.reduce((sum, item) => sum + parseFloat(item.percentage || 0), 0);
+      const totalPercentage = percentages.reduce((sum, item) => sum + parseFloat(item.spending || 0), 0);
 
       // Perform the validation
-      if (totalPercentage !== 100) {
+      if (totalPercentage != 100) {
         setErrorMessage('Percentage sum is not equal to 100.');
         return;
       }
@@ -188,120 +172,138 @@ function EditBudget() {
       const updatedCategories = category.map((item, index) => ({
         ...item,
         category: percentages[index]?.category || item.category,
-        percentage: percentages[index]?.percentage || item.spending * 100,
+        spending: parseInt(percentages[index]?.spending) / 100 || item.spending,
       }));
 
-      // Perform any necessary API calls or save the data
-      await updateCategory(updatedCategories);
-      console.log('Updated Percentages:', percentages);
+      setCategory(updatedCategories); 
       setErrorMessage('');
-      setCategory(updatedCategories);
+      updateCategory(updatedCategories);       
     };
 
     return (
-      <View style={{ marginTop: 30, flex: 1, paddingHorizontal: 30, alignContent: 'center' }}>
+      <View style={{ marginTop: 30, flex: 1, paddingHorizontal: 30 }}>
         <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 18, marginBottom: 15 }}> Categories:</Text>
-        <View
-          style={{
-            backgroundColor: '#F3F6FA',
-            borderRadius: 18,
-            paddingLeft: 30,
-            paddingTop: 20,
-            paddingBottom: 8,
-            width: 320,
-          }}
-        >
+        <View style={styles.categoryOuterContainer}>
           {category.map((item, index) => (
-            <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
-              <View
-                style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: item.color, marginRight: 20 }}
-              />
-              <Text style={{ fontFamily: 'Poppins-SemiBold', width: 120, color: '#2C2646', fontSize: 16 }}>
-                {item.category}
-              </Text>
+            <View key={index} style={styles.categoryInnerContainer}>
+              <View style={{ width: 10, height: 10, borderRadius: 10, marginRight: 20, backgroundColor: item.color }} />
+              <Text style={styles.categoryText}>{item.category}</Text>
               <TextInput
-                value={percentages.find((p) => p.category === item.category)?.percentage.toString()}
+                value={percentages.find((p) => p.category == item.category)?.spending.toString()}
                 onChangeText={(value) => handlePercentageChange(item.category, value)}
                 keyboardType="numeric"
-                style={{ fontFamily: 'Poppins-Medium', width: 30, color: '#2C2646', left: 50, fontSize: 16 }}
+                style={styles.percentageText}
               />
-              <Text style={{ fontFamily: 'Poppins-Medium', width: 30, color: '#2C2646', left: 50 }}>%</Text>
+              <Text style={styles.percentageText}>%</Text>
             </View>
           ))}
         </View>
         <Text
           onPress={handleSave}
-          style={{ fontFamily: 'Poppins-Medium', fontSize: 15, color: '#2C2646', marginTop: 10, left: 260 }}
+          style={styles.saveText}
         >
           Save
         </Text>
-        {errorMessage !== '' && <Text style={{ color: 'red', width: 250, top: -20 }}>{errorMessage}</Text>}
+        {errorMessage !='' && <Text style={{ color: 'red', width: 250, top: -20 }}>{errorMessage}</Text>}
       </View>
     );
   };
 
+
+  // Money in component 
   const MoneyIn = () => {
-    const [sideHustles, setSideHustles] = useState([]);
     const [newSideHustle, setNewSideHustle] = useState('');
     const [newSideHustleAmount, setNewSideHustleAmount] = useState('');
 
-    useEffect(() => {
-      // Fetch the side hustles from Supabase
-      fetchSideHustles();
-    }, []);
-
-    const fetchSideHustles = async () => {
+    // Add money in into backend
+    const addSideHustle = async () => {
       try {
-        const { data, error } = await supabase.from('moneyIn').select('name, amount');
-        if (error) {
-          throw error;
-        }
-        setSideHustles(data);
+        await supabase
+          .from('moneyIn')
+          .insert([{ 
+            created_at: `${selectedYear}-${selectedMonth}-01`, 
+            user_id: userId, 
+            name: newSideHustle, 
+            amount: newSideHustleAmount 
+          }]); 
+        
+
       } catch (error) {
-        console.log('Error fetching side hustles:', error.message);
+        console.error('Error adding side hustle:', error.message);
+
+      } finally {
+        fetchSideHustles(); 
+        setNewSideHustle(''); 
+        setNewSideHustleAmount(''); 
       }
     };
 
-    const addSideHustle = async () => {
-      try {
-        const { data, error } = await supabase.from('moneyIn').insert([{ user_id: userId, name: newSideHustle, amount: newSideHustleAmount }]);
-        if (error) {
-          throw error;
-        }
-        setNewSideHustle('');
-        setNewSideHustleAmount('');
-        fetchSideHustles(); // Fetch the updated side hustles after adding a new one
-      } catch (error) {
-        console.log('Error adding side hustle:', error.message);
-      }
+    // Delete money in from backend
+    const handleDeleteSideHustle = (moneyInId) => {
+      return async () => {
+        Alert.alert(
+          "Confirm Delete",
+          "Are you sure you want to delete this money in?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Delete",
+              style: "destructive",
+              onPress: async () => {
+                try {
+                  const { data } = await supabase
+                    .from("moneyIn")
+                    .delete()
+                    .eq("id", moneyInId);
+
+                  setSideHustlesChanged(!sideHustlesChanged); // Toggle sideHustlesChanged state to trigger re-render
+    
+                } catch (error) {
+                  console.error("Error deleting expense:", error.message);
+                }
+              },
+            },
+          ]
+        );
+      };
     };
 
     return (
-      <View style={{ marginTop: 30, flex: 1, paddingHorizontal: 40, alignContent: 'center' }}>
-        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 18, marginBottom: 8, left: 5 }}>Money In:</Text>
-        <View style={{ backgroundColor: '#F3F6FA', borderRadius: 18, paddingHorizontal: 30, paddingTop: 20, marginTop: 10 }}>
+      <View style={styles.moneyInOuterContainer}>
+        <Text style={styles.moneyInText}>Money In:</Text>
+        <View style={styles.moneyInInnerContainer}>
           {sideHustles.map((sideHustle) => (
-            <View key={sideHustle.name} style={{ flexDirection: 'row', marginBottom: 20 }}>
-              <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, width: 100 }}>{sideHustle.name}:</Text>
-              <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 18, marginLeft: 80 }}>${sideHustle.amount}</Text>
+            <View key={sideHustle.name} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+              <Text style={styles.sideHustleNameText}>{sideHustle.name}</Text>
+              <Text style={styles.sideHustleAmountText}>${sideHustle.amount}</Text>
+              <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteSideHustle(sideHustle.id)}>
+                <FontAwesomeIcon
+                    icon={faTrash}
+                    size={15}
+                    color="red"
+                />
+              </TouchableOpacity>
             </View>
           ))}
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <TextInput
               value={newSideHustle}
               onChangeText={setNewSideHustle}
               placeholder="Money in"
-              style={{ width: 100, fontSize: 14, fontFamily: 'Poppins-Regular' }}
+              style={styles.sideHustleNameText}
             />
             <TextInput
               value={newSideHustleAmount}
-              style={{ marginLeft: 75, width: 100, fontSize: 18, fontFamily: 'Poppins-SemiBold' }}
               onChangeText={setNewSideHustleAmount}
               placeholder="Amount"
+              style={styles.sideHustleAmountText}
             />
           </View>
           <View style={{ marginTop: 30 }}>
-            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#EAE9F0', width: 312, right: 30, marginBottomBottom: 10 }} />
+            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#8E8E93', opacity: 0.7, paddingHorizontal: 5 }} />
             <Button title="Add" onPress={addSideHustle} />
           </View>
         </View>
@@ -309,15 +311,23 @@ function EditBudget() {
     );
   };
 
+
+  // Main overall page
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center", backgroundColor: 'white' }}>
-      <ScrollView>
-        <BackButton />
-        <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 35, marginTop: 40, marginHorizontal: 30 }}>Edit</Text>
-        <Income />
-        <SpendingBox />
-        <MoneyIn />
-      </ScrollView>
+      <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="padding"
+          keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
+      >
+        <ScrollView>
+          <BackButton />
+          <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 35, marginTop: 40, marginHorizontal: 30 }}>Edit</Text>
+          <Income />
+          <SpendingBox />
+          <MoneyIn />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -326,16 +336,38 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     marginTop: 30,
+    
   },
-  incomeContainer: {
+  displayIncomeContainer: {
+   backgroundColor: "#F3F6FA", 
+   borderRadius: 20, 
+   width: 280, 
+   height: 90, 
+   justifyContent: 'center', 
+   alignItems: 'center', 
+   shadowColor: "#000",
+   shadowOffset: {
+     width: 0,
+     height: 2,
+   },
+   shadowOpacity: 0.4,
+   shadowRadius: 5, 
+  }, 
+  editIncomeContainer: {
     backgroundColor: '#F3F6FA',
     borderRadius: 20,
     width: 280,
     height: 110,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 0,
-  },
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 5, 
+  }, 
   labelText: {
     color: '#2C2646',
     fontFamily: 'Poppins-Medium',
@@ -354,13 +386,95 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingHorizontal: 10,
   },
-  editButton: {
-    marginTop: 10,
-  },
-  editButtonText: {
-    color: '#3D70FF',
-    fontFamily: 'Poppins-SemiBold',
+  editText: {
+    bottom: 42, 
+    left: 100, 
+    fontFamily: 'Poppins-Regular', 
+  }, 
+  categoryOuterContainer: {
+    backgroundColor: '#F3F6FA',
+    borderRadius: 18,
+    paddingTop: 20,
+    paddingBottom: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 5, 
+  }, 
+  categoryInnerContainer: { 
+    flexDirection: 'row',
+    alignItems: 'center', 
+    marginBottom: 15, 
+    justifyContent: 'space-between',  
+    paddingHorizontal: 30
+  }, 
+  categoryColor: { 
+    width: 10, 
+    height: 10, 
+    borderRadius: 5, 
+    marginRight: 20 
+  }, 
+  categoryText: {
+    fontFamily: 'Poppins-SemiBold', 
+    width: 120, 
+    color: '#2C2646', 
+    fontSize: 16, 
+  }, 
+  percentageText: {
+    fontFamily: 'Poppins-Medium', 
+    width: 30, 
+    color: '#2C2646', 
+    fontSize: 16, 
+  }, 
+  saveText: { 
+    fontFamily: 'Poppins-Medium', 
+    fontSize: 15, 
+    color: '#2C2646', 
+    marginTop: 10, 
+    textAlign: 'right', 
+    right: 10
+  }, 
+  moneyInText: { 
+    fontFamily: 'Poppins-Medium', 
+    fontSize: 18, 
+    marginBottom: 8, 
+    left: 5 
+  }, 
+  moneyInOuterContainer: { 
+    marginTop: 30,
+    paddingHorizontal: 30, 
+    alignContent: 'center', 
+    paddingBottom: 20, 
+  }, 
+  moneyInInnerContainer: { 
+    backgroundColor: '#F3F6FA', 
+    borderRadius: 18, 
+    paddingHorizontal: 30, 
+    paddingTop: 20, 
+    marginTop: 10, 
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 5, 
+  }, 
+  sideHustleNameText: { 
+    fontFamily: 'Poppins-Medium',
+    fontSize: 17, 
+  }, 
+  sideHustleAmountText: {
+    fontFamily: 'Poppins-SemiBold', 
     fontSize: 18,
+    marginLeft: 'auto', 
+    right: 30
+  }, 
+  deleteButton: {
+    justifyContent: 'center'
   }
 });
 
