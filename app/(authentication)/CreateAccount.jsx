@@ -54,10 +54,15 @@ function CreateAccount() {
         }
 
         setLoading(true);
-
-        const { error, user } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signUp({ 
             email, password, options: { data: { full_name: name, phone_number: phoneNumber, date_of_birth: dateOfBirth } },
         });
+
+        setLoading(false);
+        if (error) {
+            setErrMsg(error.message);
+            return;
+        }
 
     }
 
@@ -78,6 +83,7 @@ function CreateAccount() {
                     <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                     <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
                     <TextFieldInput label='Confirm Password' value={confirmPassword} onChangeText={setConfirmPassword} />
+                    {errMsg !== "" && <Text style={styles.errorText}>{errMsg}</Text>}
                     <Button
                         style={styles.signUpButton}
                         labelStyle={styles.signUpText}
@@ -87,7 +93,7 @@ function CreateAccount() {
                     >
                         Sign Up
                     </Button>
-                    {errMsg !== "" && <Text>{errMsg}</Text>}
+                    
                     {loading && <ActivityIndicator />}
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -121,7 +127,7 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         marginHorizontal: 30, 
         height: 56,
-        marginTop: 50,
+        marginTop: 30,
     },
     signUpText: {
         color: 'white',
@@ -130,6 +136,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         paddingVertical: 12
     },
+    errorText: {
+        left: 30,  
+        paddingVertical: 10, 
+        color: 'red'
+    }
 });
 
 export default CreateAccount; 

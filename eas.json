@@ -21,6 +21,10 @@
       "distribution": "internal",
       "channel": "dashboard"
     },
+    "bugfix": {
+      "distribution": "internal",
+      "channel": "bugfix"
+    },
     "production": {
       "channel": "production"
     }
