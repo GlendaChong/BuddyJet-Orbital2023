@@ -22,7 +22,7 @@ function TextFieldInput({ label, value, onChangeText }) {
 
 const styles = StyleSheet.create({
     textfieldName: {
-        left: 32,
+        left: 30,
         fontFamily: 'Poppins-Medium',
         fontWeight: 400,
         fontSize: 17,
@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     textfieldInput: {
-        width: 327,
-        left: 32,
+        marginHorizontal: 30,  
         fontFamily: 'Poppins-Medium',
         color: 'black',
         borderRadius: 4,

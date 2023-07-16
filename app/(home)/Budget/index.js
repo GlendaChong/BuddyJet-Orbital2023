@@ -16,7 +16,7 @@ import MonthYearPicker from "../../components/MonthYearPicker";
 // Case when user has not created any monthly budget for current month
 const CreateBudgetDesign = () => {
   return (
-    <View styles={{ paddingTop: 200, }}>
+    <View styles={{ paddingTop: 200 }}>
       <Image style={styles.image} source={require('../../../assets/budget.jpeg')} />
       <Text style={styles.mainText}>No Monthly Budget</Text>
       <Text style={styles.descriptionText}>You have not created this month's budget</Text>
@@ -28,7 +28,7 @@ const CreateBudgetDesign = () => {
 // Case when user did not create any budget for previous months
 const NoBudgetDesign = () => {
   return (
-    <View styles={{ paddingTop: 200, }}>
+    <View styles={{ paddingTop: 200 }}>
       <Image style={styles.image} source={require('../../../assets/budget.jpeg')} />
       <Text style={styles.mainText}>No Monthly Budget</Text>
       <Text style={styles.descriptionText}>You did not create any budget for this month</Text>
@@ -223,15 +223,17 @@ const styles = StyleSheet.create({
   editText: {
     fontFamily: 'Poppins-Regular', 
     fontSize: 15, 
-    left: 315, 
     marginBottom: 10, 
+    marginLeft: 'auto', 
+    right: 20
   }, 
   budgetBoxContainer: {
     backgroundColor: '#000E90', 
     borderRadius: 18, 
-    paddingHorizontal: 30, 
+    paddingLeft: 30,  
     paddingTop: 15, 
     paddingBottom: 8, 
+    marginHorizontal: 10, 
   }, 
   categoryContainer: {
     flexDirection: 'row', 
@@ -252,7 +254,7 @@ const styles = StyleSheet.create({
   }, 
   categoryNormalText: { 
     fontFamily: 'Poppins-Medium',
-    width: 120, 
+    width: 140, 
     fontSize: 16, 
     color:'#FFFFFF', 
   }, 
@@ -264,7 +266,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular', 
     fontSize: 14,
     marginBottom: 4, 
-    width: 350, 
     marginTop: 20, 
     paddingHorizontal: 10, 
     lineHeight: 28, 
