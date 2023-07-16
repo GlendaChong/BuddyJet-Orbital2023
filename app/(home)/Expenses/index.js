@@ -63,10 +63,12 @@ function Expenses() {
   );
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
+  // Handle sorting order between list as dates or categories
   const handleSortingOrderToggle = (selectedOrder) => {
     setSortingOrder(selectedOrder);
   };
 
+  // Handle updating of data based on month and year
   const handleDateSelect = (month, year) => {
     setSelectedMonth(month);
     setSelectedYear(year);

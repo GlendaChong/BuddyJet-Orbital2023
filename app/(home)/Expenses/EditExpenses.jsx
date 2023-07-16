@@ -1,27 +1,53 @@
 import { Text, StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
 import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAuth } from "../../../contexts/auth";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { Dropdown } from 'react-native-element-dropdown';
+import { GetMonthlyExpensesSortedByDate } from "../../components/GetBackendData";
 
-function AddExpenses() {
-    
+function EditExpenses() {
+
+  const { expensesId } = useLocalSearchParams(); 
   const [description, setDescription] = useState(''); 
   const [date, setDate] = useState(''); 
   const [amount, setAmount] = useState(''); 
-  const [loading, setLoading] = useState(false);
-  const [errMsg, setErrMsg] = useState('');
-  const { user } = useAuth(); 
-  const router = useRouter(); 
   const [selectedCategory, setSelectedCategory] = useState(''); 
   const [selectedPaymentMode, setSelectedPaymentMode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
 
+  const router = useRouter(); 
+
+  // Fetch backend data
+  const fetchExpense = async () => {
+    try {
+      const { data } = await supabase
+        .from('expenses')
+        .select()
+        .eq('id', expensesId)
+        .single();
+
+      setDescription(data.description); 
+      setAmount(data.amount); 
+      setDate(data.date.split('-').reverse().join('/')); // Format the date from yyyy-mm-dd to dd/mm/yyyy
+      setSelectedCategory(data.category); 
+      setSelectedPaymentMode(data.payment_mode); 
+
+    } catch (error) {
+      console.error('Error fetching expense', error);
+    }
+  }; 
+
+  useEffect(() => {
+    fetchExpense(); 
+  }, [expensesId]); 
+  
   // Dropdown selection for category field
   const CategoryField = () => {
     const categories = [
@@ -44,7 +70,6 @@ function AddExpenses() {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? 'Select item' : '...'}
         value={selectedCategory}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
@@ -88,56 +113,29 @@ function AddExpenses() {
     );
   };
 
-
-  const handleSubmit = async () => {
-    setErrMsg(''); 
-    if (description === '') {
-      setErrMsg('Description cannot be empty')
-      return; 
-    }
-    if (date === '') {
-      setErrMsg('Date cannot be empty')
-      return; 
-    }
-    if (amount === '') {
-      setErrMsg('Amount cannot be empty')
-      return; 
-    }
-    if (selectedCategory === '') {
-      setErrMsg('Category cannot be empty')
-      return; 
-    }
-    if (selectedPaymentMode === '') {
-      setErrMsg('Payment mode cannot be empty')
-      return; 
-    }
-
-    setLoading(true); 
-
+  // Update data in backend
+  const handleEdit = async () => {
     // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
-    const [day, month, year] = date.split('/');
-    const reformattedDate = `${year}/${month}/${day}`;
+    try {
+      const [day, month, year] = date.split('/');
+      const reformattedDate = `${year}/${month}/${day}`;
 
-    const { error } = await supabase
-      .from('expenses')
-      .insert({ 
-        description: description, 
-        user_id: user.id, 
-        date: reformattedDate, 
-        amount: amount, 
-        category: selectedCategory, 
-        payment_mode: selectedPaymentMode})
-      .select()
-      .single();
+      await supabase
+        .from('expenses')
+        .update({ 
+          description: description, 
+          date: reformattedDate, 
+          amount: amount, 
+          category: selectedCategory, 
+          payment_mode: selectedPaymentMode})
+        .eq('id', expensesId); 
 
-    if (error != null) {
-        setLoading(false);
-        console.log(error);
-        setErrMsg(error.message);
-        return;
-    }
-    setLoading(false);
-    router.back(); 
+        router.back(); 
+
+    } catch (error) {
+      setErrMsg(error); 
+      console.error('Error updating expense', error);
+    } 
   }
 
   return (
@@ -149,7 +147,7 @@ function AddExpenses() {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <Text style={styles.headerText}>Entry</Text>
-          <Text style={styles.subHeaderText}>Create a new expenses entry</Text>
+          <Text style={styles.subHeaderText}>Edit your expenses entry</Text>
           <BackButton />
           <TextFieldInput label='Description' value={description} onChangeText={setDescription} />
           <TextFieldInput label='Date (DD/MM/YYYY)' value={date} onChangeText={setDate} />
@@ -160,13 +158,13 @@ function AddExpenses() {
           <PaymentModeField />
         
           <Button  
-              style={styles.addExpenseButton} 
-              labelStyle={styles.addExpenseText} 
+              style={styles.editExpenseButton} 
+              labelStyle={styles.editExpenseText} 
               onPress={ () => {
-                    handleSubmit();
+                  handleEdit();
               }}
           >
-              Add Expense
+              Edit Expense
           </Button>
 
           {errMsg !== '' && <Text>{errMsg}</Text>}
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
     color: '#100D40', 
     opacity: 0.65,     
   }, 
-  addExpenseButton: {
+  editExpenseButton: {
     backgroundColor: "#3D70FF",
     borderRadius: 40,
     marginHorizontal: 30,
@@ -211,7 +209,7 @@ const styles = StyleSheet.create({
     width: 330,
     alignSelf: 'center', 
   }, 
-  addExpenseText: {
+  editExpenseText: {
     color: "white",
     fontFamily: "Poppins-SemiBold",
     fontWeight: 600,
@@ -266,4 +264,4 @@ const styles = StyleSheet.create({
   },
 }); 
 
-export default AddExpenses; 
+export default EditExpenses; 

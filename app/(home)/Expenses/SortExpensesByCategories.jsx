@@ -40,8 +40,8 @@ function SortExpensesByCategories({ expenses }) {
 
     const groupedCategories = groupExpensesByCategories(expenses);
     const expenseSections = Object.keys(groupedCategories).map((category) => ({
-    sectionCategory: category,
-    sectionExpenses: groupedCategories[category],
+        sectionCategory: category,
+        sectionExpenses: groupedCategories[category],
     }));
 
     return (

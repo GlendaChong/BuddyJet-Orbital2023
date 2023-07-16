@@ -1,9 +1,12 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../../lib/supabase";
+import { useRouter } from "expo-router";
 
 const IndividualExpenseBox = ({ expense }) => {
+  const router = useRouter(); 
+  const expensesId = expense.id; 
 
   const handleDeleteExpense = async () => {
     Alert.alert(
@@ -23,9 +26,6 @@ const IndividualExpenseBox = ({ expense }) => {
                 .from("expenses")
                 .delete()
                 .eq("id", expense.id);
-              if (error) {
-                throw error;
-              }
           
             } catch (error) {
               console.error("Error deleting expense:", error.message);
@@ -35,6 +35,13 @@ const IndividualExpenseBox = ({ expense }) => {
       ]
     );
   };
+
+  const handleEditExpense = async () => {
+    router.push({
+      pathname: "../(home)/Expenses/EditExpenses",
+      params: { expensesId },
+    }); 
+  }
 
   return (
     <View style={styles.expenseBox}>
@@ -53,9 +60,16 @@ const IndividualExpenseBox = ({ expense }) => {
                 color="red"
             />
           </TouchableOpacity>
-          <Text style={styles.expenseAmount}>SGD {expense.amount}</Text>
+          <View style={styles.rightIconContainer}>
+            <Text style={styles.expenseAmount}>SGD {expense.amount}</Text>
+            <TouchableOpacity onPress={handleEditExpense}>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                size={15}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-        
       </View>
     </View>
   );
@@ -100,11 +114,15 @@ const styles = StyleSheet.create({
   expenseAmount: {
     fontSize: 16,
     fontFamily: "Poppins-SemiBold",
-    // marginRight: 20,
+    marginRight: 20,
   },
   deleteButton: {
     justifyContent: "flex-end"
-  }
+  }, 
+  rightIconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });
 
 export default IndividualExpenseBox;
