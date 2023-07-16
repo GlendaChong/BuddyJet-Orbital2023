@@ -59,7 +59,7 @@ function ChangePassword() {
             <ScrollView>
                 <BackButton />
                 <Text style={styles.welcomeText}>Change Password</Text>
-                <Image style={{ marginTop: 40, left: 90 }} source={require('../../../assets/Forgot_password.jpg')} />
+                <Image style={{ height: 200, width: 300, alignSelf: 'center', marginTop: 20 }} source={require('../../../assets/Forgot_password.jpg')} />
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                 <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} />
                 <TextFieldInput label='New Password' value={newPassword} onChangeText={setNewPassword} />
@@ -82,7 +82,7 @@ function ChangePassword() {
 
 const styles = StyleSheet.create({
     welcomeText: {
-        left: 55,
+        alignSelf: "center",
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 600,
         fontSize: 30,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         width: 327,
         height: 56,
-        left: 30,
+        alignSelf: 'center',
         marginTop: 50,
     },
     loginText: {
