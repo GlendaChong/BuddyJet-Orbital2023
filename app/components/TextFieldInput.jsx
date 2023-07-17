@@ -15,6 +15,7 @@ function TextFieldInput({ label, value, onChangeText }) {
                 value={value}
                 onChangeText={onChangeText}
                 accessibilityLabel={label} // Add the accessibilityLabel prop
+                placeholder={value.toString()}
             />
         </>
     );

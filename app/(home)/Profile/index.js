@@ -597,7 +597,6 @@ const styles = StyleSheet.create({
     color: "#0A84FF",
     fontSize: 18,
   },
-
   resetOption: {
     flexDirection: "row",
     alignItems: "center",
@@ -626,6 +625,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginHorizontal: 30,
     marginTop: 10,
+    marginBottom: 10,
     width: 330,
   },
   logoutText: {
