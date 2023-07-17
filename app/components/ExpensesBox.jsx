@@ -5,8 +5,8 @@ import { supabase } from "../../lib/supabase";
 import { useRouter } from "expo-router";
 
 const IndividualExpenseBox = ({ expense }) => {
-  const router = useRouter(); 
-  const expensesId = expense.id; 
+  const router = useRouter();
+  const expensesId = expense.id;
 
   const handleDeleteExpense = async () => {
     Alert.alert(
@@ -26,7 +26,7 @@ const IndividualExpenseBox = ({ expense }) => {
                 .from("expenses")
                 .delete()
                 .eq("id", expense.id);
-          
+
             } catch (error) {
               console.error("Error deleting expense:", error.message);
             }
@@ -38,9 +38,9 @@ const IndividualExpenseBox = ({ expense }) => {
 
   const handleEditExpense = async () => {
     router.push({
-      pathname: "../(home)/Expenses/EditExpenses",
+      pathname: "../(home)/Expenses/ExpenseDetail",
       params: { expensesId },
-    }); 
+    });
   }
 
   return (
@@ -55,9 +55,9 @@ const IndividualExpenseBox = ({ expense }) => {
         <View style={styles.rightColumnBox}>
           <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteExpense}>
             <FontAwesomeIcon
-                icon={faTrash}
-                size={15}
-                color="red"
+              icon={faTrash}
+              size={15}
+              color="red"
             />
           </TouchableOpacity>
           <View style={styles.rightIconContainer}>
@@ -86,11 +86,11 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.4,
-    shadowRadius: 5, 
+    shadowRadius: 5,
   },
   rowDirectionBox: {
     flexDirection: "row",
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
     padding: 16,
   },
   leftColumnBox: {
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   rightColumnBox: {
     flexDirection: "column",
-    alignItems: "flex-end", 
+    alignItems: "flex-end",
     justifyContent: "space-between"
   },
   expenseDescription: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     justifyContent: "flex-end"
-  }, 
+  },
   rightIconContainer: {
     flexDirection: "row",
     alignItems: "center",
