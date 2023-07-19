@@ -1,11 +1,11 @@
-import { Text, StyleSheet, View, KeyboardAvoidingView, ActivityIndicator, Image } from "react-native";
+import { Text, StyleSheet, View, ActivityIndicator, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, React, useEffect, useCallback } from "react";
-import TextFieldInput from "../../components/TextFieldInput";
 import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { useIsFocused } from "@react-navigation/native";
 
 
 function ExpenseDetail() {
@@ -17,15 +17,13 @@ function ExpenseDetail() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedPaymentMode, setSelectedPaymentMode] = useState('');
     const [pic, setPic] = useState(null);
-    const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
     const [refreshing, setRefreshing] = useState(false);
-
-
     const router = useRouter();
+    const isFocused = useIsFocused();
 
     // Fetch backend data
-    const fetchExpense = useCallback(async () => {
+    const fetchExpense = async () => {
         setRefreshing(true);
         try {
             const { data } = await supabase
@@ -39,17 +37,19 @@ function ExpenseDetail() {
             setDate(data.date.split('-').reverse().join('/')); // Format the date from yyyy-mm-dd to dd/mm/yyyy
             setSelectedCategory(data.category);
             setSelectedPaymentMode(data.payment_mode);
-            setPic(data.pic_url);
-
+            setPic(data.pic_url); 
             setRefreshing(false);
         } catch (error) {
+            setErrMsg(error); 
             console.error('Error fetching expense', error);
         }
-    }, [pic, description, amount, date, selectedCategory, selectedPaymentMode])
+    }; 
 
     useEffect(() => {
-        fetchExpense();
-    }, [fetchExpense]);
+        if (isFocused) {
+            fetchExpense();
+        } 
+    }, [pic, description, amount, date, selectedCategory, selectedPaymentMode, isFocused]);
 
     const handleEditExpense = async () => {
         router.push({
@@ -58,30 +58,20 @@ function ExpenseDetail() {
         });
     }
 
-
-
     const Picture = () => {
-        return (
-            // <Text style={styles.subHeaderText}>Image</Text>
-            <View>
-                {pic !== null ? (
-                    <View>
-                        <Text style={styles.subHeaderText}>Image</Text>
-                        <Image
-                            source={{ uri: pic }}
-                            style={{ width: 285, height: 200, borderRadius: 5, marginVertical: 15, marginLeft: 23 }}
-                        />
-                    </View>
-                ) : (
+        if (pic !== null) {
+            return (
+                <View>
+                    <Text style={styles.subHeaderText}>Image</Text>
                     <Image
-                        source={{
-                            url: "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg",
-                        }}
-                        style={{ width: 0, height: 0, borderRadius: 0 }}
+                        source={{ uri: pic }}
+                        style={{ width: 285, height: 200, borderRadius: 5, marginVertical: 15, marginLeft: 23 }}
                     />
-                )}
-            </View>
-        )
+                </View>
+            );        
+        } else {
+            return; 
+        }
     }
 
     return (
@@ -89,8 +79,7 @@ function ExpenseDetail() {
             <ScrollView>
                 <BackButton />
                 {refreshing && <ActivityIndicator />}
-                <Text style={{ marginTop: 5, alignSelf: "flex-end", marginHorizontal: 45, fontFamily: "Poppins-Medium", fontSize: 25 }}
-                    onPress={handleEditExpense}>Edit</Text>
+                <Text style={styles.editText} onPress={handleEditExpense}>Edit</Text>
                 <Text style={styles.headerText}>{description}</Text>
                 <View style={{ backgroundColor: "#F3F6FA", marginHorizontal: 30, borderRadius: 18 }}>
                     <Text style={styles.subHeaderText}>Date</Text>
@@ -104,13 +93,11 @@ function ExpenseDetail() {
                     <Picture />
                     <View style={{ marginBottom: 20 }}></View>
                 </View>
-
             </ScrollView>
         </SafeAreaView>
-    )
+    ); 
 }
 
-export default ExpenseDetail;
 
 const styles = StyleSheet.create({
     container: {
@@ -137,10 +124,8 @@ const styles = StyleSheet.create({
         color: '#100D40',
         opacity: 0.65,
         marginTop: 20
-
     },
     textfieldName: {
-        left: 30,
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 400,
         fontSize: 18,
@@ -149,6 +134,16 @@ const styles = StyleSheet.create({
         alignSelf: "flex-end",
         marginTop: -25,
         marginHorizontal: 65,
-        width: 120
+        width: 140
     },
+    editText: {
+        marginTop: 5, 
+        alignSelf: "flex-end", 
+        marginHorizontal: 45, 
+        fontFamily: "Poppins-Medium", 
+        fontSize: 23, 
+    }
 });
+
+
+export default ExpenseDetail;
