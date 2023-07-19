@@ -4,12 +4,10 @@ import { useState, React, useEffect } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
 import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
-import { useAuth } from "../../../contexts/auth";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Dropdown } from 'react-native-element-dropdown';
-import { GetMonthlyExpensesSortedByDate } from "../../components/GetBackendData";
 
 function EditExpenses() {
 
