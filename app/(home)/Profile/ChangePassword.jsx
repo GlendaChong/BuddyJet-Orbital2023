@@ -1,16 +1,14 @@
 import { useState } from "react";
-import React from 'react';
-import { StyleSheet, View, Image } from "react-native";
-import { Text, Button, ActivityIndicator } from "react-native-paper";
+import { StyleSheet, Image, ActivityIndicator, KeyboardAvoidingView } from "react-native";
+import { Text, Button } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
-import TextFieldInput from "../../components/TextFieldInput";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from '../../components/BackButton'
-import { useRouter } from "expo-router";
+import TextFieldInput from "../../components/TextFieldInput";
+
 
 function ChangePassword() {
-    const router = useRouter();
     const [email, setEmail] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -36,46 +34,51 @@ function ChangePassword() {
             setErrMsg("Passwords do not match");
             return;
         }
+
         setLoading(true);
         const { errors } = await supabase.auth.signInWithPassword({ email, password: oldPassword });
 
         if (errors) {
             setLoading(false);
-            setErrMsg("Incorrect details");
+            setErrMsg("Incorrect old password");
             return;
         }
 
         const { error } = await supabase.auth.updateUser({ email, password: newPassword });
         setLoading(false);
         if (error) {
-            setErrMsg("Incorrect details");
+            setErrMsg("Invalid new password");
             return;
         }
+
         await supabase.auth.signOut();
     };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-            <ScrollView>
-                <BackButton />
-                <Text style={styles.welcomeText}>Change Password</Text>
-                <Image style={{ height: 200, width: 300, alignSelf: 'center', marginTop: 20 }} source={require('../../../assets/Forgot_password.jpg')} />
-                <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
-                <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} />
-                <TextFieldInput label='New Password' value={newPassword} onChangeText={setNewPassword} />
-                <TextFieldInput label='Confirm New Password' value={confirmPassword} onChangeText={setConfirmPassword} />
-                <Button
-                    style={styles.loginButton}
-                    labelStyle={styles.loginText}
-                    onPress={handleSubmit}
-                >
-                    Change
-                </Button>
-                <View style={{ alignItems: 'center', marginTop: 10 }}>
-                    {errMsg !== "" && <Text>{errMsg}</Text>}
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+                <ScrollView>
+                    <BackButton />
+                    <Text style={styles.welcomeText}>Change Password</Text>
+                    <Image style={{ height: 200, width: 300, alignSelf: 'center', marginTop: 20 }} source={require('../../../assets/Forgot_password.jpg')} />
+                    <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
+                    <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} />
+                    <TextFieldInput label='New Password' value={newPassword} onChangeText={setNewPassword} />
+                    <TextFieldInput label='Confirm New Password' value={confirmPassword} onChangeText={setConfirmPassword} />
+                    {errMsg !== "" && <Text style={styles.errorText}>{errMsg}</Text>}
                     {loading && <ActivityIndicator />}
-                </View>
-            </ScrollView>
+                    <Button
+                        style={styles.changeButton}
+                        labelStyle={styles.changeText}
+                        onPress={handleSubmit}
+                    >
+                        Change
+                    </Button>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -106,21 +109,27 @@ const styles = StyleSheet.create({
         right: 35,
         marginTop: 10,
     },
-    loginButton: {
-        backgroundColor: '#3D70FF',
+    changeButton: {
+        backgroundColor: "#3D70FF",
         borderRadius: 40,
-        width: 327,
-        height: 56,
-        alignSelf: 'center',
-        marginTop: 50,
+        marginHorizontal: 30,
+        marginTop: 30,
+        marginBottom: 10,
+        width: 330,
+        alignSelf: 'center'
     },
-    loginText: {
-        color: 'white',
-        fontFamily: 'Poppins-SemiBold',
+    changeText: {
+        color: "white",
+        fontFamily: "Poppins-SemiBold",
         fontWeight: 600,
         fontSize: 18,
-        lineHeight: 35,
+        lineHeight: 40,
     },
+    errorText: {
+        left: 30,  
+        paddingVertical: 10, 
+        color: 'red'
+    }
 });
 
 export default ChangePassword; 

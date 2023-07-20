@@ -10,12 +10,12 @@ function TextFieldInput({ label, value, onChangeText }) {
                 autoCapitalize='none'
                 textContentType="none"
                 keyboardType="default"
-                secureTextEntry={label == ('Password') || (label == 'Confirm Password') ||
-                    (label == 'Confirm New Password') || (label == 'New Password') || (label == 'Old Password')}
+                secureTextEntry={label == ('New Password') || (label == 'Confirm New Password')}
                 value={value}
                 onChangeText={onChangeText}
                 accessibilityLabel={label} // Add the accessibilityLabel prop
                 placeholder={value.toString()}
+                blurOnSubmit={false} 
             />
         </>
     );
