@@ -75,7 +75,7 @@ function ForgotPassword() {
                 /></TouchableOpacity>
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.welcomeText}>Forgot Password</Text>
-                    <Image style={{ marginTop: 60 }} source={require('../../assets/Forgot_password.jpg')} />
+                    <Image style={{ marginTop: 60 }} source={require('../../assets/changePassword.jpg')} />
                     <Text style={styles.descriptionText}>Enter your registered email below to receive password reset instructions</Text>
                 </View>
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
