@@ -19,21 +19,21 @@ const Legend = () => {
 const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
     // Check if all values are zero
     if (lastYearMonths.length === 0 || pastYearMoneyIn.length === 0 || pastYearExpenses.length === 0) {
-        // Page is stil generating bar chart
+        // Page is stil generating line graph
         return (
             <View style={styles.chartContainer}>
                 <View style={styles.noDataContainer}>
-                    <Image style={styles.image} source={require('../../assets/noBarChart.jpg')} />
+                    <Image style={styles.image} source={require('../../assets/noLineGraph.jpg')} />
                     <Text style={styles.noDataText}>Generating line graph...</Text>
                 </View>
             </View>
         ); 	
     } else if (pastYearExpenses.every((sum) => sum === 0) && pastYearMoneyIn.every((sum) => sum === 0)) {
-		// No data for the past 6 months
+		// No data for the past year
         return (
 			<View style={styles.chartContainer}>
 				<View style={styles.noDataContainer}>
-					<Image style={styles.image} source={require('../../assets/noBarChart.jpg')} />
+					<Image style={styles.image} source={require('../../assets/noLineGraph.jpg')} />
 					<Text style={styles.noBarChartText}>No line graph generated!</Text>
 					<Text style={styles.noDataText}>No expenses and income added for the past year</Text>
 				</View>
