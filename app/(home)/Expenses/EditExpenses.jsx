@@ -127,7 +127,7 @@ function EditExpenses() {
 
         }} onPress={handleSelectPicture}>
           {pic !== null ? (
-            <Text style={{ fontFamily: "Poppins-Medium", color: "#0A84FF", fontSize: 18, padding: 15, marginLeft: 10 }}>Choose Another Image</Text>
+            <Text style={{ fontFamily: "Poppins-Medium", color: "#0A84FF", fontSize: 18, padding: 15, marginLeft: 10 }}>Choose A Different Image</Text>
           ) : (
             <Text style={{ fontFamily: "Poppins-Medium", color: "#0A84FF", fontSize: 18, padding: 15, marginLeft: 10 }}>Add Image</Text>
           )}
