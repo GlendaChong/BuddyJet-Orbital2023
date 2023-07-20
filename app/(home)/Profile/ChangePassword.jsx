@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
         marginTop: 30,
         marginBottom: 10,
         width: 330,
-      },
+        alignSelf: 'center'
+    },
     changeText: {
         color: "white",
         fontFamily: "Poppins-SemiBold",
