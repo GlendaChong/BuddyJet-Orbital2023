@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Text, ActivityIndicator, Button } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/BackButton";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -37,7 +37,6 @@ const faqData = [
                 "If you are using an iOS simulator, due to existing bug issues in React Native's Text Input component, " + 
                 "you have to return back to the Profile Page first and try changing passwords again."
     },
-    
 ];
 
 
