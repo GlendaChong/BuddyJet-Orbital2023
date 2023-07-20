@@ -11,6 +11,7 @@ import {
   GetMonthlyExpensesSortedByCat,
   GetMonthlyExpensesSortedByDate,
   GetMoneyIn,
+  getProfilePic,
 } from "../../components/GetBackendData";
 import ProfilePic from "../../components/ProfilePic";
 
@@ -57,6 +58,7 @@ function Expenses() {
   const [expensesSortedByCat, setExpensesSortedByCat] = useState([]);
   const [expensesSortedByDate, setExpensesSortedByDate] = useState([]);
   const [currentIncome, setCurrentIncome] = useState(0);
+  const [profilePicture, setProfilePicture] = useState(''); 
 
   const [selectedMonth, setSelectedMonth] = useState(
     new Date().toLocaleString("default", { month: "long" })
@@ -92,18 +94,27 @@ function Expenses() {
     setRefreshing(false);
   }, [selectedYear, selectedMonth, expensesSortedByDate, currentIncome]);
 
+  // Fetch profile picture from backend
+  const fetchProfilePic = async () => {
+    const profilePic = await getProfilePic(); 
+    setProfilePicture(profilePic); 
+  }; 
+
   useEffect(() => {
     fetchExpenses();
   }, [fetchExpenses]);
+
+  useEffect(() => {
+    fetchProfilePic();
+  }, [fetchProfilePic]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
         <View style={{ marginBottom: -45 }}>
-          <ProfilePic />
+          <ProfilePic profilePicture={profilePicture} />
         </View>
         <MonthYearPicker onSelect={handleDateSelect} />
-
         <View>
           <BudgetProgressBar
             expenses={expensesSortedByDate}
