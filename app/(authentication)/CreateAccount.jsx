@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { supabase } from "../../lib/supabase";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, ActivityIndicator, Button } from 'react-native-paper';
@@ -8,9 +8,9 @@ import TextFieldInput from "./TextFieldInput";
 import BackButton from "../components/BackButton";
 
 function CreateAccount() {
-    const [name, setName] = useState(''); 
-    const [dateOfBirth, setDateOfBirth] = useState(''); 
-    const [phoneNumber, setPhoneNumber] = useState(''); 
+    const [name, setName] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -54,7 +54,7 @@ function CreateAccount() {
         }
 
         setLoading(true);
-        const { error } = await supabase.auth.signUp({ 
+        const { error } = await supabase.auth.signUp({
             email, password, options: { data: { full_name: name, phone_number: phoneNumber, date_of_birth: dateOfBirth } },
         });
 
@@ -93,7 +93,7 @@ function CreateAccount() {
                     >
                         Sign Up
                     </Button>
-                    
+
                     {loading && <ActivityIndicator />}
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     signUpButton: {
         backgroundColor: '#3D70FF',
         borderRadius: 40,
-        marginHorizontal: 30, 
+        marginHorizontal: 30,
         height: 56,
         marginTop: 30,
     },
@@ -137,8 +137,8 @@ const styles = StyleSheet.create({
         paddingVertical: 12
     },
     errorText: {
-        left: 30,  
-        paddingVertical: 10, 
+        left: 30,
+        paddingVertical: 10,
         color: 'red'
     }
 });
