@@ -1,11 +1,44 @@
 import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Text, ActivityIndicator, Button } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/BackButton";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+
+// FAQ data
+const faqData = [
+    {
+        question: "How do I edit my profile?",
+        answer: "Navigate to the Profile tab. Tap on the field which you wish to edit and click on the update button. "
+    },
+    {
+        question: "How do I add a new expense entry?",
+        answer: "Navigate to the Expenses tab, tap on the plus button and fill up the required details in the appropriate format. "
+    },
+    {
+        question: "I have just added in a new expense, but I do not see it in the Expenses Page. Why?",
+        answer: "The default month for the Expenses Page is set to the current month. " + 
+                "Ensure that you have navigated to the desired month and year using the Month Year Picker to view the newly added expense."
+    },
+    {
+        question: "How do I create a budget?",
+        answer: "Navigate to the Budget tab, select the month and year that you wish to create the budget for. " + 
+                "Ensure that you fill in the fixed income and select a sample budget. "
+    },
+    {
+        question: "Why can't I create a budget for past months?",
+        answer: "This is because budgeting should be done before the month, instead of after the month. There is no need to create budgets for past months. "
+    },
+    {
+        question: "iOS keeps suggesting passwords in the fields, but I would like to create my own password. What should I do?",
+        answer: "If you are using an iOS device, select choose your own password in your keyboard view, and you can key in your own password. " + 
+                "If you are using an iOS simulator, due to existing bug issues in React Native's Text Input component, " + 
+                "you have to return back to the Profile Page first and try changing passwords again."
+    },
+];
+
 
 function Faq() {
     const [answersVisible, setAnswersVisible] = useState([]);
@@ -23,7 +56,6 @@ function Faq() {
         <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA" }}>
             <ScrollView>
                 <BackButton />
-                {/* <View style={styles.container}> */}
                 <Text style={styles.helloText}>FAQs</Text>
                 {faqData.map((faq, index) => (
                     <View key={index} style={styles.questionContainer}>
@@ -45,13 +77,11 @@ function Faq() {
                         )}
                     </View>
                 ))}
-                {/* </View> */}
             </ScrollView>
         </SafeAreaView>
     );
 }
 
-export default Faq;
 
 const styles = StyleSheet.create({
     container: {
@@ -84,7 +114,7 @@ const styles = StyleSheet.create({
     questionText: {
         flex: 1,
         fontFamily: 'Poppins-Medium',
-        fontSize: 18,
+        fontSize: 17,
         color: "#0A84FF",
         paddingRight: 10
     },
@@ -101,19 +131,5 @@ const styles = StyleSheet.create({
     },
 });
 
-// FAQ data
-const faqData = [
-    {
-        question: "How to edit profile?",
-        answer: "Navigate to the Profile tab, tap on the field which you wish to edit and click on the update button",
-    },
-    {
-        question: "How to add a new expense entry?",
-        answer: "Navigate to the Expenses tab, tap on the plus botton and field up the required detials in the approperiate format",
-    },
-    {
-        question: "How to create a budget?",
-        answer: "Navigate to the Budget tab, select the month and year that you wish to create the budget for, fill in the required details and select a sample budget",
-    },
-    // Can add more Faq
-];
+
+export default Faq;
