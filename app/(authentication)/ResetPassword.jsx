@@ -65,7 +65,7 @@ function ResetPassword() {
                 <BackButton />
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.welcomeText}>Reset Password</Text>
-                    <Image style={{ marginTop: 60 }} source={require('../../assets/changePassword.jpg')} />
+                    <Image style={{ marginTop: 60 }} source={require('../../assets/Forgot_password.jpg')} />
                     {/* <Image style={{ marginTop: 60 }} source={require('../assets/Forgot_password.jpg')} /> */}
                 </View>
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
