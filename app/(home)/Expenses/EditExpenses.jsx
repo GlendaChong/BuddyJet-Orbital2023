@@ -4,12 +4,10 @@ import { useState, React, useEffect } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
 import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native-gesture-handler";
-import { useAuth } from "../../../contexts/auth";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Dropdown } from 'react-native-element-dropdown';
-import { GetMonthlyExpensesSortedByDate } from "../../components/GetBackendData";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleMinus } from "@fortawesome/free-solid-svg-icons";
@@ -25,11 +23,11 @@ function EditExpenses() {
   const [pic, setPic] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState('');
-
   const router = useRouter();
 
   // Fetch backend data
   const fetchExpense = async () => {
+    setLoading(true); 
     try {
       const { data } = await supabase
         .from('expenses')
@@ -43,6 +41,7 @@ function EditExpenses() {
       setSelectedCategory(data.category);
       setSelectedPaymentMode(data.payment_mode);
       setPic(data.pic_url);
+      setLoading(false); 
 
     } catch (error) {
       console.error('Error fetching expense', error);
@@ -52,6 +51,7 @@ function EditExpenses() {
   useEffect(() => {
     fetchExpense();
   }, [expensesId]);
+
 
   // Dropdown selection for category field
   const CategoryField = () => {
@@ -173,32 +173,10 @@ function EditExpenses() {
 
   // Update data in backend
   const handleEdit = async () => {
-
-    if (pic === null) {
-      // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
-      try {
-        const [day, month, year] = date.split('/');
-        const reformattedDate = `${year}/${month}/${day}`;
-
-        await supabase
-          .from('expenses')
-          .update({
-            description: description,
-            date: reformattedDate,
-            amount: amount,
-            category: selectedCategory,
-            payment_mode: selectedPaymentMode
-          })
-          .eq('id', expensesId);
-
-        router.back();
-
-      } catch (error) {
-        setErrMsg(error);
-        console.error('Error updating expense', error);
-      }
-    } else {
-      const { data, error: uploadError } = await supabase.storage
+    // Get the picture url to store in expenses table
+    if (pic !== null) {
+        // Insert picture into supabase storage
+        const { data, error: uploadError } = await supabase.storage
         .from("expensesPic")
         .upload(`${new Date().getTime()}`, {
           uri: pic,
@@ -211,32 +189,33 @@ function EditExpenses() {
         return;
       }
 
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("expensesPic").getPublicUrl(data.path);
+      // Retrieve picture url from supabse storage
+      const { data: { publicUrl }} = supabase.storage.from("expensesPic").getPublicUrl(data.path);
+      setPic(publicUrl); 
+    }
 
-      try {
-        const [day, month, year] = date.split('/');
-        const reformattedDate = `${year}/${month}/${day}`;
+    // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
+    const [day, month, year] = date.split('/');
+    const reformattedDate = `${year}/${month}/${day}`;
 
-        await supabase
-          .from('expenses')
-          .update({
-            description: description,
-            date: reformattedDate,
-            amount: amount,
-            category: selectedCategory,
-            payment_mode: selectedPaymentMode,
-            pic_url: publicUrl
-          })
-          .eq('id', expensesId);
+    try {
+      await supabase
+      .from('expenses')
+      .update({
+        description: description,
+        date: reformattedDate,
+        amount: amount,
+        category: selectedCategory,
+        payment_mode: selectedPaymentMode, 
+        pic_url: pic
+      })
+      .eq('id', expensesId);
 
-        router.back();
+      router.back();
 
-      } catch (error) {
-        setErrMsg(error);
-        console.error('Error updating expense', error);
-      }
+    } catch (error) {
+      setErrMsg(error);
+      console.error('Error updating expense', error);
     }
   }
 
@@ -251,9 +230,9 @@ function EditExpenses() {
           <Text style={styles.headerText}>Entry</Text>
           <Text style={styles.subHeaderText}>Edit your expenses entry</Text>
           <BackButton />
-          <TextFieldInput label='Description' value={description} onChangeText={setDescription} />
-          <TextFieldInput label='Date (DD/MM/YYYY)' value={date} onChangeText={setDate} />
-          <TextFieldInput label='Amount' value={amount} onChangeText={setAmount} />
+          <TextFieldInput label='Description' value={`${description}`} onChangeText={setDescription} />
+          <TextFieldInput label='Date (DD/MM/YYYY)' value={`${date}`} onChangeText={setDate} />
+          <TextFieldInput label='Amount' value={`${amount}`} onChangeText={setAmount} />
           <Text style={styles.textfieldName}>Category</Text>
           <CategoryField />
           <Text style={styles.textfieldName}>Payment Mode</Text>
