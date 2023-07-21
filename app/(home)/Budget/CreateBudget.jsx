@@ -12,32 +12,32 @@ import SampleBudget from "../../components/SampleBudget";
 
 function CreateBudget() {
   const [income, setIncome] = useState('');
-  const [loading, setLoading] = useState(false); 
-  const { selectedMonth, selectedYear, monthIndex } = useLocalSearchParams(); 
-  const budgetStartDate = `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`; 
+  const [loading, setLoading] = useState(false);
+  const { selectedMonth, selectedYear, monthIndex } = useLocalSearchParams();
+  const budgetStartDate = `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`;
 
-  const updateData = async ({ categories }) => { 
+  const updateData = async ({ categories }) => {
     // Obtain the user_id from the profile database 
     let { data: profiles } = await supabase
-    .from('profiles')
-    .select('id'); 
-  
+      .from('profiles')
+      .select('id');
+
     const selectedID = profiles[0]?.id;
 
-    setLoading(true);  
+    setLoading(true);
 
     try {
       // Insert new budget into backend
       const updates = {
-        income: income, 
+        income: income,
         user_id: selectedID,
-        created_at: budgetStartDate, 
-      };    
+        created_at: budgetStartDate,
+      };
 
       await supabase.from('budget').insert([updates]);
-    
+
       // Get the current budget of the month
-      const budget = await GetCurrentBudget(selectedMonth, selectedYear); 
+      const budget = await GetCurrentBudget(selectedMonth, selectedYear);
 
       // Insert data into category table based on the categories array
       await Promise.all(
@@ -53,14 +53,14 @@ function CreateBudget() {
         })
       );
 
-      console.log('Can insert budget'); 
-      setLoading(false);  
+      console.log('Can insert budget');
+      setLoading(false);
 
     } catch (error) {
-      console.log('Error in inserting data'); 
+      console.log('Error in inserting data');
     }
   }
-  
+
   // Handle the submission for budget
   const handleSubmit = async (categories) => {
     if (income == '') {
@@ -73,12 +73,28 @@ function CreateBudget() {
             style: "okay",
           },
         ]
-      ); 
-      return; 
-    } 
+      );
+      return;
+    }
+
+    if (isNaN(parseInt(income))) {
+      Alert.alert(
+        "Invalid Information",
+        "Please key in a valid fixed income",
+        [
+          {
+            text: "Okay",
+            style: "okay",
+          },
+        ]
+      );
+      return;
+    }
+
     updateData(categories);
   }
-  
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <ScrollView>
@@ -89,7 +105,7 @@ function CreateBudget() {
           index={1}
           budgetType="50/30/20 Budget Rule"
           categories={[
-            { categoryName: 'Needs', percentage: '50', color: '#0A84FF'  },
+            { categoryName: 'Needs', percentage: '50', color: '#0A84FF' },
             { categoryName: 'Wants', percentage: '30', color: '#32D74B' },
             { categoryName: 'Savings', percentage: '20', color: '#F46040' },
           ]}
@@ -105,7 +121,7 @@ function CreateBudget() {
           index={2}
           budgetType="70/20/10 Budget Rule"
           categories={[
-            { categoryName: 'Expenses', percentage: '70', color: '#0A84FF'  },
+            { categoryName: 'Expenses', percentage: '70', color: '#0A84FF' },
             { categoryName: 'Debt/Savings', percentage: '20', color: '#32D74B' },
             { categoryName: 'Wants', percentage: '10', color: '#F46040' },
           ]}
@@ -176,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     top: 20,
     alignContent: 'center',
-    flexDirection: 'column', 
+    flexDirection: 'column',
     justifyContent: 'space-evenly'
   },
   MakeBudgetButton: {
