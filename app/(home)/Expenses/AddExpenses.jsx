@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, KeyboardAvoidingView, Image, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, KeyboardAvoidingView, Image, TouchableOpacity, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, React } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
@@ -29,7 +29,7 @@ function AddExpenses() {
   // Dropdown selection for category field
   const CategoryField = () => {
     const categories = [
-      { label: 'Food', value: 'Food' },
+      { label: 'Food', value: 'Food', testID: 'food-option' },
       { label: 'Transport', value: 'Transport' },
       { label: 'Entertainment', value: 'Entertainment' },
       { label: 'Bills', value: 'Bills' },
@@ -40,6 +40,7 @@ function AddExpenses() {
 
     return (
       <Dropdown
+        testID="category-field"
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
@@ -73,6 +74,7 @@ function AddExpenses() {
 
     return (
       <Dropdown
+        testID="payment-field"
         style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}

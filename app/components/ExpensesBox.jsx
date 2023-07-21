@@ -53,7 +53,7 @@ const IndividualExpenseBox = ({ expense }) => {
           <Text style={styles.expenseCategory}>{expense.category}</Text>
         </View>
         <View style={styles.rightColumnBox}>
-          <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteExpense}>
+          <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteExpense} testID="delete-button" >
             <FontAwesomeIcon
               icon={faTrash}
               size={15}
