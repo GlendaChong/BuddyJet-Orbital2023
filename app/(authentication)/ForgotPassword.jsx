@@ -18,11 +18,13 @@ function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
 
-    let redirectURL = Linking.createURL('ResetPassword')
-    console.log(redirectURL)
+    // let redirectURL = Linking.createURL('ResetPassword'); 
 
     const handleSubmit = async () => {
-        router.push('./ResetPassword')
+        router.push({
+            pathname: './ResetPassword', 
+            params: { email }
+        }); 
 
         setErrMsg('');
         if (email === '') {
@@ -36,8 +38,13 @@ function ForgotPassword() {
          * Step 1: Send the user an email to get a password reset token.
          * This email contains a link which sends the user back to your application.
          */
-        const { data, error } = await supabase.auth
-            .resetPasswordForEmail(email)
+        // const { data, error } = await supabase.auth
+        //     .resetPasswordForEmail(email)
+
+        const { data, error } = await supabase.auth.signInWithOtp({
+            email: email
+        })
+        // console.log(data); 
 
 
         setLoading(false);
@@ -49,22 +56,22 @@ function ForgotPassword() {
 
     };
 
-    /**
-      * Step 2: Once the user is redirected back to your application,
-      * ask the user to reset their password.
-      */
-    useEffect(() => {
-        supabase.auth.onAuthStateChange(async (event, session) => {
-            if (event == "PASSWORD_RECOVERY") {
-                const newPassword = prompt("What would you like your new password to be?");
-                const { data, error } = await supabase.auth
-                    .updateUser({ password: newPassword })
+    // /**
+    //   * Step 2: Once the user is redirected back to your application,
+    //   * ask the user to reset their password.
+    //   */
+    // useEffect(() => {
+    //     supabase.auth.onAuthStateChange(async (event, session) => {
+    //         if (event == "PASSWORD_RECOVERY") {
+    //             const newPassword = prompt("What would you like your new password to be?");
+    //             const { data, error } = await supabase.auth
+    //                 .updateUser({ password: newPassword })
 
-                if (data) alert("Password updated successfully!")
-                if (error) alert("There was an error updating your password.")
-            }
-        })
-    }, [])
+    //             if (data) alert("Password updated successfully!")
+    //             if (error) alert("There was an error updating your password.")
+    //         }
+    //     })
+    // }, [])
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -75,13 +82,13 @@ function ForgotPassword() {
                 /></TouchableOpacity>
                 <View style={{ alignItems: 'center' }}>
                     <Text style={styles.welcomeText}>Forgot Password</Text>
-                    <Image style={{ marginTop: 60 }} source={require('../../assets/changePassword.jpg')} />
+                    <Image style={styles.image} source={require('../../assets/changePassword.jpg')} />
                     <Text style={styles.descriptionText}>Enter your registered email below to receive password reset instructions</Text>
                 </View>
                 <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                 <Button
-                    style={styles.loginButton}
-                    labelStyle={styles.loginText}
+                    style={styles.resetButton}
+                    labelStyle={styles.resetText}
                     onPress={handleSubmit}
                 >
                     Reset Password
@@ -129,27 +136,31 @@ const styles = {
         marginTop: 40,
         paddingHorizontal: 40,
         textAlign: 'center'
-
     },
     passwordText: {
         textAlign: 'right',
         right: 35,
         marginTop: 10,
     },
-    loginButton: {
-        backgroundColor: '#3D70FF',
+    resetButton: {
+        backgroundColor: "#3D70FF",
         borderRadius: 40,
-        width: 327,
-        height: 56,
-        left: 30,
-        marginTop: 50,
+        marginHorizontal: 30,
+        marginTop: 30,
+        marginBottom: 10,
+        alignItems: 'center', 
     },
-    loginText: {
-        color: 'white',
-        fontFamily: 'Poppins-SemiBold',
+    resetText: {
+        color: "white",
+        fontFamily: "Poppins-SemiBold",
         fontWeight: 600,
         fontSize: 18,
-        lineHeight: 35,
+        lineHeight: 40,
+    },
+    image: {
+        width: 300,
+        height: 230,
+        alignSelf: "center",
     },
 }
 
