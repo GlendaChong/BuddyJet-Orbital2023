@@ -1,12 +1,4 @@
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Image,
-} from "react-native";
+import {Text, StyleSheet, View, TextInput, TouchableOpacity, Alert, Image } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../../../lib/supabase";
@@ -510,6 +502,7 @@ function Profile() {
                 }}
                 onChangeText={setName}
                 placeholder={name}
+                accessibilityLabel="Name"
               />
 
               <TextInput

@@ -7,33 +7,33 @@ const Legend = () => {
 			<View style={styles.moneyInLegendItem}>
 				<View style={styles.moneyInColor} />
 				<Text style={styles.legendText}>Money In</Text>
-        	</View>
+			</View>
 			<View style={styles.moneyOutLegendItem}>
 				<View style={styles.moneyOutColor} />
 				<Text style={styles.legendText}>Money Out</Text>
 			</View>
-      	</View>
+		</View>
 	);
 };
 
 const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
-    // Check if all values are zero
-    if (lastYearMonths.length === 0 || pastYearMoneyIn.length === 0 || pastYearExpenses.length === 0) {
-        // Page is stil generating line graph
-        return (
-            <View style={styles.chartContainer}>
-                <View style={styles.noDataContainer}>
-                    <Image style={styles.image} source={require('../../assets/noLineGraph.jpg')} />
-                    <Text style={styles.noDataText}>Generating line graph...</Text>
-                </View>
-            </View>
-        ); 	
-    } else if (pastYearExpenses.every((sum) => sum === 0) && pastYearMoneyIn.every((sum) => sum === 0)) {
-		// No data for the past year
-        return (
+	// Check if all values are zero
+	if (lastYearMonths.length === 0 || pastYearMoneyIn.length === 0 || pastYearExpenses.length === 0) {
+		// Page is stil generating bar chart
+		return (
 			<View style={styles.chartContainer}>
 				<View style={styles.noDataContainer}>
-					<Image style={styles.image} source={require('../../assets/noLineGraph.jpg')} />
+					<Image style={styles.image} source={require('../../assets/noBarChart.jpg')} />
+					<Text style={styles.noDataText}>Generating line graph...</Text>
+				</View>
+			</View>
+		);
+	} else if (pastYearExpenses.every((sum) => sum === 0) && pastYearMoneyIn.every((sum) => sum === 0)) {
+		// No data for the past 6 months
+		return (
+			<View style={styles.chartContainer}>
+				<View style={styles.noDataContainer}>
+					<Image style={styles.image} source={require('../../assets/noBarChart.jpg')} />
 					<Text style={styles.noBarChartText}>No line graph generated!</Text>
 					<Text style={styles.noDataText}>No expenses and income added for the past year</Text>
 				</View>
@@ -41,30 +41,31 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
 		);
 	}
 
-    const moneyInLine = [];
-    const expensesLine = [];
+	const moneyInLine = [];
+	const expensesLine = [];
 
-    for (let index = 0; index < lastYearMonths.length; index++) {
-        const month = lastYearMonths[index].substring(0, 3); // Extract first 3 characters of the label
-        const moneyInSum = pastYearMoneyIn[index];
-        const expensesSum = pastYearExpenses[index];
+	for (let index = 0; index < lastYearMonths.length; index++) {
+		const month = lastYearMonths[index].substring(0, 3); // Extract first 3 characters of the label
+		const moneyInSum = pastYearMoneyIn[index];
+		const expensesSum = pastYearExpenses[index];
 
-        const moneyInData = {
-            value: moneyInSum,
-            dataPointText: moneyInSum.toString(), 
-            label: month, 
-        };
+		const moneyInData = {
+			value: moneyInSum,
+			dataPointText: moneyInSum.toString(),
+			label: month,
+		};
 
-        const expensesData = {
-            value: expensesSum,
-            dataPointText: expensesSum.toString(), 
-            label: month
-        };
+		const expensesData = {
+			value: expensesSum,
+			dataPointText: expensesSum.toString(),
+			label: month
+		};
 
-        moneyInLine.push(moneyInData); 
-        expensesLine.push(expensesData); 
-    }
+		moneyInLine.push(moneyInData);
+		expensesLine.push(expensesData);
+	}
 
+<<<<<<< HEAD
   return (
     <View style={styles.chartContainer}>
         <Legend />
@@ -85,14 +86,37 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
         />
     </View>
   );
+=======
+	return (
+		<View style={styles.chartContainer}>
+			<Legend />
+			<View testID="line-graph">
+				<LineChart
+					data={moneyInLine}
+					data2={expensesLine}
+					spacing={40}
+					color1="#32D74B"
+					color2="#FF453A"
+					dataPointsHeight={6}
+					dataPointsWidth={6}
+					noOfSections={4}
+					thickness={2.5}
+					textShiftX={-8}
+					textShiftY={-1}
+					width={270}
+				/>
+			</View>
+		</View>
+	);
+>>>>>>> a0ceef23d8cf055529511ca2ebd2e6bb1f4e9661
 };
 
 const styles = StyleSheet.create({
 	chartContainer: {
 		backgroundColor: '#fff',
-        paddingTop: 20, 
-		paddingHorizontal: 10, 
-        paddingBottom: 30, 
+		paddingTop: 20,
+		paddingHorizontal: 10,
+		paddingBottom: 30,
 		marginTop: 10,
 		marginLeft: 15,
 		marginRight: 15,
@@ -104,7 +128,7 @@ const styles = StyleSheet.create({
 			height: 2,
 		},
 		shadowOpacity: 0.3,
-		shadowRadius: 3, 
+		shadowRadius: 3,
 	},
 	legendContainer: {
 		flexDirection: 'row',
@@ -146,14 +170,14 @@ const styles = StyleSheet.create({
 	},
 	noDataContainer: {
 		alignItems: 'center',
-		alignSelf: 'center', 
-		width: 300, 
+		alignSelf: 'center',
+		width: 300,
 	},
 	noBarChartText: {
-		justifyContent: 'center', 
+		justifyContent: 'center',
 		fontFamily: 'Poppins-SemiBold',
 		fontSize: 18,
-		color: 'red', 
+		color: 'red',
 	},
 	noDataText: {
 		textAlign: 'center',

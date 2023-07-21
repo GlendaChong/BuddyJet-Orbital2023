@@ -41,7 +41,7 @@ const MonthYearPicker = ({ onSelect }) => {
         const years = [];
 
         for (let year = startYear; year <= endYear; year++) {
-        years.push(year.toString());
+            years.push(year.toString());
         }
 
         return years.map((year) => <Picker.Item key={year} label={year} value={year} />);
@@ -49,27 +49,29 @@ const MonthYearPicker = ({ onSelect }) => {
 
     return (
         <View style={styles.container}>
-            <Button 
-                title={`${selectedMonth} ${selectedYear}`} 
-                onPress={handlePickerOpen} 
+            <Button
+                title={`${selectedMonth} ${selectedYear}`}
+                onPress={handlePickerOpen}
                 color='#171328'
             />
             <Modal visible={showPicker} animationType="slide" >
                 <View style={styles.modalContainer}>
                     <View style={styles.picker}>
                         <Picker
+                            testID='PickerMonth'
                             selectedValue={selectedMonth}
                             onValueChange={(itemValue) => setSelectedMonth(itemValue)}
                             style={styles.pickerItem}
                         >
-                        {generateMonthOptions()}
+                            {generateMonthOptions()}
                         </Picker>
                         <Picker
+                            testID='PickerYear'
                             selectedValue={selectedYear}
                             onValueChange={(itemValue) => setSelectedYear(itemValue)}
                             style={styles.pickerItem}
                         >
-                        {generateYearOptions()}
+                            {generateYearOptions()}
                         </Picker>
                     </View>
                     <View style={styles.pickerHeader}>
@@ -83,38 +85,38 @@ const MonthYearPicker = ({ onSelect }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#EEF5FF', 
-    borderRadius: 20, 
-    width: 200, 
-    shadowOffset: {
-        width: 0,
-        height: 3,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 5, 
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  pickerHeader: {
-    flexDirection: 'row',
-    justifyContent: 'center', 
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#FFFFFF',
-  },
-  picker: {
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row', 
-  },
-  pickerItem: {
-    height: 200,
-    width: '50%', 
-  },
+    container: {
+        justifyContent: 'center',
+        alignSelf: 'center',
+        backgroundColor: '#EEF5FF',
+        borderRadius: 20,
+        width: 200,
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    pickerHeader: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        backgroundColor: '#FFFFFF',
+    },
+    picker: {
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'row',
+    },
+    pickerItem: {
+        height: 200,
+        width: '50%',
+    },
 });
 
 export default MonthYearPicker;
