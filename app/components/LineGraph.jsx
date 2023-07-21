@@ -76,6 +76,7 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
             color2="#FF453A"
             dataPointsHeight={6}
             dataPointsWidth={6}
+			// dataPointLabelShiftY={120}
             noOfSections={4}
             thickness={2.5}
             textShiftX={-8}
