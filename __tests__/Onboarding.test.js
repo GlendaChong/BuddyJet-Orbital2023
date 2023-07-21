@@ -26,7 +26,7 @@ describe('Onboarding', () => {
 
   it('should navigate to login page when Login button is pressed', async () => {
     
-    const { getByText } = render(<OnboardingScreen />);
+    const { getByText, findByText } = render(<OnboardingScreen />);
     const loginButton = getByText('Login Now');
     fireEvent.press(loginButton);
   

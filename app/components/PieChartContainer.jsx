@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { useState, useEffect } from "react";
 import { PieChart } from 'react-native-chart-kit';
-  
+
 
 // Assign each expenses category to a color
 const getLegendColor = (index) => {
@@ -12,7 +12,7 @@ const getLegendColor = (index) => {
 // Pie Chart Component
 const PieChartContainer = ({ monthlyExpensesList, monthlyExpensesSum }) => {
     const [mergedChartData, setMergedChartData] = useState([]);
-    
+
     useEffect(() => {
         if (monthlyExpensesList.length === 0) {
             return;
@@ -64,7 +64,7 @@ const PieChartContainer = ({ monthlyExpensesList, monthlyExpensesSum }) => {
                             color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
                             propsForLabels: {
                                 fontFamily: 'Poppins-SemiBold',
-                                fontSize: 100,  
+                                fontSize: 100,
                             },
                         }}
                         accessor="amount"
@@ -80,7 +80,7 @@ const PieChartContainer = ({ monthlyExpensesList, monthlyExpensesSum }) => {
 const styles = StyleSheet.create({
     pieChartContainer: {
         backgroundColor: "#fff",
-        paddingVertical: 10, 
+        paddingVertical: 10,
         marginTop: 10,
         marginLeft: 15,
         marginRight: 15,
@@ -94,27 +94,27 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 3,
     },
-    totalExpensesText: { 
-        fontSize: 20, 
-        fontFamily: 'Poppins-Medium', 
-        paddingVertical: 10, 
-    }, 
+    totalExpensesText: {
+        fontSize: 20,
+        fontFamily: 'Poppins-Medium',
+        paddingVertical: 10,
+    },
     noExpensesContainer: {
         alignItems: 'center',
-        width: 300, 
+        width: 300,
     },
     noPieChartText: {
-        justifyContent: 'center', 
+        justifyContent: 'center',
         fontFamily: 'Poppins-SemiBold',
         fontSize: 18,
-        color: 'red', 
+        color: 'red',
     },
     noExpensesText: {
-        justifyContent: 'center', 
+        justifyContent: 'center',
         fontFamily: 'Poppins-Medium',
-        fontSize: 16, 
-        paddingVertical: 5 
-    }, 
+        fontSize: 16,
+        paddingVertical: 5
+    },
     image: {
         width: 300,
         height: 200,

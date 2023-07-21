@@ -1,4 +1,4 @@
-import { Text, View, TextInput, StyleSheet, Button, KeyboardAvoidingView, TouchableOpacity, Alert } from "react-native";
+import { Text, View, TextInput, StyleSheet, Button, KeyboardAvoidingView, TouchableOpacity, Alert, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { supabase } from "../../../lib/supabase";
@@ -11,41 +11,41 @@ import BackButton from "../../components/BackButton";
 
 function EditBudget() {
 
-  const [budgetId, setBudgetId] = useState(0); 
-  const [userId, setUserId] = useState(''); 
+  const [budgetId, setBudgetId] = useState(0);
+  const [userId, setUserId] = useState('');
   const [category, setCategory] = useState([]);
   const [editing, setEditing] = useState(false);
   const [oldIncome, setOldIncome] = useState(0);
   const [sideHustles, setSideHustles] = useState([]);
   const [sideHustlesChanged, setSideHustlesChanged] = useState(false); // State variable to track changes in side hustles
-  const { selectedMonth, selectedYear } = useLocalSearchParams(); 
+  const { selectedMonth, selectedYear } = useLocalSearchParams();
 
   // Fetch backend data 
   const fetchBudgetData = async () => {
     const budget = await GetCurrentBudget(selectedMonth, selectedYear);
-    setUserId(budget.user_id); 
-    setBudgetId(budget.budget_id); 
+    setUserId(budget.user_id);
+    setBudgetId(budget.budget_id);
     setOldIncome(budget.income);
   }
 
   const fetchCategoryDetail = async () => {
     const categories = await GetCategoryDetails(selectedMonth, selectedYear);
-    setCategory(categories); 
+    setCategory(categories);
   };
 
   // Fetch the side hustles from Supabase
   const fetchSideHustles = async () => {
-    const sideHustles = await GetSideHustles(selectedMonth, selectedYear); 
-    setSideHustles(sideHustles); 
+    const sideHustles = await GetSideHustles(selectedMonth, selectedYear);
+    setSideHustles(sideHustles);
   };
 
   useEffect(() => {
-    fetchBudgetData(); 
+    fetchBudgetData();
   }, []);
 
   useEffect(() => {
     fetchCategoryDetail();
-  }, [budgetId]); 
+  }, [budgetId]);
 
   useEffect(() => {
     fetchSideHustles();
@@ -78,24 +78,25 @@ function EditBudget() {
     };
 
     const handleSave = () => {
-      setOldIncome(newIncome); 
+      setOldIncome(newIncome);
       updateIncome();
       setEditing(false);
     };
- 
+
     if (editing) {
       return (
         <View style={styles.container}>
           <View style={styles.editIncomeContainer}>
             <Text style={styles.labelText}>New Income:</Text>
             <TextInput
+              testID="IncomeText"
               value={newIncome.toString()}
               onChangeText={setNewIncome}
               keyboardType="numeric"
               style={styles.input}
               autoFocus
             />
-            <Text style={{ marginTop: -30, left: 70 }} onPress={handleSave}>Save</Text>
+            <Text style={{ marginTop: -30, left: 70 }} onPress={handleSave} testID="SaveButton">Save</Text>
           </View>
         </View>
       );
@@ -107,7 +108,7 @@ function EditBudget() {
           <Text style={{ color: '#2C2646', fontFamily: 'Poppins-Medium', fontWeight: '600', fontSize: 18, lineHeight: 20, textAlign: 'center' }}>Fixed Income:</Text>
           <Text style={{ color: '#2C2646', fontFamily: 'Poppins-SemiBold', fontWeight: '600', fontSize: 24, lineHeight: 26, textAlign: 'center', marginTop: 15 }}>${oldIncome}</Text>
         </View>
-        <Text onPress={handleEdit} style={styles.editText}>Edit</Text>
+        <Text onPress={handleEdit} style={styles.editText} testID="EditButton">Edit</Text>
       </View>
     );
   };
@@ -130,13 +131,13 @@ function EditBudget() {
         )
       );
       console.log('Categories updated successfully');
-      
+
     } catch (error) {
       console.error('Error updating categories:', error.message);
     }
   };
 
-  
+
   // Category box component 
   const SpendingBox = () => {
     const [percentages, setPercentages] = useState([]);
@@ -145,7 +146,7 @@ function EditBudget() {
     // Initialize the percentages array with default values based on the category data
     useEffect(() => {
       const initialPercentages = category.map((item) => ({
-        ...item, 
+        ...item,
         spending: parseInt(item.spending * 100),
       }));
       setPercentages(initialPercentages);
@@ -175,9 +176,9 @@ function EditBudget() {
         spending: parseInt(percentages[index]?.spending) / 100 || item.spending,
       }));
 
-      setCategory(updatedCategories); 
+      setCategory(updatedCategories);
       setErrorMessage('');
-      updateCategory(updatedCategories);       
+      updateCategory(updatedCategories);
     };
 
     return (
@@ -193,18 +194,20 @@ function EditBudget() {
                 onChangeText={(value) => handlePercentageChange(item.category, value)}
                 keyboardType="numeric"
                 style={styles.percentageText}
+                testID="PercentageInput"
               />
               <Text style={styles.percentageText}>%</Text>
             </View>
           ))}
         </View>
         <Text
+          testID="CategoriesSave"
           onPress={handleSave}
           style={styles.saveText}
         >
           Save
         </Text>
-        {errorMessage !='' && <Text style={{ color: 'red', width: 250, top: -20 }}>{errorMessage}</Text>}
+        {errorMessage != '' && <Text style={{ color: 'red', width: 250, top: -20 }}>{errorMessage}</Text>}
       </View>
     );
   };
@@ -220,21 +223,21 @@ function EditBudget() {
       try {
         await supabase
           .from('moneyIn')
-          .insert([{ 
-            created_at: `${selectedYear}-${selectedMonth}-01`, 
-            user_id: userId, 
-            name: newSideHustle, 
-            amount: newSideHustleAmount 
-          }]); 
-        
+          .insert([{
+            created_at: `${selectedYear}-${selectedMonth}-01`,
+            user_id: userId,
+            name: newSideHustle,
+            amount: newSideHustleAmount
+          }]);
+
 
       } catch (error) {
         console.error('Error adding side hustle:', error.message);
 
       } finally {
-        fetchSideHustles(); 
-        setNewSideHustle(''); 
-        setNewSideHustleAmount(''); 
+        fetchSideHustles();
+        setNewSideHustle('');
+        setNewSideHustleAmount('');
       }
     };
 
@@ -260,7 +263,7 @@ function EditBudget() {
                     .eq("id", moneyInId);
 
                   setSideHustlesChanged(!sideHustlesChanged); // Toggle sideHustlesChanged state to trigger re-render
-    
+
                 } catch (error) {
                   console.error("Error deleting expense:", error.message);
                 }
@@ -281,21 +284,24 @@ function EditBudget() {
               <Text style={styles.sideHustleAmountText}>${sideHustle.amount}</Text>
               <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteSideHustle(sideHustle.id)}>
                 <FontAwesomeIcon
-                    icon={faTrash}
-                    size={15}
-                    color="red"
+                  icon={faTrash}
+                  size={15}
+                  color="red"
+                  testID="DeleteButton"
                 />
               </TouchableOpacity>
             </View>
           ))}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <TextInput
+              testID="SideHustleNameInput"
               value={newSideHustle}
               onChangeText={setNewSideHustle}
               placeholder="Money in"
               style={styles.sideHustleNameText}
             />
             <TextInput
+              testID="SideHustleAmountInput"
               value={newSideHustleAmount}
               onChangeText={setNewSideHustleAmount}
               placeholder="Amount"
@@ -304,7 +310,7 @@ function EditBudget() {
           </View>
           <View style={{ marginTop: 30 }}>
             <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#8E8E93', opacity: 0.7, paddingHorizontal: 5 }} />
-            <Button title="Add" onPress={addSideHustle} />
+            <Button testID="AddSideHustleButton" title="Add" onPress={addSideHustle} />
           </View>
         </View>
       </View>
@@ -316,9 +322,9 @@ function EditBudget() {
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center", backgroundColor: 'white' }}>
       <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior="padding"
-          keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
+        style={{ flex: 1 }}
+        behavior="padding"
+        keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
       >
         <ScrollView>
           <BackButton />
@@ -338,20 +344,20 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   displayIncomeContainer: {
-   backgroundColor: "#F3F6FA", 
-   borderRadius: 20, 
-   width: 280, 
-   height: 90, 
-   justifyContent: 'center', 
-   alignItems: 'center', 
-   shadowColor: "#000",
-   shadowOffset: {
-     width: 0,
-     height: 2,
-   },
-   shadowOpacity: 0.4,
-   shadowRadius: 5, 
-  }, 
+    backgroundColor: "#F3F6FA",
+    borderRadius: 20,
+    width: 280,
+    height: 90,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+  },
   editIncomeContainer: {
     backgroundColor: '#F3F6FA',
     borderRadius: 20,
@@ -365,8 +371,8 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.4,
-    shadowRadius: 5, 
-  }, 
+    shadowRadius: 5,
+  },
   labelText: {
     color: '#2C2646',
     fontFamily: 'Poppins-Medium',
@@ -386,10 +392,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   editText: {
-    bottom: 42, 
-    left: 100, 
-    fontFamily: 'Poppins-Regular', 
-  }, 
+    bottom: 42,
+    left: 100,
+    fontFamily: 'Poppins-Regular',
+  },
   categoryOuterContainer: {
     backgroundColor: '#F3F6FA',
     borderRadius: 18,
@@ -401,77 +407,77 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.4,
-    shadowRadius: 5, 
-  }, 
-  categoryInnerContainer: { 
+    shadowRadius: 5,
+  },
+  categoryInnerContainer: {
     flexDirection: 'row',
-    alignItems: 'center', 
-    marginBottom: 15, 
-    justifyContent: 'space-between',  
+    alignItems: 'center',
+    marginBottom: 15,
+    justifyContent: 'space-between',
     paddingHorizontal: 30
-  }, 
-  categoryColor: { 
-    width: 10, 
-    height: 10, 
-    borderRadius: 5, 
-    marginRight: 20 
-  }, 
+  },
+  categoryColor: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 20
+  },
   categoryText: {
-    fontFamily: 'Poppins-SemiBold', 
-    width: 120, 
-    color: '#2C2646', 
-    fontSize: 16, 
-  }, 
+    fontFamily: 'Poppins-SemiBold',
+    width: 120,
+    color: '#2C2646',
+    fontSize: 16,
+  },
   percentageText: {
-    fontFamily: 'Poppins-Medium', 
-    width: 30, 
-    color: '#2C2646', 
-    fontSize: 16, 
-  }, 
-  saveText: { 
-    fontFamily: 'Poppins-Medium', 
-    fontSize: 15, 
-    color: '#2C2646', 
-    marginTop: 10, 
-    textAlign: 'right', 
+    fontFamily: 'Poppins-Medium',
+    width: 30,
+    color: '#2C2646',
+    fontSize: 16,
+  },
+  saveText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 15,
+    color: '#2C2646',
+    marginTop: 10,
+    textAlign: 'right',
     right: 10
-  }, 
-  moneyInText: { 
-    fontFamily: 'Poppins-Medium', 
-    fontSize: 18, 
-    marginBottom: 8, 
-    left: 5 
-  }, 
-  moneyInOuterContainer: { 
+  },
+  moneyInText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 18,
+    marginBottom: 8,
+    left: 5
+  },
+  moneyInOuterContainer: {
     marginTop: 30,
-    paddingHorizontal: 30, 
-    alignContent: 'center', 
-    paddingBottom: 20, 
-  }, 
-  moneyInInnerContainer: { 
-    backgroundColor: '#F3F6FA', 
-    borderRadius: 18, 
-    paddingHorizontal: 30, 
-    paddingTop: 20, 
-    marginTop: 10, 
+    paddingHorizontal: 30,
+    alignContent: 'center',
+    paddingBottom: 20,
+  },
+  moneyInInnerContainer: {
+    backgroundColor: '#F3F6FA',
+    borderRadius: 18,
+    paddingHorizontal: 30,
+    paddingTop: 20,
+    marginTop: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.4,
-    shadowRadius: 5, 
-  }, 
-  sideHustleNameText: { 
+    shadowRadius: 5,
+  },
+  sideHustleNameText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 17, 
-  }, 
+    fontSize: 17,
+  },
   sideHustleAmountText: {
-    fontFamily: 'Poppins-SemiBold', 
+    fontFamily: 'Poppins-SemiBold',
     fontSize: 18,
-    marginLeft: 'auto', 
+    marginLeft: 'auto',
     right: 30
-  }, 
+  },
   deleteButton: {
     justifyContent: 'center'
   }

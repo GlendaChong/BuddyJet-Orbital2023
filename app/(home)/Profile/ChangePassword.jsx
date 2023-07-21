@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
         lineHeight: 40,
     },
     errorText: {
-        left: 30,  
-        paddingVertical: 10, 
+        left: 30,
+        paddingVertical: 10,
         color: 'red'
     }
 });
