@@ -8,12 +8,14 @@ import {
   GetMonthlyExpensesSortedByDate, 
   GetPastYearExpensesSum,
   GetPastYearMoneyIn, 
+  GetProfilePic
 } from "../components/GetBackendData"; 
 import VerticalBarChart from "../components/VerticalBarChart";
 import PieChartContainer from "../components/PieChartContainer";
 import { ActivityIndicator } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import LineGraph from "../components/LineGraph";
+import ProfilePic from "../components/ProfilePic";
 
 
 function Dashboard() {
@@ -23,6 +25,7 @@ function Dashboard() {
   const [monthlyExpensesSum, setMonthlyExpensesSum] = useState(0);
   const [sixMonthsMoneyInSum, setSixMonthsMoneyInSum] = useState([]); 
   const [pastYearMoneyInSum, setPastYearMoneyInSum] = useState([]); 
+  const [profilePicture, setProfilePicture] = useState(''); 
   const [loading, setLoading] = useState(false); 
 
   const [selectedMonth, setSelectedMonth] = useState(
@@ -58,6 +61,16 @@ function Dashboard() {
     }
   }, [selectedYear, selectedMonth, isFocused]); 
 
+    // Fetch profile picture from backend
+    const fetchProfilePic = async () => {
+      const profilePic = await GetProfilePic(); 
+      setProfilePicture(profilePic); 
+    }; 
+
+    useEffect(() => {
+      fetchProfilePic();
+    }, [fetchProfilePic]);
+
 
   // Fetch the necessary months for the charts
   const fetchMonths = async () => {
@@ -79,6 +92,9 @@ function Dashboard() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA" }}>
       <View style={styles.topContainer}>
+        <View style={{ marginBottom: -45 }}>
+          <ProfilePic profilePicture={profilePicture} />
+        </View>
         <MonthYearPicker onSelect={handleDateSelect} />
         <Text style={styles.headerText}>Dashboard</Text>
       </ View>
@@ -101,7 +117,6 @@ function Dashboard() {
       </ScrollView>
     </SafeAreaView>
   );
-
 }
 
 const styles = StyleSheet.create({

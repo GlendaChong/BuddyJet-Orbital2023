@@ -49,7 +49,7 @@ function Login() {
                     <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                     <TextFieldInput label='Password' value={password} onChangeText={setPassword} />
                     {errMsg !== "" && <Text style={styles.errorText}>{errMsg}</Text>}
-                    {/* <Text onPress={() => { router.push('./ForgotPassword') }} style={styles.passwordText}>Forgot Password?</Text> */}
+                    <Text onPress={() => { router.push('./ForgotPassword') }} style={styles.passwordText}>Forgot Password?</Text>
 
                     <Button
                         style={styles.loginButton}
