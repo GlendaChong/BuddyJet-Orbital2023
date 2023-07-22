@@ -20,44 +20,28 @@ jest.mock(
 
 jest.mock("../lib/supabase", () => ({
   supabase: {
-    from: () => ({
-      delete: jest.fn().mockResolvedValue({}),
-      select: jest.fn(() => ({
-        data: [
-          {
-            full_name: "John Doe",
-            phone_number: "123456789",
-            email: "john.doe@example.com",
-            date_of_birth: "01-01-1990",
-            avatar_url: "https://example.com/avatar.jpg",
-          },
-        ],
-        error: null,
-      })),
-      update: jest.fn(),
-      eq: jest.fn(),
-    }),
-    storage: {
-      from: () => ({
-        upload: jest.fn(() => ({
-          data: {
-            path: "path/to/uploaded/image.jpg",
-          },
-          error: null,
-        })),
-        getPublicUrl: jest.fn(() => ({
-          data: {
-            publicUrl: "https://example.com/avatar.jpg",
-          },
-          error: null,
-        })),
-      }),
-    },
+    from: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockResolvedValue({}),
+    select: jest.fn().mockReturnThis(),
+    gte: jest.fn().mockReturnThis(),
+    lt: jest.fn().mockReturnThis(),
+    mockReturnValueOnce: jest.fn(),
+    update: jest.fn().mockResolvedValue({}),
   },
 }));
 
 describe("Reset Component", () => {
   test("should prompt confirmation when 'Reset Expenses' button is clicked", async () => {
+    const mockProfilesData = [{ id: "mocked-id" }];
+
+    // Mock the supabase.from('profiles').select('id') to return the mock profiles data
+    jest.spyOn(supabase, "from").mockReturnThis();
+    jest
+      .spyOn(supabase, "select")
+      .mockResolvedValue({ data: mockProfilesData });
+
     const alertSpy = jest.spyOn(Alert, "alert").mockImplementation();
     const { getByText } = render(<Profile />);
 
@@ -84,10 +68,22 @@ describe("Reset Component", () => {
 
   test("should delete expenses when 'Reset' is pressed in the confirmation prompt for 'Reset Expenses' button", async () => {
     // Mock supabase method for delete
+    const mockProfilesData = [{ user_id: "mocked-id" }];
 
-    supabase.from("expenses").delete = jest
-      .fn()
-      .mockResolvedValue({ error: null });
+    // Mock the supabase.from('profiles').select('id') to return the mock profiles data
+    jest.spyOn(supabase, "from").mockReturnThis();
+    jest
+      .spyOn(supabase, "select")
+      .mockResolvedValue({ data: mockProfilesData });
+
+    const mockExpensesData = [
+      { id: 1, description: "Expense 1", amount: 100 },
+      { id: 2, description: "Expense 2", amount: 50 },
+    ];
+
+    jest.spyOn(supabase, "select").mockReturnValueOnce({
+      data: mockExpensesData,
+    });
 
     // Mock the Alert.alert function
     Alert.alert = jest.fn((title, message, buttons) => {
@@ -104,13 +100,9 @@ describe("Reset Component", () => {
 
     // Check if the expenses are deleted
     await waitFor(() => {
-      expect(supabase.from("expenses").delete)
-        .toHaveBeenCalledWith("*")
-        .eq("user_id", "user123");
+      expect(supabase.from).toHaveBeenCalledWith("expenses");
+      expect(supabase.delete).toHaveBeenCalledWith("*");
+      expect(supabase.eq).toHaveBeenCalledWith("user_id", "");
     });
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
   });
 });
