@@ -9,8 +9,10 @@ import {
   CheckMonthlyBudgetExist,
   GetCategoryDetails,
   GetMoneyIn,
+  GetProfilePic
 } from "../../components/GetBackendData";
 import MonthYearPicker from "../../components/MonthYearPicker";
+import ProfilePic from "../../components/ProfilePic";
 
 // Case when user has not created any monthly budget for current month
 const CreateBudgetDesign = () => {
@@ -75,6 +77,7 @@ export default function Budget() {
   const [categories, setCategories] = useState([]);
   const [monthlyBudgetIncome, setMonthlyBudgetIncome] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(''); 
 
   // Retrieve the selected months and year
   const [selectedMonth, setSelectedMonth] = useState(
@@ -122,9 +125,19 @@ export default function Budget() {
     monthlyBudgetIncome,
   ]);
 
+  // Fetch profile picture from backend
+  const fetchProfilePic = async () => {
+    const profilePic = await GetProfilePic(); 
+    setProfilePicture(profilePic); 
+  }; 
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    fetchProfilePic();
+  }, [fetchProfilePic]);
 
   // Case when user has created a monthly budget
   const BudgetBox = () => {
@@ -172,6 +185,9 @@ export default function Budget() {
     <SafeAreaView style={styles.container}>
       {refreshing && <ActivityIndicator />}
       <View style={styles.topContainer}>
+        <View style={{ marginBottom: -45 }}>
+          <ProfilePic profilePicture={profilePicture} />
+        </View>
         <MonthYearPicker onSelect={handleDateSelect} />
       </View>
 
