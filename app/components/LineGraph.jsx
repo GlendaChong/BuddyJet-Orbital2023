@@ -65,7 +65,6 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
 		expensesLine.push(expensesData);
 	}
 
-<<<<<<< Updated upstream
 	return (
 		<View style={styles.chartContainer}>
 			<Legend />
@@ -87,28 +86,6 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
 			</View>
 		</View>
 	);
-=======
-  return (
-    <View style={styles.chartContainer}>
-        <Legend />
-        <LineChart
-            data={moneyInLine}
-            data2={expensesLine}
-            spacing={40}
-            color1="#32D74B"
-            color2="#FF453A"
-            dataPointsHeight={6}
-            dataPointsWidth={6}
-			// dataPointLabelShiftY={120}
-            noOfSections={4}
-            thickness={2.5}
-            textShiftX={-8}
-            textShiftY={-1}
-            width={270}
-        />
-    </View>
-  );
->>>>>>> Stashed changes
 };
 
 const styles = StyleSheet.create({
