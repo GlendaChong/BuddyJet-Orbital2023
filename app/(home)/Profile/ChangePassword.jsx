@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, Image, ActivityIndicator, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, Image, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
 import { Text, Button } from "react-native-paper";
 import { supabase } from "../../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -125,9 +125,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 40,
     },
-    errorText: { 
+    errorText: {
         paddingVertical: 20,
-        paddingHorizontal: 30, 
+        paddingHorizontal: 30,
         color: 'red'
     }
 });
