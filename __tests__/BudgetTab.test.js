@@ -3,19 +3,13 @@ import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import Budget from "../app/(home)/Budget/index";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "../__mocks__/expo-router";
-import {
-  CheckMonthlyBudgetExist,
-  GetCategoryDetails,
-  GetMoneyIn,
-} from "../app/components/GetBackendData";
-import { useState } from "react-native";
+import { CheckMonthlyBudgetExist } from "../app/components/GetBackendData";
 
 jest.mock("../__mocks__/expo-router", () => ({
   useRouter: jest.fn(),
 }));
 
 // Mock the necessary modules
-// Mock the sideHustles data for testing
 jest.mock("../lib/supabase", () => ({
   supabase: {
     from: jest.fn().mockReturnThis(),
@@ -55,16 +49,16 @@ jest.mock(
   }
 );
 
-// Mock the GetBackendData functions
+// // Mock the GetBackendData functions
 jest.mock("../app/components/GetBackendData", () => ({
   ...jest.requireActual("../app/components/GetBackendData"),
-  CheckMonthlyBudgetExist: jest.fn().mockResolvedValue(false),
+  CheckMonthlyBudgetExist: jest.fn(),
 
   GetCategoryDetails: jest.fn().mockResolvedValue([
     { category: "Category 1", spending: 0.3, color: "#FF0000" },
     { category: "Category 2", spending: 0.2, color: "#00FF00" },
   ]),
-  GetMoneyIn: jest.fn().mockResolvedValue(0),
+  GetMoneyIn: jest.fn().mockResolvedValue(100),
   GetProfilePic: jest.fn().mockResolvedValue("mocked-profile-picture-url"),
 }));
 
@@ -75,6 +69,7 @@ describe("Budget", () => {
   });
 
   it('should render "CreateBudgetDesign" when no monthly budget exists', async () => {
+    CheckMonthlyBudgetExist.mockResolvedValue(false);
     // Render the component
     const { getByText, getByTestId } = render(<Budget />);
 
@@ -106,32 +101,24 @@ describe("Budget", () => {
 
   it('should render "BudgetBox" when monthly budget exists', async () => {
     // Mock the GetBackendData functions to return data
-    jest.mock("../app/components/GetBackendData", () => ({
-      ...jest.requireActual("../app/components/GetBackendData"),
-      CheckMonthlyBudgetExist: jest.fn().mockResolvedValue(true),
-      GetCategoryDetails: jest.fn().mockResolvedValue([
-        { category: "Category 1", spending: 0.3, color: "#FF0000" },
-        { category: "Category 2", spending: 0.2, color: "#00FF00" },
-      ]),
-      GetMoneyIn: jest.fn().mockResolvedValue(1000),
-    }));
+    CheckMonthlyBudgetExist.mockResolvedValue(true);
 
-    const { getByText, getByTestId } = render(<Budget />);
+    const { getByText } = render(<Budget />);
 
     // Check if "Monthly Budget" text is displayed
     await waitFor(() => {
       // Check if "Monthly Budget" text is displayed
       const monthlyBudgetText = getByText("Monthly Budget");
       expect(monthlyBudgetText).toBeDefined();
-
-      // Check if budget amounts and percentages are displayed correctly
-      const budgetBox = getByTestId("BudgetBox");
-      expect(budgetBox).toBeDefined();
-
-      const category1Text = getByText("Category 1");
-      const category2Text = getByText("Category 2");
-      expect(category1Text).toBeDefined();
-      expect(category2Text).toBeDefined();
     });
+
+    // Check if budget amounts and percentages are displayed correctly
+    const tips = getByText("Financial Tip!");
+    expect(tips).toBeDefined();
+
+    const category1Text = getByText("Category 1");
+    const category2Text = getByText("Category 2");
+    expect(category1Text).toBeDefined();
+    expect(category2Text).toBeDefined();
   });
 });

@@ -163,6 +163,14 @@ describe("Integration test for CreateBudget", () => {
       { categoryName: "Savings", percentage: "20", color: "#F46040" },
     ];
 
+    const mockProfilesData = [{ id: "mocked-id" }];
+
+    // Mock the supabase.from('profiles').select('id') to return the mock profiles data
+    jest.spyOn(supabase, "from").mockReturnThis();
+    jest
+      .spyOn(supabase, "select")
+      .mockResolvedValue({ data: mockProfilesData });
+
     // Set up the input fields
     const incomeInput = getByTestId("text-input-flat");
 
@@ -185,16 +193,14 @@ describe("Integration test for CreateBudget", () => {
     await act(() => {
       // Assert that the supabase functions were called with the correct parameters
       expect(supabase.from).toHaveBeenCalledWith("profiles");
-      // expect(supabase.from).toHaveBeenCalledWith("budget");
-      // expect(supabase.insert).toHaveBeenCalledWith([
-      //   {
-      //     income: "2000",
-      //     user_id: expect.any(String),
-      //     created_at: expect.any(String),
-      //   },
-      // ]);
-
-      // Add more assertions for other supabase function calls if needed
+      expect(supabase.from).toHaveBeenCalledWith("budget");
+      expect(supabase.insert).toHaveBeenCalledWith([
+        {
+          income: "2000",
+          user_id: expect.any(String),
+          created_at: expect.any(String),
+        },
+      ]);
     });
   });
 });
