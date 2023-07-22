@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
+import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
 import Profile from "../app/(home)/Profile/index";
 import * as ImagePicker from "expo-image-picker";
 import { supabase } from "../lib/supabase";
@@ -34,8 +34,12 @@ jest.mock("../lib/supabase", () => ({
         ],
         error: null,
       })),
-      update: jest.fn(),
-      eq: jest.fn(),
+      update: jest.fn(() => ({
+        eq: jest.fn(() => ({
+          data: null,
+          error: null,
+        })),
+      })),
     }),
     storage: {
       from: () => ({
@@ -135,5 +139,66 @@ describe("Profile Component", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+  });
+});
+
+describe("Profile Component Integration Test", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("renders Profile page and performs integration tests", async () => {
+    // Mock the ImagePicker result
+    ImagePicker.launchImageLibraryAsync = jest.fn(() =>
+      Promise.resolve({ cancelled: false, uri: "path/to/image.jpg" })
+    );
+
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation();
+
+    // Render the Profile component
+    const { getByText, getByPlaceholderText, getByTestId } = render(
+      <Profile />
+    );
+
+    // Check if the page title is rendered
+    const pageTitle = getByText("Profile");
+    expect(pageTitle).toBeTruthy();
+
+    // // Test the initial display of user data
+    await waitFor(() => {
+      expect(getByPlaceholderText("John Doe")).toBeTruthy();
+      expect(getByPlaceholderText("123456789")).toBeTruthy();
+      expect(getByPlaceholderText("john.doe@example.com")).toBeTruthy();
+      expect(getByPlaceholderText("01-01-1990")).toBeTruthy();
+    });
+
+    // Test updating the text field input
+    const nameInput = getByPlaceholderText("John Doe");
+    fireEvent.changeText(nameInput, "New Name");
+    const phoneNumberInput = getByPlaceholderText("123456789");
+    fireEvent.changeText(phoneNumberInput, "987654321");
+    const emailInput = getByPlaceholderText("john.doe@example.com");
+    fireEvent.changeText(emailInput, "new.email@example.com");
+    const dobInput = getByPlaceholderText("01-01-1990");
+    fireEvent.changeText(dobInput, "01-02-1990");
+
+    await waitFor(() => {
+      // Check if the updated details are displayed
+      expect(getByPlaceholderText("New Name")).toBeTruthy();
+      expect(getByPlaceholderText("987654321")).toBeTruthy();
+      expect(getByPlaceholderText("new.email@example.com")).toBeTruthy();
+      expect(getByPlaceholderText("01-02-1990")).toBeTruthy();
+    });
+
+    await waitFor(() => {
+      // Test clicking the 'Update' button
+      const updateButton = getByTestId("Update-button");
+      fireEvent.press(updateButton);
+    });
+
+    expect(alertSpy).toHaveBeenCalledWith(
+      "Success",
+      "Profile updated successfully"
+    );
   });
 });
