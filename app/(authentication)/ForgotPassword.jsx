@@ -165,17 +165,16 @@ const styles = StyleSheet.create({
         right: 35,
         marginTop: 10,
     },
-    loginButton: {
-        backgroundColor: '#3D70FF',
+    resetButton: {
+        backgroundColor: "#3D70FF",
         borderRadius: 40,
-        width: 327,
-        height: 56,
-        left: 30,
-        marginTop: 50,
+        marginHorizontal: 30,
+        marginTop: 30,
+        marginBottom: 10,
     },
-    loginText: {
-        color: 'white',
-        fontFamily: 'Poppins-SemiBold',
+    resetText: {
+        color: "white",
+        fontFamily: "Poppins-SemiBold",
         fontWeight: 600,
         fontSize: 18,
         lineHeight: 40,
@@ -186,10 +185,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
 });
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 
 export default ForgotPassword; 
