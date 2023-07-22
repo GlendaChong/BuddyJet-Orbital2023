@@ -155,8 +155,6 @@ describe("Integration test for CreateBudget", () => {
   });
 
   test("should allow user to create a budget", async () => {
-    // Mock the profiles data to be used when calling handleSubmit
-
     const { queryAllByTestId, debug, getByTestId } = render(<CreateBudget />);
     // Mock the categories data to be used when calling handleSubmit
     const categories = [
