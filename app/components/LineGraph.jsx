@@ -23,7 +23,7 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
 		return (
 			<View style={styles.chartContainer}>
 				<View style={styles.noDataContainer}>
-					<Image style={styles.image} source={require('../../assets/noBarChart.jpg')} />
+					<Image style={styles.image} source={require('../../assets/noLineGraph.jpg')} />
 					<Text style={styles.noDataText}>Generating line graph...</Text>
 				</View>
 			</View>
@@ -33,7 +33,7 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
 		return (
 			<View style={styles.chartContainer}>
 				<View style={styles.noDataContainer}>
-					<Image style={styles.image} source={require('../../assets/noBarChart.jpg')} />
+					<Image style={styles.image} source={require('../../assets/noLineGraph.jpg')} />
 					<Text style={styles.noBarChartText}>No line graph generated!</Text>
 					<Text style={styles.noDataText}>No expenses and income added for the past year</Text>
 				</View>

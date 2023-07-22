@@ -65,6 +65,7 @@ jest.mock("../app/components/GetBackendData", () => ({
     { category: "Category 2", spending: 0.2, color: "#00FF00" },
   ]),
   GetMoneyIn: jest.fn().mockResolvedValue(0),
+  GetProfilePic: jest.fn().mockResolvedValue("mocked-profile-picture-url"),
 }));
 
 describe("Budget", () => {

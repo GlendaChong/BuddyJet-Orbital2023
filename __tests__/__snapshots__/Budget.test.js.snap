@@ -29,6 +29,28 @@ exports[`Budget should render and match snapshot 1`] = `
     <View
       style={
         {
+          "marginBottom": -45,
+        }
+      }
+    >
+      <Image
+        source={
+          {
+            "url": "",
+          }
+        }
+        style={
+          {
+            "borderRadius": 50,
+            "height": 50,
+            "width": 50,
+          }
+        }
+      />
+    </View>
+    <View
+      style={
+        {
           "alignSelf": "center",
           "backgroundColor": "#EEF5FF",
           "borderRadius": 20,
