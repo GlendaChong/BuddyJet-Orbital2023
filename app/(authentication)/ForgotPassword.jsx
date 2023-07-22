@@ -7,6 +7,7 @@ import TextFieldInput from "../components/TextFieldInput"
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "expo-router";
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
     const [isEmailSent, setIsEmailSent] = useState(false);
+    const router = useRouter(); 
 
     // Supabase to send an email with OTP
     const handleSendOTP = async () => {
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
         marginTop: 30,
         marginBottom: 10,
-    },
+     },
     resetText: {
         color: "white",
         fontFamily: "Poppins-SemiBold",

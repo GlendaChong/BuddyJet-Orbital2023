@@ -131,10 +131,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 26,
         color: '#100D40',
-        alignSelf: "flex-end",
+        alignSelf: "flex-start",
         marginTop: -25,
         marginHorizontal: 65,
-        width: 140
+        paddingLeft: 100
     },
     editText: {
         marginTop: 5, 
