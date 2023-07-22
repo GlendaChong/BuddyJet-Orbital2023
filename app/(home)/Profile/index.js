@@ -248,7 +248,7 @@ function Profile() {
         console.error(error.message);
       }
 
-      const { errorssss } = await supabase
+      await supabase
         .from("moneyIn")
         .delete("*")
         .eq("user_id", userId);
@@ -414,10 +414,39 @@ function Profile() {
               <FontAwesomeIcon icon={faChevronRight} />
             </View>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.resetOption}
+            onPress={() => {
+              router.push("../Profile/AboutUs");
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#FF9F0A",
+                borderRadius: 10,
+                padding: 10,
+                marginRight: 25,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faFileCircleQuestion}
+                color="white"
+                size={18}
+              />
+            </View>
+            <Text style={styles.resetOptionText}>About Us</Text>
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 20 }}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </View>
+          </TouchableOpacity>
+
         </View>
       </View>
     );
   };
+
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA" }}>
@@ -531,6 +560,7 @@ function Profile() {
         <AccountBox />
         <ResetBox />
         <Faq />
+        
         <View style={{ alignItems: "center", marginTop: 30 }}>
           <Button
             style={styles.logoutButton}
