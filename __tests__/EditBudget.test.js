@@ -1,10 +1,9 @@
 import React from "react";
-import { render, fireEvent, act } from "@testing-library/react-native";
+import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import EditBudget from "../app/(home)/Budget/EditBudget";
 import { supabase } from "../lib/supabase";
 
 // Mock the necessary modules
-// Mock the sideHustles data for testing
 jest.mock("../lib/supabase", () => ({
   supabase: {
     from: jest.fn().mockReturnThis(),
@@ -18,6 +17,7 @@ jest.mock("../lib/supabase", () => ({
     update: jest.fn().mockResolvedValue({}),
   },
 }));
+
 jest.mock("expo-router", () => ({
   useRouter: jest.fn().mockReturnValue({
     push: jest.fn(),
@@ -139,5 +139,103 @@ describe("EditBudget", () => {
     expect(errorMessage).toBeDefined();
   });
 
-  // You can write additional tests for other functionalities in a similar manner
+  it("should update category percentages correctly and save the changes", async () => {
+    const { getByText, getByTestId, queryAllByTestId, debug } = render(
+      <EditBudget />
+    );
+
+    // Wait for the data to be loaded
+    await waitFor(() => getByText("Categories:"));
+
+    // Trigger the editing mode
+    const buttons = queryAllByTestId("PercentageInput");
+
+    // Check if there's at least one element with the testID "submitButton"
+    expect(buttons.length).toBeGreaterThan(0);
+
+    // Trigger the form submission using the first element with testID "submitButton"
+    fireEvent.changeText(buttons[0], "40");
+    fireEvent.changeText(buttons[1], "60");
+    // });
+
+    // Save the changes
+    fireEvent.press(getByText("Save"));
+
+    // Wait for the updates to be applied
+    await waitFor(() => expect(supabase.update).toHaveBeenCalledTimes(2));
+
+    // // Check if the supabase update method was called with the correct arguments
+    expect(supabase.update).toHaveBeenCalledWith({
+      category: "Category 1",
+      spending: 0.4,
+    });
+
+    const input = queryAllByTestId("PercentageInput");
+    const first = input[0];
+    const second = input[1];
+    // Check if the UI is updated with the new percentage values
+    expect(first.props.value).toBe("40");
+    expect(second.props.value).toBe("60");
+  });
+});
+
+describe("Integration test for EditBudget", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("should allow user to edit a budget", async () => {
+    const { queryAllByTestId, getByTestId, getByText, debug } = render(
+      <EditBudget />
+    );
+
+    act(() => {
+      // Find and click the Edit button for Income
+      const editButton = getByTestId("EditButton");
+      fireEvent.press(editButton);
+    });
+
+    act(() => {
+      // Find the TextInput for new income and update its value
+      const newIncomeInput = getByTestId("IncomeText");
+      fireEvent.changeText(newIncomeInput, "2000");
+    });
+
+    // Find and click the Save button for Income
+    const saveButton = getByTestId("SaveButton");
+    fireEvent.press(saveButton);
+
+    // Ensure that the income is updated and the "Income updated successfully" message is logged
+    expect(supabase.from().update).toHaveBeenCalledWith({
+      income: "2000",
+      in_use: true,
+    });
+
+    await waitFor(() => getByText("Categories:"));
+
+    // Trigger the editing mode
+    const buttons = queryAllByTestId("PercentageInput");
+
+    // Check if there's at least one element with the testID "submitButton"
+    expect(buttons.length).toBeGreaterThan(0);
+
+    // Trigger the form submission using the first element with testID "submitButton"
+    fireEvent.changeText(buttons[0], "40");
+    fireEvent.changeText(buttons[1], "60");
+
+    // Save the changes
+    fireEvent.press(getByText("Save"));
+
+    // Wait for the updates to be applied
+    await waitFor(() => expect(supabase.update).toHaveBeenCalledTimes(4));
+    console.log("Calls to supabase.update:", supabase.update.mock.calls);
+    expect(supabase.update).toHaveBeenCalledWith({
+      income: "2000",
+      in_use: true,
+    });
+    expect(supabase.update).toHaveBeenCalledWith({
+      category: "Category 1",
+      spending: 0.4,
+    });
+  });
 });
