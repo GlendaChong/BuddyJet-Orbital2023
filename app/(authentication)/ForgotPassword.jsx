@@ -186,6 +186,10 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
 });
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 
 export default ForgotPassword; 
