@@ -15,6 +15,13 @@ jest.mock("../lib/supabase", () => ({
   supabase: {
     from: jest.fn().mockReturnThis(),
     insert: jest.fn().mockResolvedValue({}),
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    gte: jest.fn().mockReturnThis(),
+    lt: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockResolvedValue({}),
+    mockReturnValueOnce: jest.fn(),
+    update: jest.fn().mockResolvedValue({}),
   },
 }));
 
@@ -65,9 +72,6 @@ describe("CreateBudget", () => {
         handleSubmit={handleSubmit}
       />
     );
-
-    // Print the rendered output to the console for debugging
-    debug();
 
     await waitFor(() => {
       const button = getByTestId("submitButton");
@@ -143,19 +147,56 @@ describe("CreateBudget", () => {
       [{ style: "okay", text: "Okay" }]
     );
   });
+});
 
-  // it("should call the updateData function with correct parameters", async () => {
-  //   const { getByText } = render(<CreateBudget />);
+describe("Integration test for CreateBudget", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-  //   // Mock the functions and inputs
-  //   const handleSubmit = jest.fn();
+  test("should allow user to create a budget", async () => {
+    // Mock the profiles data to be used when calling handleSubmit
 
-  //   // Trigger the form submission
-  //   act(() => {
-  //     fireEvent.press(getByText("Make Budget"));
-  //   });
+    const { queryAllByTestId, debug, getByTestId } = render(<CreateBudget />);
+    // Mock the categories data to be used when calling handleSubmit
+    const categories = [
+      { categoryName: "Needs", percentage: "50", color: "#0A84FF" },
+      { categoryName: "Wants", percentage: "30", color: "#32D74B" },
+      { categoryName: "Savings", percentage: "20", color: "#F46040" },
+    ];
 
-  //   // Assert the updateData function is called with correct parameters
-  //   expect(handleSubmit).toHaveBeenCalled();
-  // });
+    // Set up the input fields
+    const incomeInput = getByTestId("text-input-flat");
+
+    // Enter the income value
+    fireEvent.changeText(incomeInput, "2000");
+
+    // Get the submit button and trigger its press event
+    await waitFor(async () => {
+      // Get all elements with testID "submitButton"
+      const buttons = queryAllByTestId("submitButton");
+
+      // Check if there's at least one element with the testID "submitButton"
+      expect(buttons.length).toBeGreaterThan(0);
+
+      // Trigger the form submission using the first element with testID "submitButton"
+      fireEvent.press(buttons[0]);
+    });
+
+    // Wait for the handleSubmit function to finish its async operations
+    await act(() => {
+      // Assert that the supabase functions were called with the correct parameters
+      expect(supabase.from).toHaveBeenCalledWith("profiles");
+      // expect(supabase.from).toHaveBeenCalledWith("budget");
+      // expect(supabase.insert).toHaveBeenCalledWith([
+      //   {
+      //     income: "2000",
+      //     user_id: expect.any(String),
+      //     created_at: expect.any(String),
+      //   },
+      // ]);
+
+      // Add more assertions for other supabase function calls if needed
+    });
+  });
 });
