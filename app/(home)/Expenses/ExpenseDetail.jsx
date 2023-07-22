@@ -127,13 +127,11 @@ const styles = StyleSheet.create({
     },
     textfieldName: {
         fontFamily: 'Poppins-SemiBold',
-        fontWeight: 400,
-        fontSize: 18,
+        fontSize: 17,
         lineHeight: 26,
         color: '#100D40',
-        alignSelf: "flex-start",
         marginTop: -25,
-        marginHorizontal: 65,
+        marginHorizontal: 54,
         paddingLeft: 100
     },
     editText: {
