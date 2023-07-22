@@ -11,7 +11,7 @@ import {
   GetMonthlyExpensesSortedByCat,
   GetMonthlyExpensesSortedByDate,
   GetMoneyIn,
-  getProfilePic,
+  GetProfilePic,
 } from "../../components/GetBackendData";
 import ProfilePic from "../../components/ProfilePic";
 
@@ -96,7 +96,7 @@ function Expenses() {
 
   // Fetch profile picture from backend
   const fetchProfilePic = async () => {
-    const profilePic = await getProfilePic(); 
+    const profilePic = await GetProfilePic(); 
     setProfilePicture(profilePic); 
   }; 
 

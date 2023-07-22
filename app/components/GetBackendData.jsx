@@ -331,7 +331,7 @@ export const GetUserId = async () => {
   }
 };
 
-export const getProfilePic = async () => {
+export const GetProfilePic = async () => {
   const { data, error } = await supabase
     .from("profiles")
     .select("avatar_url");
