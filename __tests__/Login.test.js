@@ -11,21 +11,20 @@ jest.mock("../lib/supabase", () => ({
 }));
 
 describe("Login", () => {
-  it('should display the login screen with welcome text', () => {
+  it("should display the login screen with welcome text", () => {
     const { getByText, getByLabelText } = render(<Login />);
-    
+
     // Check if the welcome text is present
-    const welcomeText = getByText('Welcome!');
+    const welcomeText = getByText("Welcome!");
     expect(welcomeText).toBeDefined();
 
     // Check if the email and password fields are rendered
-    const emailInput = getByLabelText('Email');
-    const passwordInput = getByLabelText('Password');
+    const emailInput = getByLabelText("Email");
+    const passwordInput = getByLabelText("Password");
     expect(emailInput).toBeDefined();
     expect(passwordInput).toBeDefined();
   });
 
-  
   it("should display an error message when email is empty", async () => {
     const { getByLabelText, getByText } = render(<Login />);
 
@@ -43,29 +42,31 @@ describe("Login", () => {
     expect(errorMessage).toBeDefined();
   });
 
-  // it('should display an error message when wrong login credentials are provided', async () => {
+  // it("should display an error message when wrong login credentials are provided", async () => {
   //   const { getByLabelText, getByText, queryByText } = render(<Login />);
 
   //   // Set up the input fields
-  //   const emailInput = getByLabelText('Email');
-  //   const passwordInput = getByLabelText('Password');
+  //   const emailInput = getByLabelText("Email");
+  //   const passwordInput = getByLabelText("Password");
 
   //   // Enter the email and password values
-  //   fireEvent.changeText(emailInput, 'test@gmail.com');
-  //   fireEvent.changeText(passwordInput, 'wrongpassword');
+  //   fireEvent.changeText(emailInput, "test@gmail.com");
+  //   fireEvent.changeText(passwordInput, "wrongpassword");
 
   //   // Mock the sign-in response to simulate authentication failure
   //   supabase.auth.signInWithPassword.mockRejectedValue({});
 
-  //   // Trigger the form submission
-  //   fireEvent.press(getByText('Login'));
+  //   await waitFor(() => {
+  //     // Trigger the form submission
+  //     fireEvent.press(getByText("Login"));
+  //   });
 
   //   // Wait for the error message to be displayed
   //   // await waitFor(() => {
   //   //   expect(queryByText('Invalid login credentials')).toBeTruthy();
   //   // });
 
-  //   const errorMessage = getByText('Invalid login credentials');
+  //   const errorMessage = getByText("Invalid login credentials");
   //   expect(errorMessage).toBeDefined();
   // });
 
