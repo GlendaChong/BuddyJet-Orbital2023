@@ -26,7 +26,7 @@ export function useProtectedRoute(user) {
         } else if (user && inAuthGroup) {
             if (segments[1] === "CreateAccount") {
                 router.replace("/(authentication)/AccountCreated");
-            } else if (segments[1] === "Login") {
+            } else if (segments[1] === "Login" || segments[1] === "ForgotPassword") {
                 router.replace("/(home)/Expenses/")
             }
         }

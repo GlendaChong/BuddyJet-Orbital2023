@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -34,7 +34,7 @@ function Login() {
             return;
         }
     }
-    
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <KeyboardAvoidingView
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     loginButton: {
         backgroundColor: '#3D70FF',
         borderRadius: 40,
-        marginHorizontal: 30, 
+        marginHorizontal: 30,
         height: 56,
         marginTop: 50,
     },
@@ -104,11 +104,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-SemiBold',
         fontWeight: 600,
         fontSize: 18,
-        paddingVertical: 12, 
+        paddingVertical: 12,
     },
     errorText: {
-        left: 30,  
-        paddingVertical: 10, 
+        left: 30,
+        paddingVertical: 10,
         color: 'red'
     }
 })

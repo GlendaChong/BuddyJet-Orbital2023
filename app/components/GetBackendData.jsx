@@ -244,8 +244,8 @@ export const GetSideHustles = async (selectedMonth, selectedYear) => {
       .select('*')
       .gte('created_at', `${selectedYear}-${monthIndex.toString().padStart(2, '0')}-01`)
       .lt('created_at', `${endYear}-${endMonth.toString().padStart(2, '0')}-01`);
-    
-    return sideHustles; 
+
+    return sideHustles;
 
   } catch (error) {
     console.log('Error fetching side hustles:', error.message);

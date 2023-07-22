@@ -1,0 +1,304 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Budget should render and match snapshot 1`] = `
+<RNCSafeAreaView
+  edges={
+    [
+      "bottom",
+      "left",
+      "right",
+      "top",
+    ]
+  }
+  style={
+    {
+      "backgroundColor": "white",
+      "flex": 1,
+    }
+  }
+>
+  <ActivityIndicator />
+  <View
+    style={
+      {
+        "paddingHorizontal": 20,
+        "paddingTop": 20,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": "#EEF5FF",
+          "borderRadius": 20,
+          "justifyContent": "center",
+          "shadowOffset": {
+            "height": 3,
+            "width": 0,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 5,
+          "width": 200,
+        }
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        onPress={[Function]}
+      >
+        <View
+          style={
+            [
+              {},
+            ]
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "color": "#007AFF",
+                  "fontSize": 18,
+                  "margin": 8,
+                  "textAlign": "center",
+                },
+                {
+                  "color": "#171328",
+                },
+              ]
+            }
+          >
+            July 2023
+          </Text>
+        </View>
+      </View>
+      <Modal
+        animationType="slide"
+        hardwareAccelerated={false}
+        visible={false}
+      />
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "marginTop": 110,
+      }
+    }
+  >
+    <View
+      styles={
+        {
+          "paddingTop": 200,
+        }
+      }
+    >
+      <Image
+        source={1}
+        style={
+          {
+            "alignSelf": "center",
+            "height": 230,
+            "width": 300,
+          }
+        }
+      />
+      <Text
+        style={
+          {
+            "color": "#100D40",
+            "fontFamily": "Poppins-SemiBold",
+            "fontSize": 30,
+            "lineHeight": 52,
+            "textAlign": "center",
+          }
+        }
+      >
+        No Monthly Budget
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#100D40",
+            "fontFamily": "Poppins-Medium",
+            "fontSize": 16,
+            "lineHeight": 24,
+            "opacity": 0.65,
+            "textAlign": "center",
+          }
+        }
+      >
+        You have not created this month's budget
+      </Text>
+    </View>
+    <View
+      collapsable={false}
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": "#3D70FF",
+          "borderRadius": 40,
+          "height": 56,
+          "marginTop": 40,
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 0,
+            "width": 0,
+          },
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+          "width": 280,
+        }
+      }
+      testID="button-container-outer-layer"
+    >
+      <View
+        collapsable={false}
+        style={
+          {
+            "backgroundColor": "#3D70FF",
+            "borderColor": "transparent",
+            "borderRadius": 40,
+            "borderStyle": "solid",
+            "borderWidth": 0,
+            "flex": 1,
+            "justifyContent": "center",
+            "minWidth": 64,
+            "shadowColor": "#000",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0,
+            "shadowRadius": 0,
+          }
+        }
+        testID="button-container"
+      >
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": false,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            [
+              {
+                "overflow": "hidden",
+              },
+              {
+                "borderRadius": 40,
+              },
+            ]
+          }
+          testID="button"
+        >
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                },
+                undefined,
+              ]
+            }
+          >
+            <Text
+              numberOfLines={1}
+              selectable={false}
+              style={
+                [
+                  {
+                    "fontFamily": "System",
+                    "fontSize": 14,
+                    "fontWeight": "500",
+                    "letterSpacing": 0.1,
+                    "lineHeight": 20,
+                  },
+                  {
+                    "textAlign": "left",
+                  },
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "marginHorizontal": 16,
+                      "marginVertical": 9,
+                      "textAlign": "center",
+                    },
+                    false,
+                    {
+                      "marginHorizontal": 24,
+                      "marginVertical": 10,
+                    },
+                    undefined,
+                    false,
+                    {
+                      "color": "rgba(255, 255, 255, 1)",
+                      "fontFamily": "System",
+                      "fontSize": 14,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1,
+                      "lineHeight": 20,
+                    },
+                    {
+                      "color": "#FFFFFF",
+                      "fontFamily": "Poppins-SemiBold",
+                      "fontSize": 18,
+                      "fontWeight": 600,
+                      "lineHeight": 30,
+                      "textAlign": "center",
+                    },
+                  ],
+                ]
+              }
+              testID="button-text"
+            >
+              Create a budget
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
