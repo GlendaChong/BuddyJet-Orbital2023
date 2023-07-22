@@ -10,7 +10,7 @@ import TextFieldInput from "../../components/TextFieldInput";
 
 function ChangePassword() {
     const [email, setEmail] = useState('');
-    const [oldPassword, setOldPassword] = useState('');
+    // const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -22,10 +22,10 @@ function ChangePassword() {
             setErrMsg("Email cannot be empty");
             return;
         }
-        if (oldPassword === '') {
-            setErrMsg("Old Password cannot be empty");
-            return;
-        }
+        // if (oldPassword === '') {
+        //     setErrMsg("Old Password cannot be empty");
+        //     return;
+        // }
         if (newPassword === '') {
             setErrMsg("New Password cannot be empty");
             return;
@@ -36,18 +36,18 @@ function ChangePassword() {
         }
 
         setLoading(true);
-        const { errors } = await supabase.auth.signInWithPassword({ email, password: oldPassword });
+        // const { errors } = await supabase.auth.signInWithPassword({ email, password: oldPassword });
 
-        if (errors) {
-            setLoading(false);
-            setErrMsg("Incorrect old password");
-            return;
-        }
+        // if (errors) {
+        //     setLoading(false);
+        //     setErrMsg("Incorrect old password");
+        //     return;
+        // }
 
         const { error } = await supabase.auth.updateUser({ email, password: newPassword });
         setLoading(false);
         if (error) {
-            setErrMsg("Invalid new password");
+            setErrMsg("Invalid new password. New password must be different from the old password.");
             return;
         }
 
@@ -65,7 +65,7 @@ function ChangePassword() {
                     <Text style={styles.welcomeText}>Change Password</Text>
                     <Image style={{ height: 200, width: 300, alignSelf: 'center', marginTop: 20 }} source={require('../../../assets/changePassword.jpg')} />
                     <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
-                    <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} />
+                    {/* <TextFieldInput label='Old Password' value={oldPassword} onChangeText={setOldPassword} /> */}
                     <TextFieldInput label='New Password' value={newPassword} onChangeText={setNewPassword} />
                     <TextFieldInput label='Confirm New Password' value={confirmPassword} onChangeText={setConfirmPassword} />
                     {errMsg !== "" && <Text style={styles.errorText}>{errMsg}</Text>}
@@ -125,9 +125,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 40,
     },
-    errorText: {
-        left: 30,
-        paddingVertical: 10,
+    errorText: { 
+        paddingVertical: 20,
+        paddingHorizontal: 30, 
         color: 'red'
     }
 });
