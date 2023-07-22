@@ -18,6 +18,42 @@ jest.mock(
   }
 );
 
+// jest.mock("../lib/supabase", () => ({
+//   supabase: {
+//     storage: {
+//       from: () => ({
+//         upload: jest.fn(() => ({
+//           data: {
+//             path: "path/to/uploaded/image.jpg",
+//           },
+//           error: null,
+//         })),
+//         getPublicUrl: jest.fn(() => ({
+//           data: {
+//             publicUrl: "https://example.com/avatar.jpg",
+//           },
+//           error: null,
+//         })),
+//       }),
+//     },
+//   },
+// }));
+
+jest.mock("../lib/supabase", () => ({
+  supabase: {
+    from: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockResolvedValue({}),
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    gte: jest.fn().mockReturnThis(),
+    lt: jest.fn().mockReturnThis(),
+    order: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockResolvedValue({}),
+    mockReturnValueOnce: jest.fn(),
+    update: jest.fn().mockResolvedValue({}),
+  },
+}));
+
 jest.mock("react-native-gifted-charts", () => {
   const { View } = require("react-native");
   const Animated = {
@@ -36,6 +72,7 @@ jest.mock("../app/components/GetBackendData", () => ({
   GetPastYearExpensesSum: jest.fn().mockResolvedValue([]),
   GetPastYearMoneyIn: jest.fn().mockResolvedValue([]),
   GetLastYearMonths: jest.fn().mockResolvedValue([]),
+  GetProfilePic: jest.fn().mockResolvedValue("mocked-profile-picture-url"),
 }));
 
 jest.mock("@react-navigation/native", () => ({
