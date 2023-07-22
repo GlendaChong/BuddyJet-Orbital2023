@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, KeyboardAvoidingView, TouchableOpacity, Image } from "react-native";
+import { Text, StyleSheet, View, KeyboardAvoidingView, TouchableOpacity, Image, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, React, useEffect } from "react";
 import TextFieldInput from "../../components/TextFieldInput";
@@ -27,7 +27,7 @@ function EditExpenses() {
 
   // Fetch backend data
   const fetchExpense = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const { data } = await supabase
         .from('expenses')
@@ -41,7 +41,7 @@ function EditExpenses() {
       setSelectedCategory(data.category);
       setSelectedPaymentMode(data.payment_mode);
       setPic(data.pic_url);
-      setLoading(false); 
+      setLoading(false);
 
     } catch (error) {
       console.error('Error fetching expense', error);
@@ -175,8 +175,8 @@ function EditExpenses() {
   const handleEdit = async () => {
     // Get the picture url to store in expenses table
     if (pic !== null) {
-        // Insert picture into supabase storage
-        const { data, error: uploadError } = await supabase.storage
+      // Insert picture into supabase storage
+      const { data, error: uploadError } = await supabase.storage
         .from("expensesPic")
         .upload(`${new Date().getTime()}`, {
           uri: pic,
@@ -190,8 +190,8 @@ function EditExpenses() {
       }
 
       // Retrieve picture url from supabse storage
-      const { data: { publicUrl }} = supabase.storage.from("expensesPic").getPublicUrl(data.path);
-      setPic(publicUrl); 
+      const { data: { publicUrl } } = supabase.storage.from("expensesPic").getPublicUrl(data.path);
+      setPic(publicUrl);
     }
 
     // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
@@ -200,16 +200,16 @@ function EditExpenses() {
 
     try {
       await supabase
-      .from('expenses')
-      .update({
-        description: description,
-        date: reformattedDate,
-        amount: amount,
-        category: selectedCategory,
-        payment_mode: selectedPaymentMode, 
-        pic_url: pic
-      })
-      .eq('id', expensesId);
+        .from('expenses')
+        .update({
+          description: description,
+          date: reformattedDate,
+          amount: amount,
+          category: selectedCategory,
+          payment_mode: selectedPaymentMode,
+          pic_url: pic
+        })
+        .eq('id', expensesId);
 
       router.back();
 
