@@ -34,7 +34,7 @@ const BudgetProgressBar = ({ expenses, income } ) => {
   
     return (
       <View>
-        <Text style={styles.expensesText}>S${monthlyExpenses}</Text>
+        <Text style={styles.expensesText}>SGD {monthlyExpenses}</Text>
         <View style={styles.container}>
           <View style={styles.wordsContainer}>
             <View>
@@ -74,8 +74,9 @@ const styles = StyleSheet.create({
   expensesText: {
     color: '#100D40',
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 48,
+    fontSize: 40,
     textAlign: 'center',
+    marginTop: 10
   },
   wordText: {
     color: "#FFFFFF",
