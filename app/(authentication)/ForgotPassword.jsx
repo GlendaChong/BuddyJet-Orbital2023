@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View, Image, TouchableOpacity, Alert, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
