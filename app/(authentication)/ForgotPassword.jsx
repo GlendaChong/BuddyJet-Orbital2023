@@ -25,8 +25,29 @@ function ForgotPassword() {
                   setErrMsg("Email cannot be empty");
                   return;
             } 
-    
+
             setLoading(true);
+            
+            try {
+                // Check if the email exists in the backend
+                const { data, error } = await supabase
+                    .from("userEmail")
+                    .select("email")
+                    .eq('email', email)
+                    .single(); 
+                
+                if (data == null) {
+                    // User email not found in the backend, get user to create new account instead
+                    setErrMsg("User with this email does not exist. Please create a new account instead.");
+                    return;
+                }
+
+            } catch (error) {
+                console.error("error with checking if user is registered"); 
+                return; 
+            }
+    
+            // Only allow signing in with OTP if user is registered previously
             const { error } = await supabase.auth.signInWithOtp({ email: email });
             setLoading(false);
             setIsEmailSent(true);
@@ -85,6 +106,7 @@ function ForgotPassword() {
                         <Text style={styles.descriptionText}>Enter your registered email below to receive an OTP to login</Text>
                     </View>
                     <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
+                    {errMsg !== " " && <Text style={styles.errorText}>{errMsg}</Text>}
                     <Button
                         style={styles.resetButton}
                         labelStyle={styles.resetText}
@@ -92,10 +114,7 @@ function ForgotPassword() {
                     >
                         Reset Password
                     </Button>
-                    <View style={{ alignItems: 'center', marginTop: 15, marginHorizontal: 30 }}>
-                        {errMsg !== " " && <Text>{errMsg}</Text>}
-                        {loading && <ActivityIndicator />}
-                    </View>
+                    {loading && <ActivityIndicator />}
                 </ScrollView>
             )  : (
                 <ScrollView>
@@ -114,6 +133,7 @@ function ForgotPassword() {
                         </Text>
                     </View>
                     <TextFieldInput label='OTP' value={otp} onChangeText={setOTP} />
+                    {errMsg !== "" && <Text style={styles.errorText}>{errMsg}</Text>}
                     <Button
                         style={styles.resetButton}
                         labelStyle={styles.resetText}
@@ -121,10 +141,7 @@ function ForgotPassword() {
                     >
                         Reset
                     </Button>
-                    <View style={{ alignItems: 'center', marginTop: 10 }}>
-                        {errMsg !== "" && <Text>{errMsg}</Text>}
-                        {loading && <ActivityIndicator />}
-                    </View>
+                    {loading && <ActivityIndicator />}
                 </ScrollView>      
             )}
             </KeyboardAvoidingView>
@@ -192,6 +209,11 @@ const styles = StyleSheet.create({
         height: 230,
         alignSelf: "center",
     },
+    errorText: {
+        paddingVertical: 10,
+        color: 'red', 
+        paddingHorizontal: 30, 
+    }
 });
 
 
