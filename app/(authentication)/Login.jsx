@@ -40,7 +40,7 @@ function Login() {
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior="padding"
-                keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
+                keyboardVerticalOffset={Platform.select({ ios: 0, android: 0 })} // Adjust this value as per your requirement
             >
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <BackButton />
