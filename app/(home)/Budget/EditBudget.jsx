@@ -78,6 +78,22 @@ function EditBudget() {
     };
 
     const handleSave = () => {
+
+      // Check for valid input for income
+      if (isNaN(parseInt(newIncome)) || newIncome <= 0) {
+        Alert.alert(
+          "Invalid Information",
+          "Please key in a positive fixed income",
+          [
+            {
+              text: "Okay",
+              style: "okay",
+            },
+          ]
+        );
+        return;
+      }
+
       setOldIncome(newIncome);
       updateIncome();
       setEditing(false);
@@ -161,6 +177,21 @@ function EditBudget() {
     };
 
     const handleSave = async () => {
+      // Check if percentages are all non-negative values
+      if (!percentages.reduce((check, item) => check && item.spending >= 0, true)) {
+        Alert.alert(
+          "Invalid Information",
+          "Please key in valid percentage values",
+          [
+            {
+              text: "Okay",
+              style: "okay",
+            },
+          ]
+        );
+        return;
+      }
+
       // Calculate the total sum of percentages
       const totalPercentage = percentages.reduce((sum, item) => sum + parseFloat(item.spending || 0), 0);
 
@@ -221,6 +252,37 @@ function EditBudget() {
     // Add money in into backend
     const addSideHustle = async () => {
       try {
+
+        // Check if both input fields are filled
+        if (newSideHustle === '' && newSideHustleAmount === '') {
+          Alert.alert(
+            "Missing Information",
+            "Please key in both Money In and Amount fields",
+            [
+              {
+                text: "Okay",
+                style: "okay",
+              },
+            ]
+          );
+          return;
+        }
+
+        // Check for invalid or negative input for Amount
+        if (isNaN(parseInt(newSideHustleAmount)) || newSideHustleAmount <= 0) {
+          Alert.alert(
+            "Invalid Information",
+            "Please key in a positive amount",
+            [
+              {
+                text: "Okay",
+                style: "okay",
+              },
+            ]
+          );
+          return;
+        } 
+
         await supabase
           .from('moneyIn')
           .insert([{
@@ -424,7 +486,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontFamily: 'Poppins-SemiBold',
-    width: 120,
+    width: 125,
     color: '#2C2646',
     fontSize: 16,
   },

@@ -65,6 +65,7 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
 		expensesLine.push(expensesData);
 	}
 
+
 	return (
 		<View style={styles.chartContainer}>
 			<Legend />
@@ -75,10 +76,10 @@ const LineGraph = ({ lastYearMonths, pastYearMoneyIn, pastYearExpenses }) => {
 					spacing={40}
 					color1="#32D74B"
 					color2="#FF453A"
-					dataPointsHeight={6}
-					dataPointsWidth={6}
 					noOfSections={4}
 					thickness={2.5}
+					dataPointsHeight={6}
+					dataPointsWidth={6}
 					textShiftX={-8}
 					textShiftY={-1}
 					width={270}
