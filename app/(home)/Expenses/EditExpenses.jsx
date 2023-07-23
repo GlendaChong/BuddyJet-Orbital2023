@@ -173,6 +173,10 @@ function EditExpenses() {
 
   // Update data in backend
   const handleEdit = async () => {
+    // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
+    const [day, month, year] = date.split('/');
+    const reformattedDate = `${year}/${month}/${day}`;
+
     // Get the picture url to store in expenses table
     if (pic !== null) {
       // Insert picture into supabase storage
@@ -191,31 +195,47 @@ function EditExpenses() {
 
       // Retrieve picture url from supabse storage
       const { data: { publicUrl } } = supabase.storage.from("expensesPic").getPublicUrl(data.path);
-      setPic(publicUrl);
-    }
 
-    // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
-    const [day, month, year] = date.split('/');
-    const reformattedDate = `${year}/${month}/${day}`;
+      try {
+        await supabase
+          .from('expenses')
+          .update({
+            description: description,
+            date: reformattedDate,
+            amount: amount,
+            category: selectedCategory,
+            payment_mode: selectedPaymentMode,
+            pic_url: publicUrl
+          })
+          .eq('id', expensesId);
 
-    try {
-      await supabase
-        .from('expenses')
-        .update({
-          description: description,
-          date: reformattedDate,
-          amount: amount,
-          category: selectedCategory,
-          payment_mode: selectedPaymentMode,
-          pic_url: pic
-        })
-        .eq('id', expensesId);
+        router.back();
 
-      router.back();
+      } catch (error) {
+        setErrMsg(error);
+        console.error('Error updating expense', error);
+      }
 
-    } catch (error) {
-      setErrMsg(error);
-      console.error('Error updating expense', error);
+    } else {
+      try {
+        await supabase
+          .from('expenses')
+          .update({
+            description: description,
+            date: reformattedDate,
+            amount: amount,
+            category: selectedCategory,
+            payment_mode: selectedPaymentMode,
+            pic_url: pic
+          })
+          .eq('id', expensesId);
+
+        router.back();
+
+      } catch (error) {
+        setErrMsg(error);
+        console.error('Error updating expense', error);
+      }
     }
   }
 

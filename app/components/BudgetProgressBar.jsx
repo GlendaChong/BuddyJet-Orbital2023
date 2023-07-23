@@ -92,10 +92,9 @@ const styles = StyleSheet.create({
   progressBar: {
     marginTop: 15,
     marginBottom: 10,
-    marginLeft: 25,
+    marginHorizontal: 25,
     height: 10,
     borderRadius: 10,
-    width: 300,
   },
 })
 export default BudgetProgressBar; 
