@@ -17,7 +17,7 @@ const AboutUs = () => {
                 size={20}
                 />
             </TouchableOpacity>
-            <Image style={styles.image} source={require('../../../assets/onboarding.jpg')}/>
+            <Image style={styles.image} source={require('../../../assets/splash.png')}/>
             <Text style={styles.headerText}>Welcome to BuddyJet!</Text>
             <Text style={styles.descriptionText}>
                 Our app aims to ease the process of personal financing for you, by
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 25,
-    lineHeight: 40,
+    lineHeight: 60,
     color: "#100D40",
     textAlign: 'center'
   },
@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   image: {
-    width: 325,
-    height: 237,
+    width: 300,
+    height: 200,
     alignSelf: 'center',  
     marginBottom: 20, 
   }, 
