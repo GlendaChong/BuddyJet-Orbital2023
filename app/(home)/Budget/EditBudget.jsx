@@ -344,7 +344,7 @@ function EditBudget() {
             <View key={sideHustle.name} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
               <Text style={styles.sideHustleNameText}>{sideHustle.name}</Text>
               <Text style={styles.sideHustleAmountText}>${sideHustle.amount}</Text>
-              <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteSideHustle(sideHustle.id)}>
+              <TouchableOpacity testID="money-delete" style={styles.deleteButton} onPress={handleDeleteSideHustle(sideHustle.id)}>
                 <FontAwesomeIcon
                   icon={faTrash}
                   size={15}

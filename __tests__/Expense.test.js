@@ -28,6 +28,21 @@ jest.mock("../app/components/GetBackendData", () => ({
   GetMoneyIn: jest.fn(),
 }));
 
+// jest.mock("../app/components/GetBackendData", () => ({
+//   GetMonthlyExpensesSortedByCat: jest
+//     .fn()
+//     .mockResolvedValue([
+//       { id: 1, date: "2023-07-01", amount: 10, category: "Category A" },
+//     ]),
+//   GetMonthlyExpensesSortedByDate: jest
+//     .fn()
+//     .mockResolvedValue([
+//       { id: 1, date: "2023-07-01", amount: 10, category: "Category A" },
+//     ]),
+//   GetMoneyIn: jest.fn(100),
+//   GetProfilePic: jest.fn().mockResolvedValue("mocked-profile-picture-url"),
+// }));
+
 jest.mock(
   "react-native/Libraries/Components/Touchable/TouchableOpacity",
   () => {
@@ -83,6 +98,14 @@ describe("Test if user can make successful API calls", () => {
     );
     expect(result).toEqual(expenses);
   });
-
-  // Similar test cases for GetMonthlyExpensesSortedByCat, GetCurrentFixedIncome, and GetMoneyIn
 });
+
+// describe("Expensex box", () => {
+//   test("if expense can be deleted", async () => {
+//     const { getByTestId, getByText, debug } = render(<Expenses />);
+
+//     getByText("Monthly");
+
+//     debug();
+//   });
+// });
