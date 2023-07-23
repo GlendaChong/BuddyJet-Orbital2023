@@ -2,6 +2,7 @@ import React from "react";
 import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import EditBudget from "../app/(home)/Budget/EditBudget";
 import { supabase } from "../lib/supabase";
+import { Alert } from "react-native";
 
 // Mock the necessary modules
 jest.mock("../lib/supabase", () => ({
@@ -123,6 +124,68 @@ describe("EditBudget", () => {
         amount: "100",
       },
     ]);
+  });
+
+  it("should display an alert when click on delete icon for money in", async () => {
+    // Render the component
+
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation();
+    const { getByTestId, queryAllByTestId, getByText, debug, queryByText } =
+      render(<EditBudget />);
+
+    // Wait for the data to be loaded
+    await waitFor(() => getByText("Side Hustle 1"));
+
+    // Find the delete button for the first money in item
+    const buttons = queryAllByTestId("money-delete");
+
+    // Check if there's at least one element with the testID "money-delete"
+    expect(buttons.length).toBeGreaterThan(0);
+
+    // Trigger the deletion using the first element with testID "money-delete"
+    fireEvent.press(buttons[0]);
+
+    expect(alertSpy).toHaveBeenCalledWith(
+      "Confirm Delete",
+      "Are you sure you want to delete this money in?",
+      expect.arrayContaining([
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          onPress: expect.any(Function),
+          style: "destructive",
+        },
+      ])
+    );
+  });
+
+  it("should delete money in correctly", async () => {
+    // Render the component
+    // Mock the Alert.alert function
+    Alert.alert = jest.fn((title, message, buttons) => {
+      // Simulate pressing the "Reset" button in the confirmation alert
+      buttons[1].onPress();
+    });
+
+    const { getByTestId, queryAllByTestId, getByText, debug, queryByText } =
+      render(<EditBudget />);
+
+    // Wait for the data to be loaded
+    await waitFor(() => getByText("Side Hustle 1"));
+
+    // Find the delete button for the first money in item
+    const buttons = queryAllByTestId("money-delete");
+
+    // Check if there's at least one element with the testID "money-delete"
+    expect(buttons.length).toBeGreaterThan(0);
+
+    // Trigger the deletion using the first element with testID "money-delete"
+    fireEvent.press(buttons[0]);
+
+    // Wait for the update to be applied
+    await waitFor(() => {
+      expect(supabase.from().delete).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("should display an error message for an invalid total percentage", () => {
