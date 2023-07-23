@@ -7,6 +7,15 @@ jest.mock("../lib/supabase", () => ({
     auth: {
       signUp: jest.fn().mockResolvedValue({}),
     },
+    from: jest.fn().mockReturnThis(),
+    insert: jest.fn().mockResolvedValue({}),
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    gte: jest.fn().mockReturnThis(),
+    lt: jest.fn().mockReturnThis(),
+    delete: jest.fn().mockResolvedValue({}),
+    mockReturnValueOnce: jest.fn(),
+    update: jest.fn().mockResolvedValue({}),
   },
 }));
 
