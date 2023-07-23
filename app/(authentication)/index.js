@@ -55,15 +55,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-
   image: {
     position: 'absolute', 
     width: 325,
-    height: 237,
-    alignSelf: 'center',  
-    top: 168, 
+    height: 235, 
+    alignSelf: 'center', 
+    top: 200, 
   }, 
-  
   mainText: {
     fontFamily: 'Poppins-SemiBold', 
     fontSize: 35, 
