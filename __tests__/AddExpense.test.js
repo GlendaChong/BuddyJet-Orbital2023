@@ -3,6 +3,13 @@ import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import AddExpenses from "../app/(home)/Expenses/AddExpenses";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/auth";
+import * as ImagePicker from "expo-image-picker";
+
+// Mock the ImagePicker module
+jest.mock("expo-image-picker", () => ({
+  launchImageLibraryAsync: jest.fn(), // Mock the function
+  MediaTypeOptions: { Images: "Images" }, // Mock the MediaTypeOptions
+}));
 
 jest.mock(
   "react-native/Libraries/Components/Touchable/TouchableOpacity",
@@ -89,6 +96,57 @@ describe("AddExpenses", () => {
     // expect(getByText("Category cannot be empty")).toBeTruthy();
     // expect(getByText("Payment mode cannot be empty")).toBeTruthy();
   });
+
+  test("should handle image input and state changes", async () => {
+    // Resolve the ImagePicker promise with a sample image URI
+    ImagePicker.launchImageLibraryAsync.mockResolvedValueOnce({
+      cancelled: false,
+      assets: [{ uri: "sample-image-uri.jpg" }],
+    });
+
+    const { getByText, getByTestId, debug, queryByTestId } = render(
+      <AddExpenses />
+    );
+
+    await waitFor(() => {
+      // Find the 'Add Image' button and press it
+      const addImageButton = getByText("Add Image");
+      fireEvent.press(addImageButton);
+    });
+
+    // Expect the 'pic' state to be updated with the selected image URI
+    const picture = getByTestId("expense-pic");
+    expect(picture.props.source).toEqual({ uri: "sample-image-uri.jpg" });
+  });
+
+  test("should be able to delete a selected image", async () => {
+    // Resolve the ImagePicker promise with a sample image URI
+    ImagePicker.launchImageLibraryAsync.mockResolvedValueOnce({
+      cancelled: false,
+      assets: [{ uri: "sample-image-uri.jpg" }],
+    });
+
+    const { getByText, getByTestId, debug, queryByTestId } = render(
+      <AddExpenses />
+    );
+
+    await waitFor(() => {
+      // Find the 'Add Image' button and press it
+      const addImageButton = getByText("Add Image");
+      fireEvent.press(addImageButton);
+    });
+
+    // Expect the 'pic' state to be updated with the selected image URI
+    const picture = getByTestId("expense-pic");
+    expect(picture.props.source).toEqual({ uri: "sample-image-uri.jpg" });
+
+    // // Find the 'Reset' button (which should appear when an image is selected) and press it
+    const resetImageButton = getByTestId("delete-pic");
+    fireEvent.press(resetImageButton);
+
+    // // Expect the 'pic' state to be null after resetting the image
+    expect(queryByTestId("expense-pic")).toBeFalsy();
+  });
 });
 
 describe("Expenses integration test ", () => {
@@ -116,8 +174,8 @@ describe("Expenses integration test ", () => {
       user_id: "mocked-user-id",
       date: "2022/01/01",
       amount: "100",
-      category: "Food", // Replace with the selected category from your form
-      payment_mode: "Cash", // Replace with the selected payment mode from your form
+      category: "Food",
+      payment_mode: "Cash",
     };
 
     expect(supabase.from().insert).toHaveBeenCalledWith(expectedData);
