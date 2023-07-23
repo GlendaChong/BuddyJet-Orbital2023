@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View, Image, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { Text, Button, ActivityIndicator } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -66,6 +66,11 @@ function ForgotPassword() {
         
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior="padding"
+                keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })} // Adjust this value as per your requirement
+            >
             {!isEmailSent ? (
                 <ScrollView>
                     <TouchableOpacity style={{ marginLeft: 30, marginTop: 20 }} onPress={() => { router.back() }}>
@@ -77,7 +82,7 @@ function ForgotPassword() {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.welcomeText}>Forgot Password</Text>
                         <Image style={styles.image} source={require('../../assets/changePassword.jpg')} />
-                        <Text style={styles.descriptionText}>Enter your registered email below to receive password reset instructions</Text>
+                        <Text style={styles.descriptionText}>Enter your registered email below to receive an OTP to login</Text>
                     </View>
                     <TextFieldInput label='Email' value={email} onChangeText={setEmail} />
                     <Button
@@ -122,6 +127,7 @@ function ForgotPassword() {
                     </View>
                 </ScrollView>      
             )}
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
