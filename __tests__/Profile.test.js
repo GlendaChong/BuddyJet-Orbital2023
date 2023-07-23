@@ -71,13 +71,18 @@ describe("Profile Component", () => {
   });
 
   test("should show user data when available", async () => {
-    const { getByPlaceholderText } = render(<Profile />);
+    const { getByPlaceholderText, debug, getByTestId } = render(<Profile />);
     await waitFor(() => {
       expect(getByPlaceholderText("John Doe")).toBeTruthy();
       expect(getByPlaceholderText("123456789")).toBeTruthy();
       expect(getByPlaceholderText("john.doe@example.com")).toBeTruthy();
       expect(getByPlaceholderText("01-01-1990")).toBeTruthy();
+      expect(getByTestId("profile-pic").props.source).toEqual({
+        uri: "https://example.com/avatar.jpg",
+      });
     });
+
+    debug();
   });
 
   test("should display the updated details when updating the text field input", async () => {

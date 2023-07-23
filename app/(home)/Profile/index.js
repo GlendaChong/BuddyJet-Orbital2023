@@ -459,6 +459,7 @@ function Profile() {
           <View style={styles.userDataContainer}>
             {profilePicture !== null ? (
               <Image
+                testID="profile-pic"
                 source={{ uri: profilePicture }}
                 style={{ width: 120, height: 120, borderRadius: 100, top: 10 }}
               />
