@@ -176,6 +176,39 @@ function EditExpenses() {
     // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
     const [day, month, year] = date.split('/');
     const reformattedDate = `${year}/${month}/${day}`;
+    const dateFormat = /^(\d{2}\/)(\d{2}\/)(\d{4})$/;
+    const numericAmount = parseFloat(amount); // Convert amount to a number
+
+    setErrMsg('');
+    if (description === '') {
+      setErrMsg('Description cannot be empty')
+      return;
+    }
+    if (date === '') {
+      setErrMsg('Date cannot be empty')
+      return;
+    } else if (!date.match(dateFormat)) {
+      setErrMsg("Date must be in DD/MM/YYYY format")
+      return;
+    }
+
+    if (amount === '') {
+      setErrMsg('Amount cannot be empty')
+      return;
+    } else if (isNaN(numericAmount) || numericAmount <= 0) {
+        setErrMsg('Amount must be a positive number'); 
+        return; 
+    }
+
+    if (selectedCategory === '') {
+      setErrMsg('Category cannot be empty.')
+      return;
+    }
+
+    if (selectedPaymentMode === '') {
+      setErrMsg('Payment mode cannot be empty.')
+      return;
+    }
 
     // Get the picture url to store in expenses table
     if (pic !== null) {
@@ -259,6 +292,7 @@ function EditExpenses() {
           <PaymentModeField />
           <Text style={styles.textfieldName}>Image (Optional)</Text>
           <Picture />
+          {errMsg !== '' && <Text style={styles.errorText}>{errMsg}</Text>}
 
           <Button
             style={styles.editExpenseButton}
@@ -269,8 +303,6 @@ function EditExpenses() {
           >
             Edit Expense
           </Button>
-
-          {errMsg !== '' && <Text>{errMsg}</Text>}
           {loading && <ActivityIndicator />}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -308,7 +340,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D70FF",
     borderRadius: 40,
     marginHorizontal: 30,
-    marginTop: 50,
+    marginTop: 20,
     marginBottom: 10,
     width: 330,
     alignSelf: 'center',
@@ -366,6 +398,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
   },
+  errorText: {
+    left: 30,
+    paddingVertical: 10,
+    color: 'red'
+  }, 
 });
 
 export default EditExpenses; 
