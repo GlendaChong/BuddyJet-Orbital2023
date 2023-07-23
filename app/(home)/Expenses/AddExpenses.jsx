@@ -126,10 +126,11 @@ function AddExpenses() {
           <View>
             <View style={{ borderBottomColor: "grey", borderBottomWidth: 0.4, marginBottom: 30 }} />
             <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity onPress={handleDeletePic}>
+              <TouchableOpacity testID="delete-pic" onPress={handleDeletePic}>
                 <FontAwesomeIcon icon={faCircleMinus} color="#FF453A" size={25} style={{ marginTop: 30, marginHorizontal: 25 }} />
               </TouchableOpacity>
               <Image
+                testID="expense-pic"
                 source={{ uri: pic }}
                 style={{ width: 80, height: 80, borderRadius: 18, marginBottom: 20 }}
               />

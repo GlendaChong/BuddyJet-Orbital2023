@@ -1,4 +1,12 @@
-import {Text, StyleSheet, View, TextInput, TouchableOpacity, Alert, Image } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../../../lib/supabase";
@@ -248,10 +256,7 @@ function Profile() {
         console.error(error.message);
       }
 
-      await supabase
-        .from("moneyIn")
-        .delete("*")
-        .eq("user_id", userId);
+      await supabase.from("moneyIn").delete("*").eq("user_id", userId);
     }
     console.log("Reset data", type);
   };
@@ -440,13 +445,10 @@ function Profile() {
               <FontAwesomeIcon icon={faChevronRight} />
             </View>
           </TouchableOpacity>
-
         </View>
       </View>
     );
   };
-
-
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F3F6FA" }}>
@@ -457,6 +459,7 @@ function Profile() {
           <View style={styles.userDataContainer}>
             {profilePicture !== null ? (
               <Image
+                testID="profile-pic"
                 source={{ uri: profilePicture }}
                 style={{ width: 120, height: 120, borderRadius: 100, top: 10 }}
               />
@@ -549,6 +552,7 @@ function Profile() {
               }}
             />
             <Button
+              testID="Update-button"
               style={styles.updateButton}
               labelStyle={styles.updateButtonText}
               onPress={handleUpdateProfile}
@@ -560,7 +564,7 @@ function Profile() {
         <AccountBox />
         <ResetBox />
         <Faq />
-        
+
         <View style={{ alignItems: "center", marginTop: 30 }}>
           <Button
             style={styles.logoutButton}

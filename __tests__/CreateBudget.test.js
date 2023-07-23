@@ -125,7 +125,7 @@ describe("CreateBudget", () => {
     const incomeInput = getByTestId("text-input-flat");
 
     // Enter the income value
-    fireEvent.changeText(incomeInput, "ddd");
+    fireEvent.changeText(incomeInput, "-12");
 
     await waitFor(() => {
       // Get all elements with testID "submitButton"
@@ -143,7 +143,7 @@ describe("CreateBudget", () => {
     // Check if the alert was called with the correct message
     expect(Alert.alert).toHaveBeenCalledWith(
       "Invalid Information",
-      "Please key in a valid fixed income",
+      "Please key in a positive fixed income",
       [{ style: "okay", text: "Okay" }]
     );
   });
