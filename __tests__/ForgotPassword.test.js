@@ -5,12 +5,19 @@ import { supabase } from "../lib/supabase";
 import { useState } from "react";
 import { Alert } from "react-native";
 
-// Mock supabase auth functions
 jest.mock("../lib/supabase", () => ({
   supabase: {
+    from: jest.fn(() => ({
+      select: jest.fn().mockReturnThis(),
+      eq: jest.fn().mockReturnThis(),
+      single: jest.fn().mockResolvedValue({
+        data: { email: "test@example.com" },
+        error: null,
+      }),
+    })),
     auth: {
-      signInWithOtp: jest.fn().mockResolvedValue({}), // Mock successful response for signInWithOtp
-      verifyOtp: jest.fn().mockResolvedValue({}), // Mock successful response for verifyOtp
+      signInWithOtp: jest.fn().mockResolvedValue({}),
+      verifyOtp: jest.fn().mockResolvedValue({}),
     },
   },
 }));
@@ -47,9 +54,6 @@ describe("ForgotPassword Component", () => {
     expect(supabase.auth.signInWithOtp).toHaveBeenCalledWith({
       email: "test@example.com",
     });
-
-    // You can also check if the component behaves as expected after a successful sign in with OTP.
-    // For example, you can test if isEmailSent state is true and the correct content is rendered.
   });
 
   it("should show an error message when the Reset Password button is pressed with an empty email", async () => {
