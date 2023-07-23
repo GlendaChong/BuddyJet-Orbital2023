@@ -162,6 +162,7 @@ export const GetCurrentBudget = async (selectedMonth, selectedYear) => {
   return (budgetsArray[0]);
 }
 
+
 export const GetCurrentFixedIncome = async (selectedMonth, selectedYear) => {
   const monthIndex = monthNames.indexOf(selectedMonth) + 1;
 
@@ -316,11 +317,11 @@ export const GetPastYearMoneyIn = async (selectedMonth, selectedYear) => {
 };
 
 
-export const GetUserId = async () => {
+export const GetUserEmail = async () => {
   try {
     let { data: profiles } = await supabase
       .from('profiles')
-      .select('id');
+      .select('email');
 
     const UserID = profiles[0]?.id;
     return UserID;
@@ -330,6 +331,7 @@ export const GetUserId = async () => {
     return;
   }
 };
+
 
 export const GetProfilePic = async () => {
   const { data, error } = await supabase
