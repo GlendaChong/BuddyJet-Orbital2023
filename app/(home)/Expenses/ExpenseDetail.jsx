@@ -37,18 +37,18 @@ function ExpenseDetail() {
             setDate(data.date.split('-').reverse().join('/')); // Format the date from yyyy-mm-dd to dd/mm/yyyy
             setSelectedCategory(data.category);
             setSelectedPaymentMode(data.payment_mode);
-            setPic(data.pic_url); 
+            setPic(data.pic_url);
             setRefreshing(false);
         } catch (error) {
-            setErrMsg(error); 
+            setErrMsg(error);
             console.error('Error fetching expense', error);
         }
-    }; 
+    };
 
     useEffect(() => {
         if (isFocused) {
             fetchExpense();
-        } 
+        }
     }, [pic, description, amount, date, selectedCategory, selectedPaymentMode, isFocused]);
 
     const handleEditExpense = async () => {
@@ -61,16 +61,16 @@ function ExpenseDetail() {
     const Picture = () => {
         if (pic !== null) {
             return (
-                <View>
+                <View style={{ marginTop: 20 }}>
                     <Text style={styles.subHeaderText}>Image</Text>
                     <Image
                         source={{ uri: pic }}
                         style={{ width: 285, height: 200, borderRadius: 5, marginVertical: 15, marginLeft: 23 }}
                     />
                 </View>
-            );        
+            );
         } else {
-            return; 
+            return;
         }
     }
 
@@ -82,20 +82,28 @@ function ExpenseDetail() {
                 <Text style={styles.editText} onPress={handleEditExpense}>Edit</Text>
                 <Text style={styles.headerText}>{description}</Text>
                 <View style={{ backgroundColor: "#F3F6FA", marginHorizontal: 30, borderRadius: 18 }}>
-                    <Text style={styles.subHeaderText}>Date</Text>
-                    <Text style={styles.textfieldName}>{date}</Text>
-                    <Text style={styles.subHeaderText}>Amount</Text>
-                    <Text style={styles.textfieldName}>${amount}</Text>
-                    <Text style={styles.subHeaderText}>Category</Text>
-                    <Text style={styles.textfieldName}>{selectedCategory}</Text>
-                    <Text style={styles.subHeaderText}>Payment Mode</Text>
-                    <Text style={styles.textfieldName}>{selectedPaymentMode}</Text>
+                    <View style={styles.inputContanier}>
+                        <Text style={styles.subHeaderText}>Date</Text>
+                        <Text style={styles.textfieldName}>{date}</Text>
+                    </View>
+                    <View style={styles.inputContanier}>
+                        <Text style={styles.subHeaderText}>Amount</Text>
+                        <Text style={styles.textfieldName}>${amount}</Text>
+                    </View>
+                    <View style={styles.inputContanier}>
+                        <Text style={styles.subHeaderText}>Category</Text>
+                        <Text style={styles.textfieldName}>{selectedCategory}</Text>
+                    </View>
+                    <View style={styles.inputContanier}>
+                        <Text style={styles.subHeaderText}>Payment Mode</Text>
+                        <Text style={styles.textfieldName}>{selectedPaymentMode}</Text>
+                    </View>
                     <Picture />
                     <View style={{ marginBottom: 20 }}></View>
                 </View>
             </ScrollView>
         </SafeAreaView>
-    ); 
+    );
 }
 
 
@@ -104,6 +112,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'center'
+    },
+
+    inputContanier: {
+        flexDirection: "row", marginTop: 20
     },
     headerText: {
         left: 36,
@@ -119,27 +131,26 @@ const styles = StyleSheet.create({
         left: 25,
         fontFamily: 'Poppins-Regular',
         fontWeight: 400,
-        fontSize: 15,
-        lineHeight: 24,
+        fontSize: 17,
         color: '#100D40',
         opacity: 0.65,
-        marginTop: 20
+        width: 200
+        // marginTop: 25,
     },
     textfieldName: {
         fontFamily: 'Poppins-SemiBold',
         fontSize: 17,
-        lineHeight: 26,
+        // lineHeight: 26,
         color: '#100D40',
-        marginTop: -25,
-        marginHorizontal: 54,
-        paddingLeft: 100
+        // marginTop: -23,
+
     },
     editText: {
-        marginTop: 5, 
-        alignSelf: "flex-end", 
-        marginHorizontal: 45, 
-        fontFamily: "Poppins-Medium", 
-        fontSize: 23, 
+        marginTop: 5,
+        alignSelf: "flex-end",
+        marginHorizontal: 45,
+        fontFamily: "Poppins-Medium",
+        fontSize: 23,
     }
 });
 
