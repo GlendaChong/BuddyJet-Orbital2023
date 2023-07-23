@@ -182,8 +182,6 @@ function AddExpenses() {
       return;
     }
 
-
-
     setLoading(true);
 
     // Reformat the date from DD/MM/YYYY to YYYY/MM/DD for Supabase
