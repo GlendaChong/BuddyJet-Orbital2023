@@ -149,6 +149,9 @@ function AddExpenses() {
   }
 
   const handleSubmit = async () => {
+    const dateFormat = /^(\d{2}\/)(\d{2}\/)(\d{4})$/;
+    const numericAmount = parseFloat(amount); // Convert amount to a number
+
     setErrMsg('');
     if (description === '') {
       setErrMsg('Description cannot be empty')
@@ -157,19 +160,30 @@ function AddExpenses() {
     if (date === '') {
       setErrMsg('Date cannot be empty')
       return;
+    } else if (!date.match(dateFormat)) {
+      setErrMsg("Date must be in DD/MM/YYYY format")
+      return;
     }
+
     if (amount === '') {
       setErrMsg('Amount cannot be empty')
       return;
+    } else if (isNaN(numericAmount) || numericAmount <= 0) {
+        setErrMsg('Amount must be a positive number'); 
+        return; 
     }
+
     if (selectedCategory === '') {
-      setErrMsg('Category cannot be empty')
+      setErrMsg('Category cannot be empty.')
       return;
     }
+
     if (selectedPaymentMode === '') {
-      setErrMsg('Payment mode cannot be empty')
+      setErrMsg('Payment mode cannot be empty.')
       return;
     }
+
+
 
     setLoading(true);
 
@@ -267,6 +281,7 @@ function AddExpenses() {
           <PaymentModeField />
           <Text style={styles.textfieldName}>Select Image (Optional)</Text>
           <Picture />
+          {errMsg !== '' && <Text style={styles.errorText}>{errMsg}</Text>}
 
           <Button
             style={styles.addExpenseButton}
@@ -278,7 +293,7 @@ function AddExpenses() {
             Add Expense
           </Button>
 
-          {errMsg !== '' && <Text>{errMsg}</Text>}
+          
           {loading && <ActivityIndicator />}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -373,6 +388,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
   },
+  errorText: {
+    left: 30,
+    paddingVertical: 10,
+    color: 'red'
+  }, 
 });
 
 export default AddExpenses; 

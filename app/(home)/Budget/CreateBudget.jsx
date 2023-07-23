@@ -77,10 +77,10 @@ function CreateBudget() {
       return;
     }
 
-    if (isNaN(parseInt(income))) {
+    if (isNaN(parseInt(income)) || income <= 0) {
       Alert.alert(
         "Invalid Information",
-        "Please key in a valid fixed income",
+        "Please key in a positive fixed income",
         [
           {
             text: "Okay",
@@ -90,10 +90,8 @@ function CreateBudget() {
       );
       return;
     }
-
     updateData(categories);
   }
-
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>

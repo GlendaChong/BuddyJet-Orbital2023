@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Image, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { FAB, SegmentedButtons } from "react-native-paper";
@@ -41,7 +41,9 @@ const SelectSortingOrder = ({ onToggle }) => {
       value={value}
       onValueChange={handleToggle}
       buttons={[
-        { value: "Date", label: "Date" },
+        { value: "Date", 
+          label: "Date", 
+        },
         {
           value: "Categories",
           label: "Categories",
@@ -124,7 +126,14 @@ function Expenses() {
         <SelectSortingOrder onToggle={handleSortingOrderToggle} />
       </View>
       {refreshing && <ActivityIndicator />}
-      {sortingOrder === "Date" ? (
+      {expensesSortedByDate.length === 0  ? ( 
+        // Check if there are no expenses
+        // If no expenses, display the image
+        <View style={styles.noExpensesContainer}>
+          <Image source={require('../../../assets/noExpenses.jpg')} style={styles.noExpensesImage} />
+          <Text style={styles.noExpensesText}>No expenses for this month yet!</Text>
+        </View>
+      ) : sortingOrder === 'Date' ? (
         <SortExpensesByDate
           expenses={expensesSortedByDate}
           selectedMonth={selectedMonth}
@@ -173,8 +182,19 @@ const styles = StyleSheet.create({
   segmentedButtonContainer: {
     marginTop: 20,
   },
-  SegmentedButtons: {
-    fontSize: 15,
+  noExpensesContainer: {
+    alignItems: 'center',
+  },
+  noExpensesImage: {
+    width: 350,
+    height: 300,
+    resizeMode: 'contain',
+  },
+  noExpensesText: {
+		textAlign: 'center',
+		fontSize: 20,
+		fontFamily: 'Poppins-SemiBold',
+    color: 'red',     
   },
 });
 
